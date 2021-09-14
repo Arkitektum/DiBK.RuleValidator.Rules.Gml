@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <Description>Valideringsregler for generell geometri</Description>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <Copyright>Direktoratet for byggkvalitet (DiBK)</Copyright>
+    <Authors>Direktoratet for byggkvalitet (DiBK)</Authors>
+    <RepositoryUrl>https://github.com/Arkitektum/DiBK.RuleValidator.Rules.Gml</RepositoryUrl>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="DiBK.RuleValidator" Version="1.0.0" />
+    <PackageReference Include="DiBK.RuleValidator.Extensions" Version="1.0.0" />
+  </ItemGroup>
+
+</Project>

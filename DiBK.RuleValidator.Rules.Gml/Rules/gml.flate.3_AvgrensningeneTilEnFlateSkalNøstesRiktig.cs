@@ -1,4 +1,4 @@
-﻿using DiBK.RuleValidator.Models;
+﻿using DiBK.RuleValidator;
 using DiBK.RuleValidator.Extensions;
 using System;
 using System.Linq;

@@ -1,4 +1,4 @@
-﻿using DiBK.RuleValidator.Models;
+﻿using DiBK.RuleValidator;
 using System.Linq;
 
 namespace DiBK.RuleValidator.Rules.Gml

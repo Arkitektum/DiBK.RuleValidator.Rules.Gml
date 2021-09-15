@@ -1,5 +1,4 @@
-﻿using DiBK.RuleValidator;
-using DiBK.RuleValidator.Extensions;
+﻿using DiBK.RuleValidator.Extensions;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -28,7 +27,7 @@ namespace DiBK.RuleValidator.Rules.Gml
 
         private void Validate(GmlDocument document)
         {
-            var selfIntersections = (List<string>)GetData("SelfIntersections");
+            var selfIntersections = (List<string>)GetData($"SelfIntersections_{document.GetHashCode()}");
 
             var surfaceElements = document.GetFeatures()
                 .GetElements("*/gml:MultiSurface | */gml:Surface | */gml:Polygon | */gml:PolygonPatch")

@@ -1,5 +1,4 @@
-﻿using DiBK.RuleValidator;
-using DiBK.RuleValidator.Extensions;
+﻿using DiBK.RuleValidator.Extensions;
 using OSGeo.OGR;
 using System;
 using System.Linq;

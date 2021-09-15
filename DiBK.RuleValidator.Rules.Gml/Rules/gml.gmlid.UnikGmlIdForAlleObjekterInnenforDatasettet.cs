@@ -1,5 +1,4 @@
-﻿using DiBK.RuleValidator;
-using DiBK.RuleValidator.Extensions;
+﻿using DiBK.RuleValidator.Extensions;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
@@ -53,7 +52,7 @@ namespace DiBK.RuleValidator.Rules.Gml
                     gmlIds.Add((document.FileName, element.GetAttribute("gml:id"), element));
             }
 
-            var documents = (data.Surfaces ?? new()).Concat(data.Solids ?? new());
+            var documents = data.Surfaces.Concat(data.Solids);
 
             foreach (var document in documents)
                 AddGmlIds(document);

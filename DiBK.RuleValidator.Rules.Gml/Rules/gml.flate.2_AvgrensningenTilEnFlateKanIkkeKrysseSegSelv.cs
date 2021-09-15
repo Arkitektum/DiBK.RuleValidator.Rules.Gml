@@ -1,5 +1,4 @@
-﻿using DiBK.RuleValidator;
-using DiBK.RuleValidator.Extensions;
+﻿using DiBK.RuleValidator.Extensions;
 using OSGeo.OGR;
 using System.Collections.Generic;
 using System.Linq;
@@ -46,7 +45,7 @@ namespace DiBK.RuleValidator.Rules.Gml
                 DetectSelfIntersections(document, element, polygon);
             }
 
-            SetData("SelfIntersections", _gmlIds);
+            SetData($"SelfIntersections_{document.GetHashCode()}", _gmlIds);
         }
 
         private void DetectSelfIntersections(GmlDocument document, XElement element, Geometry polygon)

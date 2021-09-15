@@ -1,5 +1,4 @@
-﻿using DiBK.RuleValidator;
-using System.Linq;
+﻿using System.Linq;
 
 namespace DiBK.RuleValidator.Rules.Gml
 {
@@ -19,8 +18,7 @@ namespace DiBK.RuleValidator.Rules.Gml
 
             var espgCodes = (int[])GetSetting("EspgCodes3D");
 
-            foreach (var document in data.Solids)
-                Messages.AddRange(KoordinatreferansesystemForKart2D.Validate(document, espgCodes));
+            data.Solids.ForEach(document => Messages.AddRange(KoordinatreferansesystemForKart2D.Validate(document, espgCodes)));
 
             return HasMessages ? Status.FAILED : Status.PASSED;
         }

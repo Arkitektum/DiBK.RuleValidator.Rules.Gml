@@ -11,8 +11,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="DiBK.RuleValidator" Version="1.0.1" />
-    <PackageReference Include="DiBK.RuleValidator.Extensions" Version="1.0.1" />
+    <PackageReference Include="DiBK.RuleValidator" Version="1.0.2" />
+    <PackageReference Include="DiBK.RuleValidator.Extensions" Version="1.0.2" />
   </ItemGroup>
 
 </Project>

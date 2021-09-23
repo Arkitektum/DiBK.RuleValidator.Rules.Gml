@@ -23,7 +23,7 @@ namespace DiBK.RuleValidator.Rules.Gml
             if (!data.Surfaces.Any())
                 return Status.NOT_EXECUTED;
 
-            var espgCodes = (int[])GetSetting("EspgCodes2D");
+            var espgCodes = GetSetting<int[]>("EspgCodes2D");
 
             data.Surfaces.ForEach(document => Messages.AddRange(Validate(document, espgCodes)));
 

@@ -27,7 +27,7 @@ namespace DiBK.RuleValidator.Rules.Gml
 
         private void Validate(GmlDocument document)
         {
-            var selfIntersections = (List<string>)GetData($"SelfIntersections_{document.GetHashCode()}");
+            var selfIntersections = GetData<List<string>>($"SelfIntersections_{document.Id}");
 
             var surfaceElements = document.GetFeatures()
                 .GetElements("*/gml:MultiSurface | */gml:Surface | */gml:Polygon | */gml:PolygonPatch")

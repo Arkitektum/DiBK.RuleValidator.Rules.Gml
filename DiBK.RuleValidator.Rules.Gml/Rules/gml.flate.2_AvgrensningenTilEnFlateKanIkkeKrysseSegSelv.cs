@@ -45,7 +45,7 @@ namespace DiBK.RuleValidator.Rules.Gml
                 DetectSelfIntersections(document, element, polygon);
             }
 
-            SetData($"SelfIntersections_{document.GetHashCode()}", _gmlIds);
+            SetData($"SelfIntersections_{document.Id}", _gmlIds);
         }
 
         private void DetectSelfIntersections(GmlDocument document, XElement element, Geometry polygon)

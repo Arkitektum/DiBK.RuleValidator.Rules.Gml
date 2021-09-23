@@ -16,7 +16,7 @@ namespace DiBK.RuleValidator.Rules.Gml
             if (!data.Solids.Any())
                 return Status.NOT_EXECUTED;
 
-            var espgCodes = (int[])GetSetting("EspgCodes3D");
+            var espgCodes = GetSetting<int[]>("EspgCodes3D");
 
             data.Solids.ForEach(document => Messages.AddRange(KoordinatreferansesystemForKart2D.Validate(document, espgCodes)));
 

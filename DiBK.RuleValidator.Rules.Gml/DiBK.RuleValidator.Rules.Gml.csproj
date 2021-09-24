@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
@@ -7,12 +7,12 @@
     <Copyright>Direktoratet for byggkvalitet (DiBK)</Copyright>
     <Authors>Direktoratet for byggkvalitet (DiBK)</Authors>
     <RepositoryUrl>https://github.com/Arkitektum/DiBK.RuleValidator.Rules.Gml</RepositoryUrl>
-    <Version>1.0.4</Version>
+    <Version>1.0.5</Version>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="DiBK.RuleValidator" Version="1.0.3" />
-    <PackageReference Include="DiBK.RuleValidator.Extensions" Version="1.0.3" />
+    <PackageReference Include="DiBK.RuleValidator" Version="1.0.4" />
+    <PackageReference Include="DiBK.RuleValidator.Extensions" Version="1.0.4" />
   </ItemGroup>
 
 </Project>

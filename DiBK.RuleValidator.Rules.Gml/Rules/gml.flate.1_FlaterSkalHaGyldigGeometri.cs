@@ -12,7 +12,7 @@ namespace DiBK.RuleValidator.Rules.Gml
             Name = "Flater skal ha gyldig geometri";
             Documentation = "https://dibk.atlassian.net/wiki/spaces/FP/pages/1933574255/gml.flate.1";
 
-            DependOn<AvgrensningenTilEnFlateKanIkkeKrysseSegSelv>().ToRun();
+            DependOn<AvgrensningenTilEnFlateKanIkkeKrysseSegSelv>().ToExecute();
         }
 
         protected override Status Validate(IGmlValidationData data)

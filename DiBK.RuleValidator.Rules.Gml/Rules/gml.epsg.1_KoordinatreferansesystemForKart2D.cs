@@ -96,7 +96,8 @@ namespace DiBK.RuleValidator.Rules.Gml
                         {
                             Message = string.Format(_messageTemplate, srsName),
                             FileName = document.FileName,
-                            XPath = new[] { element.GetXPath() }
+                            XPath = new[] { element.GetXPath() },
+                            GmlIds = new[] { GmlHelper.GetFeatureGmlId(element) }
                         });
                     }
                     else if (!espgCodes.Contains(epsg.Value))
@@ -105,7 +106,8 @@ namespace DiBK.RuleValidator.Rules.Gml
                         {
                             Message = string.Format(_messageTemplate, epsg.Value),
                             FileName = document.FileName,
-                            XPath = new[] { element.GetXPath() }
+                            XPath = new[] { element.GetXPath() },
+                            GmlIds = new[] { GmlHelper.GetFeatureGmlId(element) }
                         });
                     }
                     else
@@ -119,7 +121,8 @@ namespace DiBK.RuleValidator.Rules.Gml
                     {
                         Message = $"{element.GetName()} '{element.GetAttribute("gml:id")}' mangler gyldig koordinatsystem.",
                         FileName = document.FileName,
-                        XPath = new[] { element.GetXPath() }
+                        XPath = new[] { element.GetXPath() },
+                        GmlIds = new[] { GmlHelper.GetFeatureGmlId(element) }
                     });
                 }
             }
@@ -132,7 +135,6 @@ namespace DiBK.RuleValidator.Rules.Gml
                 {
                     Message = $"Geometriene i datasettet har ulike koordinatreferansesystemkoder: {string.Join(", ", codeGroupings.Select(grouping => grouping.Key))}.",
                     FileName = document.FileName,
-                    XPath = Array.Empty<string>()
                 });
             }
 

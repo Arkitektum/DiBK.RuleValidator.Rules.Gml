@@ -46,7 +46,7 @@ namespace DiBK.RuleValidator.Rules.Gml
                     }
                     catch (Exception exception)
                     {
-                        this.AddMessage(exception.Message, document.FileName, new[] { interiorElement.GetXPath() });
+                        this.AddMessage(exception.Message, document.FileName, new[] { interiorElement.GetXPath() }, new[] { GmlHelper.GetFeatureGmlId(element) });
                     }
                 }
 
@@ -67,7 +67,8 @@ namespace DiBK.RuleValidator.Rules.Gml
                             this.AddMessage(
                                 $"{element.GetName()} '{element.GetAttribute("gml:id")}': Et hull i flaten overlapper et annet hull i samme flate.",
                                 document.FileName,
-                                new[] { geoElement.GetXPath(), otherGeoElement.GetXPath() }
+                                new[] { geoElement.GetXPath(), otherGeoElement.GetXPath() },
+                                new[] { GmlHelper.GetFeatureGmlId(element) }
                             );
                         }
                     }

@@ -1,5 +1,4 @@
-﻿using DiBK.RuleValidator;
-using DiBK.RuleValidator.Extensions;
+﻿using DiBK.RuleValidator.Extensions;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -44,7 +43,8 @@ namespace DiBK.RuleValidator.Rules.Gml
                     this.AddMessage(
                         $"Referansen fra {GmlHelper.GetFeatureType(element)} til {element.GetName()} '{xlink[0]}' har ugyldig format.",
                         document.FileName,
-                        new[] { element.GetXPath() }
+                        new[] { element.GetXPath() },
+                        new[] { GmlHelper.GetFeatureGmlId(element) }
                     );
 
                     continue;
@@ -61,7 +61,8 @@ namespace DiBK.RuleValidator.Rules.Gml
                 this.AddMessage(
                     $"Referansen fra {feature.GetName()} '{feature.GetAttribute("gml:id")}' til {element.GetName()} '{gmlId}' fungerer ikke.", 
                     document.FileName,
-                    new[] { element.GetXPath() }
+                    new[] { element.GetXPath() },
+                    new[] { GmlHelper.GetFeatureGmlId(element) }
                 );
             }
         }

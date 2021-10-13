@@ -39,7 +39,7 @@ namespace DiBK.RuleValidator.Rules.Gml
                 }
                 catch (Exception exception)
                 {
-                    this.AddMessage(exception.Message, document.FileName, new[] { exteriorElement.GetXPath() });
+                    this.AddMessage(exception.Message, document.FileName, new[] { exteriorElement.GetXPath() }, new[] { GmlHelper.GetFeatureGmlId(element) });
                     continue;
                 }
 
@@ -56,13 +56,14 @@ namespace DiBK.RuleValidator.Rules.Gml
                             this.AddMessage(
                                 $"{element.GetName()} '{element.GetAttribute("gml:id")}': Et hull i flaten ligger utenfor flatens ytre avgrensning.",
                                 document.FileName,
-                                new[] { interiorElement.GetXPath() }
+                                new[] { interiorElement.GetXPath() },
+                                new[] { GmlHelper.GetFeatureGmlId(element) }
                             );
                         }
                     }
                     catch (Exception exception)
                     {
-                        this.AddMessage(exception.Message, document.FileName, new[] { interiorElement.GetXPath() });
+                        this.AddMessage(exception.Message, document.FileName, new[] { interiorElement.GetXPath() }, new[] { GmlHelper.GetFeatureGmlId(element) });
                     }
                 }
 

@@ -79,7 +79,7 @@ namespace DiBK.RuleValidator.Rules.Gml
                             $"{element.GetName()} '{gmlId}': Avgrensningen krysser seg selv.",
                             document.FileName,
                             new[] { element.GetXPath() },
-                            new[] { gmlId },
+                            new[] { GmlHelper.GetFeatureGmlId(element) },
                             pointWkt                            
                         );
 

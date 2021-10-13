@@ -53,7 +53,8 @@ namespace DiBK.RuleValidator.Rules.Gml
                 this.AddMessage(
                     $"{gmlElement.GetName()} '{gmlId}' er ikke angitt med koordinater på centimenternivå (maks 2 desimaler).",                    
                     document.FileName,
-                    new[] { posElement.GetXPath() }
+                    new[] { posElement.GetXPath() },
+                    new[] { GmlHelper.GetFeatureGmlId(gmlElement) }
                 );
             }
         }

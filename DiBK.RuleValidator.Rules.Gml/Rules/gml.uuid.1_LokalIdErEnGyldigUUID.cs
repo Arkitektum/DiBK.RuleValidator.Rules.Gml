@@ -47,7 +47,7 @@ namespace DiBK.RuleValidator.Rules.Gml
                         $"{GmlHelper.GetContext(element)}: Egenskapen 'LokalId' må være en gyldig UUID.",
                         document.FileName,
                         new[] { element.GetXPath() },
-                        new[] { element.GetAttribute("gml:id") }
+                        new[] { GmlHelper.GetFeatureGmlId(element) }
                     );
                 }
                 else if (uuids.Any(id => id == lokalId))
@@ -56,7 +56,7 @@ namespace DiBK.RuleValidator.Rules.Gml
                         $"{GmlHelper.GetContext(element)}: Det kan ikke finnes flere like 'LokalId'. 'LokalId' må være unik.",
                         document.FileName,
                         new[] { element.GetXPath() },
-                        new[] { element.GetAttribute("gml:id") }
+                        new[] { GmlHelper.GetFeatureGmlId(element) }
                     );
                 }
                 else

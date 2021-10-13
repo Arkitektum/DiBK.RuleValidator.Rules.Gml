@@ -40,13 +40,19 @@ namespace DiBK.RuleValidator.Rules.Gml
                         this.AddMessage(
                             $"{element.GetName()} '{element.GetAttribute("gml:id")}' er ugyldig: Ytre avgrensning går i retning med klokka, men skal gå i motsatt retning.",
                             document.FileName,
-                            new[] { exteriorElement.GetXPath() }
+                            new[] { exteriorElement.GetXPath() },
+                            new[] { GmlHelper.GetFeatureGmlId(element) }
                         );
                     }
                 }
                 catch (Exception exception)
                 {
-                    this.AddMessage(exception.Message, document.FileName, new[] { exteriorElement.GetXPath() });
+                    this.AddMessage(
+                        exception.Message, 
+                        document.FileName, 
+                        new[] { exteriorElement.GetXPath() }, 
+                        new[] { GmlHelper.GetFeatureGmlId(element) }
+                    );
                 }
 
                 var interiorElements = element.GetElements("*:interior");
@@ -62,13 +68,14 @@ namespace DiBK.RuleValidator.Rules.Gml
                             this.AddMessage(
                                 $"{element.GetName()} '{element.GetAttribute("gml:id")}' er ugyldig: Indre avgrensning går i retning mot klokka, men skal gå med klokka.",
                                 document.FileName,
-                                new[] { interiorElement.GetXPath() }
+                                new[] { interiorElement.GetXPath() },
+                                new[] { GmlHelper.GetFeatureGmlId(element) }
                             );
                         }
                     }
                     catch (Exception exception)
                     {
-                        this.AddMessage(exception.Message, document.FileName, new[] { interiorElement.GetXPath() });
+                        this.AddMessage(exception.Message, document.FileName, new[] { interiorElement.GetXPath() }, new[] { GmlHelper.GetFeatureGmlId(element) });
                     }
                 }
             }

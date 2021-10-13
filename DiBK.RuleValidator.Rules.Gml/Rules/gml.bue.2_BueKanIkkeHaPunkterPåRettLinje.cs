@@ -39,7 +39,13 @@ namespace DiBK.RuleValidator.Rules.Gml
                 }
                 catch (Exception exception)
                 {
-                    this.AddMessage(exception.Message, document.FileName, new[] { element.GetXPath() });
+                    this.AddMessage(
+                        exception.Message, 
+                        document.FileName, 
+                        new[] { element.GetXPath() }, 
+                        new[] { GmlHelper.GetFeatureGmlId(element) }
+                    );
+
                     continue;
                 }
 
@@ -57,7 +63,12 @@ namespace DiBK.RuleValidator.Rules.Gml
                 if (sangitta >= MIN_SANGITTA)
                     continue;
 
-                this.AddMessage("Punktene som danner sirkelbuen ligger i rett linje og bør fremstilles som kurve.", document.FileName, new[] { element.GetXPath() });
+                this.AddMessage(
+                    "Punktene som danner sirkelbuen ligger i rett linje og bør fremstilles som kurve.", 
+                    document.FileName, 
+                    new[] { element.GetXPath() },
+                    new[] { GmlHelper.GetFeatureGmlId(element) }
+                );
             }
         }
     }

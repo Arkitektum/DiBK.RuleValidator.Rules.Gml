@@ -37,13 +37,25 @@ namespace DiBK.RuleValidator.Rules.Gml
 
                     if (coordinatePairs.Count != 3)
                     {
-                        this.AddMessage("En bue kan kun inneholde tre punkter.", document.FileName, new[] { element.GetXPath() });
+                        this.AddMessage(
+                            "En bue kan kun inneholde tre punkter.", 
+                            document.FileName, 
+                            new[] { element.GetXPath() },
+                            new[] { GmlHelper.GetFeatureGmlId(element) }
+                        );
+                        
                         continue;
                     }
                 }
                 catch (Exception exception)
                 {
-                    this.AddMessage(exception.Message, document.FileName, new[] { element.GetXPath() });
+                    this.AddMessage(
+                        exception.Message, 
+                        document.FileName, 
+                        new[] { element.GetXPath() },
+                        new[] { GmlHelper.GetFeatureGmlId(element) }
+                    );
+                    
                     continue;
                 }
 
@@ -53,7 +65,14 @@ namespace DiBK.RuleValidator.Rules.Gml
                     .Any();
 
                 if (hasDoublePoint)
-                    this.AddMessage("En bue beregnes med tre punkter, og sirkelbuen kan ikke ha dobbeltpunkter.", document.FileName, new[] { element.GetXPath() });
+                {
+                    this.AddMessage(
+                        "En bue beregnes med tre punkter, og sirkelbuen kan ikke ha dobbeltpunkter.", 
+                        document.FileName, 
+                        new[] { element.GetXPath() },
+                        new[] { GmlHelper.GetFeatureGmlId(element) }
+                    );
+                }
             }
         }
     }

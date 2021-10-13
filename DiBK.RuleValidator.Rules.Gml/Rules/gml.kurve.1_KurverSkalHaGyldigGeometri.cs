@@ -32,7 +32,7 @@ namespace DiBK.RuleValidator.Rules.Gml
 
                 if (geometry == null)
                 {
-                    this.AddMessage(errorMessage, document.FileName, new[] { element.GetXPath() });
+                    this.AddMessage(errorMessage, document.FileName, new[] { element.GetXPath() }, new[] { GmlHelper.GetFeatureGmlId(element) });
                 }
             }
         }

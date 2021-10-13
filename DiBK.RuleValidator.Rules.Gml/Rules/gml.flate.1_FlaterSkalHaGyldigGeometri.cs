@@ -39,11 +39,16 @@ namespace DiBK.RuleValidator.Rules.Gml
 
                 if (geometry == null)
                 {
-                    this.AddMessage(errorMessage, document.FileName, new[] { element.GetXPath() });
+                    this.AddMessage(errorMessage, document.FileName, new[] { element.GetXPath() }, new[] { GmlHelper.GetFeatureGmlId(element) });
                 }
                 else if (!geometry.IsValid())
                 {
-                    this.AddMessage($"{element.GetName()} '{element.GetAttribute("gml:id")}': Geometrien er ugyldig.", document.FileName, new[] { element.GetXPath() });
+                    this.AddMessage(
+                        $"{element.GetName()} '{element.GetAttribute("gml:id")}': Geometrien er ugyldig.", 
+                        document.FileName, 
+                        new[] { element.GetXPath() },
+                        new[] { GmlHelper.GetFeatureGmlId(element) }
+                    );
                 }
             }
         }

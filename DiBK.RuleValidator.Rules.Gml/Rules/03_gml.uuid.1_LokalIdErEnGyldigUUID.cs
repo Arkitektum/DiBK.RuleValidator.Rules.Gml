@@ -34,8 +34,8 @@ namespace DiBK.RuleValidator.Rules.Gml
             if (document == null)
                 return;
 
-            var uuids = new List<string>();
-            var elements = document.GetFeatures().GetElements("*:identifikasjon//*:lokalId");
+            var uuids = new List<string>(25000);
+            var elements = document.GetFeatures().GetElements("*:identifikasjon//*:lokalId").ToList();
 
             foreach (var element in elements)
             {

@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace DiBK.RuleValidator.Rules.Gml
 {
-    public class FungerendeLinkerMellomObjekter : Rule<IGmlValidationData>
+    public class FungerendeReferanserMellomObjekter : Rule<IGmlValidationData>
     {
         public override void Create()
         {

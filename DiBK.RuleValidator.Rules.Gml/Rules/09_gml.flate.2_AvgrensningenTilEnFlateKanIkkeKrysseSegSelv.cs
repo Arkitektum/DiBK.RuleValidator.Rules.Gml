@@ -73,10 +73,10 @@ namespace DiBK.RuleValidator.Rules.Gml
 
                         var point = intersection.GetPoint(0);
                         var pointWkt = $"POINT ({point[0]} {point[1]})";
-                        var gmlId = element.GetAttribute("gml:id");
+                        var gmlId = GmlHelper.GetClosestGmlId(element);
 
                         this.AddMessage(
-                            $"{element.GetName()} '{gmlId}': Avgrensningen krysser seg selv.",
+                            $"{GmlHelper.GetNameAndId(element)}: Avgrensningen krysser seg selv.",
                             document.FileName,
                             new[] { element.GetXPath() },
                             new[] { GmlHelper.GetFeatureGmlId(element) },

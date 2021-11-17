@@ -1,0 +1,96 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net5.0</TargetFramework>
+
+		<IsPackable>false</IsPackable>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <None Remove="TestData\gml.bue.1-fail.gml" />
+	  <None Remove="TestData\gml.bue.1-pass.gml" />
+	  <None Remove="TestData\gml.bue.2-fail.gml" />
+	  <None Remove="TestData\gml.bue.2-pass.gml" />
+	  <None Remove="TestData\gml.enhet.1-fail.gml" />
+	  <None Remove="TestData\gml.epsg.1-fail.gml" />
+	  <None Remove="TestData\gml.epsg.1-pass-1.gml" />
+	  <None Remove="TestData\gml.epsg.1-pass-2.gml" />
+	  <None Remove="TestData\gml.epsg.2-fail.gml" />
+	  <None Remove="TestData\gml.epsg.2-pass.gml" />
+	  <None Remove="TestData\gml.flate.1-fail.gml" />
+	  <None Remove="TestData\gml.flate.2-fail.gml" />
+	  <None Remove="TestData\gml.flate.3-fail.gml" />
+	  <None Remove="TestData\gml.flate.4-fail.gml" />
+	  <None Remove="TestData\gml.flate.5-fail.gml" />
+	  <None Remove="TestData\gml.gmlid.1-2D-fail.gml" />
+	  <None Remove="TestData\gml.gmlid.1-2D-pass.gml" />
+	  <None Remove="TestData\gml.gmlid.1-3D-fail.gml" />
+	  <None Remove="TestData\gml.gmlid.1-3D-pass.gml" />
+	  <None Remove="TestData\gml.kurve.1-fail.gml" />
+	  <None Remove="TestData\gml.uuid.1-fail.gml" />
+	  <None Remove="TestData\gml.uuid.1-pass.gml" />
+	  <None Remove="TestData\gml.xlink.1-2D-fail.gml" />
+	  <None Remove="TestData\gml.xlink.1-2D-pass.gml" />
+	  <None Remove="TestData\gml.xlink.1-3D-fail.gml" />
+	  <None Remove="TestData\gml.xlink.1-3D-pass.gml" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <EmbeddedResource Include="TestData\gml.bue.1-fail.gml" />
+	  <EmbeddedResource Include="TestData\gml.bue.1-pass.gml" />
+	  <EmbeddedResource Include="TestData\gml.bue.2-fail.gml" />
+	  <EmbeddedResource Include="TestData\gml.bue.2-pass.gml" />
+	  <EmbeddedResource Include="TestData\gml.enhet.1-fail.gml" />
+	  <EmbeddedResource Include="TestData\gml.epsg.1-fail.gml" />
+	  <EmbeddedResource Include="TestData\gml.epsg.1-pass-1.gml" />
+	  <EmbeddedResource Include="TestData\gml.epsg.1-pass-2.gml" />
+	  <EmbeddedResource Include="TestData\gml.epsg.2-fail.gml" />
+	  <EmbeddedResource Include="TestData\gml.epsg.2-pass.gml" />
+	  <EmbeddedResource Include="TestData\gml.flate.1-fail.gml" />
+	  <EmbeddedResource Include="TestData\gml.flate.2-fail.gml" />
+	  <EmbeddedResource Include="TestData\gml.flate.3-fail.gml" />
+	  <EmbeddedResource Include="TestData\gml.flate.4-fail.gml" />
+	  <EmbeddedResource Include="TestData\gml.flate.5-fail.gml" />
+	  <EmbeddedResource Include="TestData\gml.gmlid.1-2D-fail.gml" />
+	  <EmbeddedResource Include="TestData\gml.gmlid.1-2D-pass.gml" />
+	  <EmbeddedResource Include="TestData\gml.gmlid.1-3D-fail.gml" />
+	  <EmbeddedResource Include="TestData\gml.gmlid.1-3D-pass.gml" />
+	  <EmbeddedResource Include="TestData\gml.kurve.1-fail.gml" />
+	  <EmbeddedResource Include="TestData\gml.uuid.1-fail.gml" />
+	  <EmbeddedResource Include="TestData\gml.uuid.1-pass.gml" />
+	  <EmbeddedResource Include="TestData\gml.xlink.1-2D-fail.gml" />
+	  <EmbeddedResource Include="TestData\gml.xlink.1-2D-pass.gml" />
+	  <EmbeddedResource Include="TestData\gml.xlink.1-3D-fail.gml" />
+	  <EmbeddedResource Include="TestData\gml.xlink.1-3D-pass.gml" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="FluentAssertions" Version="6.2.0" />
+		<PackageReference Include="MaxRev.Gdal.Core" Version="3.2.0.320" />
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.9.4" />
+		<PackageReference Include="Moq" Version="4.16.1" />
+		<PackageReference Include="xunit" Version="2.4.1" />
+		<PackageReference Include="Xunit.DependencyInjection" Version="8.1.0" />
+		<PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+			<PrivateAssets>all</PrivateAssets>
+		</PackageReference>
+		<PackageReference Include="coverlet.collector" Version="3.0.2">
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+			<PrivateAssets>all</PrivateAssets>
+		</PackageReference>
+	</ItemGroup>
+
+	<ItemGroup Condition="'$(OS)' == 'Unix'">
+		<PackageReference Include="MaxRev.Gdal.LinuxRuntime.Minimal" Version="3.2.0.300" />
+	</ItemGroup>
+
+	<ItemGroup Condition="'$(OS)' != 'Unix'">
+		<PackageReference Include="MaxRev.Gdal.WindowsRuntime.Minimal" Version="3.2.0.310" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\DiBK.RuleValidator.Rules.Gml\DiBK.RuleValidator.Rules.Gml.csproj" />
+	</ItemGroup>
+
+</Project>

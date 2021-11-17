@@ -9,7 +9,7 @@ namespace DiBK.RuleValidator.Rules.Gml
             return RuleConfig
                 .Create<IGmlValidationData>("Generell geometri")
                 .AddGroup("GenerellGeometri", "Generell geometri", group => group
-                    .AddRule<FungerendeLinkerMellomObjekter>()
+                    .AddRule<FungerendeReferanserMellomObjekter>()
                     .AddRule<UnikGmlIdForAlleObjekterInnenforDatasettet>()
                     .AddRule<LokalIdErEnGyldigUUID>()
                     .AddRule<KoordinatreferansesystemForKart2D>()

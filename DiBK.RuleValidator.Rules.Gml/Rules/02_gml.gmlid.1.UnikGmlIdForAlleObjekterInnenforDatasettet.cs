@@ -7,6 +7,8 @@ namespace DiBK.RuleValidator.Rules.Gml
 {
     public class UnikGmlIdForAlleObjekterInnenforDatasettet : Rule<IGmlValidationData>
     {
+        private static readonly XNamespace _gmlNs = "http://www.opengis.net/gml/3.2";
+
         public override void Create()
         {
             Id = "gml.gmlid.1";
@@ -19,16 +21,18 @@ namespace DiBK.RuleValidator.Rules.Gml
                 return Status.NOT_EXECUTED;
 
             var duplicates = GetGmlIds(data)
-                .GroupBy(tuple => new { tuple.fileName, tuple.gmlId })
+                .GroupBy(tuple => new { tuple.FileName, tuple.Attribute.Value })
                 .Where(grouping => grouping.Count() > 1);
 
             foreach (var grouping in duplicates)
             {
-                foreach (var (fileName, gmlId, element) in grouping)
+                foreach (var (FileName, Attribute) in grouping)
                 {
+                    var element = Attribute.Parent;
+
                     this.AddMessage(
-                        $"GML-ID '{gmlId}' til geometritypen '{element.GetName()}' finnes to eller flere ganger.",
-                        fileName,
+                        $"GML-ID '{Attribute.Value}' til objektet '{element.GetName()}' finnes to eller flere ganger.",
+                        FileName,
                         new[] { element.GetXPath() }
                     );
                 }
@@ -37,19 +41,20 @@ namespace DiBK.RuleValidator.Rules.Gml
             return HasMessages ? Status.FAILED : Status.PASSED;
         }
 
-        private static List<(string fileName, string gmlId, XElement element)> GetGmlIds(IGmlValidationData data)
+        private static List<(string FileName, XAttribute Attribute)> GetGmlIds(IGmlValidationData data)
         {
-            var gmlIds = new List<(string fileName, string gmlId, XElement element)>();
+            var gmlIds = new List<(string FileName, XAttribute Attribute)>();
 
             void AddGmlIds(GmlDocument document)
             {
                 if (document == null)
                     return;
 
-                var gmlElements = document.GetElements("//*[@gml:id]");
+                var attributes = document.Document.Descendants().Attributes(_gmlNs + "id")
+                    .Select(attribute => (document.FileName, attribute))
+                    .ToArray();
 
-                foreach (var element in gmlElements)
-                    gmlIds.Add((document.FileName, element.GetAttribute("gml:id"), element));
+                gmlIds.AddRange(attributes);
             }
 
             var documents = data.Surfaces.Concat(data.Solids);

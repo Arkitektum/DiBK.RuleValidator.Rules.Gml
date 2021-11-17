@@ -37,8 +37,10 @@ namespace DiBK.RuleValidator.Rules.Gml
 
                     if (GeometryHelper.PointsAreClockWise(exteriorPoints))
                     {
+                        var gmlId = element.GetAttribute("gml:id");
+
                         this.AddMessage(
-                            $"{element.GetName()} '{element.GetAttribute("gml:id")}' er ugyldig: Ytre avgrensning går i retning med klokka, men skal gå i motsatt retning.",
+                            $"{GmlHelper.GetNameAndId(element)} er ugyldig: Ytre avgrensning går i retning med klokka, men skal gå i motsatt retning.",
                             document.FileName,
                             new[] { exteriorElement.GetXPath() },
                             new[] { GmlHelper.GetFeatureGmlId(element) }
@@ -66,7 +68,7 @@ namespace DiBK.RuleValidator.Rules.Gml
                         if (!GeometryHelper.PointsAreClockWise(interiorPoints))
                         {
                             this.AddMessage(
-                                $"{element.GetName()} '{element.GetAttribute("gml:id")}' er ugyldig: Indre avgrensning går i retning mot klokka, men skal gå med klokka.",
+                                $"{GmlHelper.GetNameAndId(element)} er ugyldig: Indre avgrensning går i retning mot klokka, men skal gå med klokka.",
                                 document.FileName,
                                 new[] { interiorElement.GetXPath() },
                                 new[] { GmlHelper.GetFeatureGmlId(element) }

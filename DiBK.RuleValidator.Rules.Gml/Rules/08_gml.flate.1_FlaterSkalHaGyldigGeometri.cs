@@ -44,8 +44,8 @@ namespace DiBK.RuleValidator.Rules.Gml
                 else if (!geometry.IsValid())
                 {
                     this.AddMessage(
-                        $"{element.GetName()} '{element.GetAttribute("gml:id")}': Geometrien er ugyldig.", 
-                        document.FileName, 
+                        $"{element.GetName()} '{element.GetAttribute("gml:id")}': Geometrien er ugyldig.",
+                        document.FileName,
                         new[] { element.GetXPath() },
                         new[] { GmlHelper.GetFeatureGmlId(element) }
                     );

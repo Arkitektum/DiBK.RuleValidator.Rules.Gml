@@ -32,7 +32,7 @@ namespace DiBK.RuleValidator.Rules.Gml
             if (document == null)
                 return;
 
-            var gmlIds = new List<string>();
+            var gmlIds = new List<string>(25000);
             var elements = document.GetFeatures().GetElements("//*:pos | //*:posList");
 
             foreach (var posElement in elements)
@@ -42,7 +42,7 @@ namespace DiBK.RuleValidator.Rules.Gml
                 if (posList.All(pos => _twoDecimalRegex.IsMatch(pos)))
                     continue;
 
-                var gmlElement = GmlHelper.GetClosestGmlElement(posElement);
+                var gmlElement = GmlHelper.GetClosestGmlIdElement(posElement);
                 var gmlId = gmlElement.GetAttribute("gml:id");
 
                 if (gmlIds.Contains(gmlId))
@@ -51,7 +51,7 @@ namespace DiBK.RuleValidator.Rules.Gml
                 gmlIds.Add(gmlId);
 
                 this.AddMessage(
-                    $"{gmlElement.GetName()} '{gmlId}' er ikke angitt med koordinater på centimenternivå (maks 2 desimaler).",                    
+                    $"{GmlHelper.GetNameAndId(gmlElement)} er ikke angitt med koordinater på centimenternivå (maks 2 desimaler).",                    
                     document.FileName,
                     new[] { posElement.GetXPath() },
                     new[] { GmlHelper.GetFeatureGmlId(gmlElement) }

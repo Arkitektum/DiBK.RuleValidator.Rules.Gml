@@ -2,13 +2,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
 
 namespace DiBK.RuleValidator.Rules.Gml
 {
     public class KoordinatreferansesystemForKart2D : Rule<IGmlValidationData>
-    {
-        private static readonly Regex _srsNameRegex = new(@"^(http:\/\/www\.opengis\.net\/def\/crs\/EPSG\/0\/|^urn:ogc:def:crs:EPSG::)(?<epsg>\d+)$", RegexOptions.Compiled);
+    {        
         private static readonly string _messageTemplate = "Koordinatsystem '{0}' er ikke i henhold til godkjente koordinatsystem/EPSG-koder på https://register.geonorge.no/epsg-koder";
 
         public override void Create()
@@ -52,7 +50,7 @@ namespace DiBK.RuleValidator.Rules.Gml
                 }
                 else
                 {
-                    var epsg = GetEpsgCode(srsName);
+                    var epsg = GmlHelper.GetEpsgCode(srsName);
 
                     if (!epsg.HasValue)
                     {
@@ -88,7 +86,7 @@ namespace DiBK.RuleValidator.Rules.Gml
 
                 if (srsName != null)
                 {
-                    var epsg = GetEpsgCode(srsName);
+                    var epsg = GmlHelper.GetEpsgCode(srsName);
 
                     if (!epsg.HasValue)
                     {
@@ -139,16 +137,6 @@ namespace DiBK.RuleValidator.Rules.Gml
             }
 
             return messages;
-        }
-
-        private static int? GetEpsgCode(string srsName)
-        {
-            var match = _srsNameRegex.Match(srsName);
-
-            if (!match.Success)
-                return null;
-
-            return int.Parse(match.Groups["epsg"].Value);
         }
     }
 }

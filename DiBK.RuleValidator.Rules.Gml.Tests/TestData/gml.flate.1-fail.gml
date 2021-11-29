@@ -271,7 +271,7 @@
             <gml:Polygon gml:id="_614f21d8-20d3-451b-8ed9-c98296e2d301-1" srsDimension="2" srsName="http://www.opengis.net/def/crs/EPSG/0/25832">
               <gml:exterior>
                 <gml:LinearRing>
-                  <gml:posList>4.54 2.09 4.52 1.04 6.65 1.02 6.67 2.47 6.22 2.47 6.22 2.07 4.54 2.09</gml:posList>
+                  <gml:posList>4.54 2.09 4.52 1.04 1.02 6.67 2.47 6.22 2.47 6.22 2.07 4.54 2.09</gml:posList>
                 </gml:LinearRing>
               </gml:exterior>
             </gml:Polygon>
@@ -299,7 +299,7 @@
         <gml:Polygon gml:id="_12a3a62d-af54-4187-8213-7ed2c6453b2e-0" srsDimension="2" srsName="http://www.opengis.net/def/crs/EPSG/0/25832">
           <gml:exterior>
             <gml:LinearRing>
-              <gml:posList>7.29 3.77 7.29 3.22 8.61 3.27 8.63 1.97 9.56 1.97 9.53 3.80 7.29 3.77</gml:posList>
+              <gml:posList>7.29 3.77 7.29 3.22 8.61 3.27 8.63 1.97 9.56 1.97 9.53 3.80 7.29</gml:posList>
             </gml:LinearRing>
           </gml:exterior>
         </gml:Polygon>

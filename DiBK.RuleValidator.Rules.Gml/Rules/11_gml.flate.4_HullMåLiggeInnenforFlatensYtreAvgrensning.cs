@@ -1,13 +1,15 @@
 ﻿using DiBK.RuleValidator.Extensions;
+using DiBK.RuleValidator.Rules.Gml.Constants;
 using OSGeo.OGR;
-using System;
+using System.Collections.Generic;
 using System.Linq;
-using System.Xml.Linq;
 
 namespace DiBK.RuleValidator.Rules.Gml
 {
     public class HullMåLiggeInnenforFlatensYtreAvgrensning : Rule<IGmlValidationData>
     {
+        private readonly HashSet<string> _xPaths = new();
+
         public override void Create()
         {
             Id = "gml.flate.4";
@@ -35,11 +37,10 @@ namespace DiBK.RuleValidator.Rules.Gml
 
                 try
                 {
-                    exterior = CreateLineString(exteriorElement);
+                    exterior = GeometryHelper.CreatePolygon(exteriorElement);
                 }
-                catch (Exception exception)
+                catch
                 {
-                    this.AddMessage(exception.Message, document.FileName, new[] { exteriorElement.GetXPath() }, new[] { GmlHelper.GetFeatureGmlId(element) });
                     continue;
                 }
 
@@ -49,37 +50,30 @@ namespace DiBK.RuleValidator.Rules.Gml
                 {
                     try
                     {
-                        using var interior = CreateLineString(interiorElement);
-
-                        if (interior.Intersects(exterior))
+                        using var interior = GeometryHelper.CreatePolygon(interiorElement);
+                        
+                        if (!exterior.Contains(interior))
                         {
                             this.AddMessage(
-                                $"{element.GetName()} '{element.GetAttribute("gml:id")}': Et hull i flaten ligger utenfor flatens ytre avgrensning.",
+                                $"{GmlHelper.GetNameAndId(element)}: Et hull i flaten ligger utenfor flatens ytre avgrensning.",
                                 document.FileName,
                                 new[] { interiorElement.GetXPath() },
                                 new[] { GmlHelper.GetFeatureGmlId(element) }
                             );
+
+                            _xPaths.Add(GmlHelper.GetBaseGmlElement(element).GetXPath());
                         }
                     }
-                    catch (Exception exception)
+                    catch
                     {
-                        this.AddMessage(exception.Message, document.FileName, new[] { interiorElement.GetXPath() }, new[] { GmlHelper.GetFeatureGmlId(element) });
+                        continue;
                     }
                 }
 
                 exterior.Dispose();
             }
-        }
 
-        private static Geometry CreateLineString(XElement element)
-        {
-            var points = GeometryHelper.GetCoordinates(element);
-            var lineString = new Geometry(wkbGeometryType.wkbLineString);
-
-            foreach (var point in points)
-                lineString.AddPoint(point[0], point[1], 0);
-
-            return lineString;
+            SetData(string.Format(DataKey.HullUtenforYtreAvgrensning, document.Id), _xPaths);
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using DiBK.RuleValidator.Extensions;
+using DiBK.RuleValidator.Rules.Gml.Constants;
 using OSGeo.OGR;
 using System;
 using System.Collections.Generic;
@@ -9,6 +10,8 @@ namespace DiBK.RuleValidator.Rules.Gml
 {
     public class HullKanIkkeOverlappeAndreHullISammeFlate : Rule<IGmlValidationData>
     {
+        private readonly HashSet<string> _xPaths = new();
+
         public override void Create()
         {
             Id = "gml.flate.5";
@@ -42,11 +45,10 @@ namespace DiBK.RuleValidator.Rules.Gml
                 {
                     try
                     {
-                        interiors.Add((interiorElement, CreatePolygon(interiorElement)));
+                        interiors.Add((interiorElement, GeometryHelper.CreatePolygon(interiorElement)));
                     }
-                    catch (Exception exception)
+                    catch
                     {
-                        this.AddMessage(exception.Message, document.FileName, new[] { interiorElement.GetXPath() }, new[] { GmlHelper.GetFeatureGmlId(element) });
                     }
                 }
 
@@ -65,29 +67,19 @@ namespace DiBK.RuleValidator.Rules.Gml
                         if (geometry.Overlaps(otherGeometry))
                         {
                             this.AddMessage(
-                                $"{element.GetName()} '{element.GetAttribute("gml:id")}': Et hull i flaten overlapper et annet hull i samme flate.",
+                                $"{GmlHelper.GetNameAndId(element)}': Et hull i flaten overlapper et annet hull i samme flate.",
                                 document.FileName,
                                 new[] { geoElement.GetXPath(), otherGeoElement.GetXPath() },
                                 new[] { GmlHelper.GetFeatureGmlId(element) }
                             );
+
+                            _xPaths.Add(GmlHelper.GetBaseGmlElement(element).GetXPath());
                         }
                     }
                 }
             }
-        }
 
-        private static Geometry CreatePolygon(XElement element)
-        {
-            var points = GeometryHelper.GetCoordinates(element);
-            var polygon = new Geometry(wkbGeometryType.wkbPolygon);
-            var linearRing = new Geometry(wkbGeometryType.wkbLinearRing);
-
-            foreach (var point in points)
-                linearRing.AddPoint(point[0], point[1], 0);
-
-            polygon.AddGeometry(linearRing);
-
-            return polygon;
+            SetData(string.Format(DataKey.OverlappendeHull, document.Id), _xPaths);
         }
     }
 }

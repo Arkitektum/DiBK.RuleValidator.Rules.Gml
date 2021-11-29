@@ -44,7 +44,7 @@ namespace DiBK.RuleValidator.Rules.Gml
                 if (!_uuidRegex.IsMatch(lokalId))
                 {
                     this.AddMessage(
-                        $"{GmlHelper.GetContext(element)}: Egenskapen 'LokalId' må være en gyldig UUID.",
+                        $"{GmlHelper.GetNameAndId(GmlHelper.GetFeature(element))}: Egenskapen 'LokalId' må være en gyldig UUID.",
                         document.FileName,
                         new[] { element.GetXPath() },
                         new[] { GmlHelper.GetFeatureGmlId(element) }
@@ -53,7 +53,7 @@ namespace DiBK.RuleValidator.Rules.Gml
                 else if (uuids.Any(id => id == lokalId))
                 {
                     this.AddMessage(
-                        $"{GmlHelper.GetContext(element)}: Det kan ikke finnes flere like 'LokalId'. 'LokalId' må være unik.",
+                        $"{GmlHelper.GetNameAndId(GmlHelper.GetFeature(element))}: Det kan ikke finnes flere like 'LokalId'. 'LokalId' må være unik.",
                         document.FileName,
                         new[] { element.GetXPath() },
                         new[] { GmlHelper.GetFeatureGmlId(element) }

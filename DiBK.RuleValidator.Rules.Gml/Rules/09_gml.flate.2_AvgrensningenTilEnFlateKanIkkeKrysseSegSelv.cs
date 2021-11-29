@@ -1,4 +1,5 @@
 ﻿using DiBK.RuleValidator.Extensions;
+using DiBK.RuleValidator.Rules.Gml.Constants;
 using OSGeo.OGR;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +9,7 @@ namespace DiBK.RuleValidator.Rules.Gml
 {
     public class AvgrensningenTilEnFlateKanIkkeKrysseSegSelv : Rule<IGmlValidationData>
     {
-        private readonly List<string> _gmlIds = new();
+        private readonly HashSet<string> _xPaths = new();
 
         public override void Create()
         {
@@ -28,7 +29,7 @@ namespace DiBK.RuleValidator.Rules.Gml
 
         private void Validate(GmlDocument document)
         {
-            var surfaceElements = document.GetFeatures().GetElements("*/gml:MultiSurface | */gml:Surface | */gml:Polygon | */gml:PolygonPatch");
+            var surfaceElements = document.GetFeatures().GetElements("*/gml:MultiSurface | */gml:Surface | */gml:Polygon");
 
             foreach (var element in surfaceElements)
             {
@@ -45,7 +46,7 @@ namespace DiBK.RuleValidator.Rules.Gml
                 DetectSelfIntersections(document, element, polygon);
             }
 
-            SetData($"SelfIntersections_{document.Id}", _gmlIds);
+            SetData(string.Format(DataKey.Selvkryss, document.Id), _xPaths);
         }
 
         private void DetectSelfIntersections(GmlDocument document, XElement element, Geometry polygon)
@@ -74,16 +75,17 @@ namespace DiBK.RuleValidator.Rules.Gml
                         var point = intersection.GetPoint(0);
                         var pointWkt = $"POINT ({point[0]} {point[1]})";
                         var gmlId = GmlHelper.GetClosestGmlId(element);
+                        var xPath = element.GetXPath();
 
                         this.AddMessage(
                             $"{GmlHelper.GetNameAndId(element)}: Avgrensningen krysser seg selv.",
                             document.FileName,
-                            new[] { element.GetXPath() },
+                            new[] { xPath },
                             new[] { GmlHelper.GetFeatureGmlId(element) },
                             pointWkt                            
                         );
 
-                        _gmlIds.Add(gmlId);
+                        _xPaths.Add(xPath);
                     }
                 }
             }

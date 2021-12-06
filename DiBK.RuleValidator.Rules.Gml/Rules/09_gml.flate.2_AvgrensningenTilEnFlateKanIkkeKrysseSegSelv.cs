@@ -17,14 +17,12 @@ namespace DiBK.RuleValidator.Rules.Gml
             Name = "Avgrensningen til en flate kan ikke krysse seg selv";
         }
 
-        protected override Status Validate(IGmlValidationData data)
+        protected override void Validate(IGmlValidationData data)
         {
             if (!data.Surfaces.Any())
-                return Status.NOT_EXECUTED;
+                SkipRule();
 
             data.Surfaces.ForEach(Validate);
-
-            return HasMessages ? Status.FAILED : Status.PASSED;
         }
 
         private void Validate(GmlDocument document)

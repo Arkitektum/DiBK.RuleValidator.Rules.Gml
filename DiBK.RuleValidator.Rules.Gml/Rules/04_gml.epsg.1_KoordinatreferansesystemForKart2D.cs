@@ -6,7 +6,7 @@ using System.Linq;
 namespace DiBK.RuleValidator.Rules.Gml
 {
     public class KoordinatreferansesystemForKart2D : Rule<IGmlValidationData>
-    {        
+    {
         private static readonly string _messageTemplate = "Koordinatsystem '{0}' er ikke i henhold til godkjente koordinatsystem/EPSG-koder på https://register.geonorge.no/epsg-koder";
 
         public override void Create()
@@ -16,21 +16,18 @@ namespace DiBK.RuleValidator.Rules.Gml
             Description = "Koordinatsystemet for 2D-kart må være i UTM 32, 33 eller 35 (EPSG-kode 25832, 25833, 25835).";
         }
 
-        protected override Status Validate(IGmlValidationData data)
+        protected override void Validate(IGmlValidationData data)
         {
             if (!data.Surfaces.Any())
-                return Status.NOT_EXECUTED;
+                SkipRule();
 
             var espgCodes = GetSetting<int[]>("EspgCodes2D");
 
-            data.Surfaces.ForEach(document => Messages.AddRange(Validate(document, espgCodes)));
-
-            return HasMessages ? Status.FAILED : Status.PASSED;
+            data.Surfaces.ForEach(document => Validate(document, espgCodes));
         }
 
-        public static List<RuleMessage> Validate(GmlDocument document, int[] espgCodes)
+        public void Validate(GmlDocument document, int[] espgCodes)
         {
-            var messages = new List<RuleMessage>();
             var codes = new List<int>();
             var envElement = document.GetElement("*/*:boundedBy/*:Envelope");
             int? envEpsg = null;
@@ -41,12 +38,11 @@ namespace DiBK.RuleValidator.Rules.Gml
 
                 if (srsName == null)
                 {
-                    messages.Add(new GmlRuleMessage
-                    {
-                        Message = $"{envElement.GetName()} mangler gyldig koordinatsystem",
-                        FileName = document.FileName,
-                        XPath = new[] { envElement.GetXPath() }
-                    });
+                    this.AddMessage(
+                        $"{envElement.GetName()} mangler gyldig koordinatsystem",
+                        document.FileName,
+                        new[] { envElement.GetXPath() }
+                    );
                 }
                 else
                 {
@@ -54,21 +50,19 @@ namespace DiBK.RuleValidator.Rules.Gml
 
                     if (!epsg.HasValue)
                     {
-                        messages.Add(new GmlRuleMessage
-                        {
-                            Message = string.Format(_messageTemplate, srsName),
-                            FileName = document.FileName,
-                            XPath = new[] { envElement.GetXPath() }
-                        });
+                        this.AddMessage(
+                            string.Format(_messageTemplate, srsName),
+                            document.FileName,
+                            new[] { envElement.GetXPath() }
+                        );
                     }
                     else if (!espgCodes.Contains(epsg.Value))
                     {
-                        messages.Add(new GmlRuleMessage
-                        {
-                            Message = string.Format(_messageTemplate, epsg.Value),
-                            FileName = document.FileName,
-                            XPath = new[] { envElement.GetXPath() }
-                        });
+                        this.AddMessage(
+                            string.Format(_messageTemplate, epsg.Value),
+                            document.FileName,
+                            new[] { envElement.GetXPath() }
+                        );
                     }
                     else
                     {
@@ -90,23 +84,21 @@ namespace DiBK.RuleValidator.Rules.Gml
 
                     if (!epsg.HasValue)
                     {
-                        messages.Add(new GmlRuleMessage
-                        {
-                            Message = string.Format(_messageTemplate, srsName),
-                            FileName = document.FileName,
-                            XPath = new[] { element.GetXPath() },
-                            GmlIds = new[] { GmlHelper.GetFeatureGmlId(element) }
-                        });
+                        this.AddMessage(
+                            string.Format(_messageTemplate, srsName),
+                            document.FileName,
+                            new[] { element.GetXPath() },
+                            new[] { GmlHelper.GetFeatureGmlId(element) }
+                        );
                     }
                     else if (!espgCodes.Contains(epsg.Value))
                     {
-                        messages.Add(new GmlRuleMessage
-                        {
-                            Message = string.Format(_messageTemplate, epsg.Value),
-                            FileName = document.FileName,
-                            XPath = new[] { element.GetXPath() },
-                            GmlIds = new[] { GmlHelper.GetFeatureGmlId(element) }
-                        });
+                        this.AddMessage(
+                            string.Format(_messageTemplate, epsg.Value),
+                            document.FileName,
+                            new[] { element.GetXPath() },
+                            new[] { GmlHelper.GetFeatureGmlId(element) }
+                        );
                     }
                     else
                     {
@@ -115,13 +107,12 @@ namespace DiBK.RuleValidator.Rules.Gml
                 }
                 else if (!envEpsg.HasValue)
                 {                    
-                    messages.Add(new GmlRuleMessage
-                    {
-                        Message = $"{element.GetName()} '{element.GetAttribute("gml:id")}' mangler gyldig koordinatsystem.",
-                        FileName = document.FileName,
-                        XPath = new[] { element.GetXPath() },
-                        GmlIds = new[] { GmlHelper.GetFeatureGmlId(element) }
-                    });
+                    this.AddMessage(
+                        $"{GmlHelper.GetNameAndId(element)} mangler gyldig koordinatsystem.",
+                        document.FileName,
+                        new[] { element.GetXPath() },
+                        new[] { GmlHelper.GetFeatureGmlId(element) }
+                    );
                 }
             }
 
@@ -129,14 +120,11 @@ namespace DiBK.RuleValidator.Rules.Gml
 
             if (codeGroupings.Count() > 1)
             {
-                messages.Add(new GmlRuleMessage
-                {
-                    Message = $"Geometriene i datasettet har ulike koordinatreferansesystemkoder: {string.Join(", ", codeGroupings.Select(grouping => grouping.Key))}.",
-                    FileName = document.FileName,
-                });
+                this.AddMessage(
+                    $"Geometriene i datasettet har ulike koordinatreferansesystemkoder: {string.Join(", ", codeGroupings.Select(grouping => grouping.Key))}.",
+                    document.FileName
+                );
             }
-
-            return messages;
         }
     }
 }

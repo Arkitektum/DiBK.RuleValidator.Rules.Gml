@@ -1,6 +1,5 @@
 ﻿using DiBK.RuleValidator.Config;
 using Microsoft.Extensions.DependencyInjection;
-using System.Reflection;
 
 namespace DiBK.RuleValidator.Rules.Gml.Tests.Setup
 {
@@ -10,15 +9,17 @@ namespace DiBK.RuleValidator.Rules.Gml.Tests.Setup
         {
             var services = new ServiceCollection();
 
-            services.AddRuleValidator(new[] {
-                Assembly.Load("DiBK.RuleValidator.Rules.Gml")
+            services.AddRuleValidator(settings =>
+            {
+                settings.AddAssemblies("DiBK.RuleValidator.Rules.Gml");
+                settings.MaxMessageCount = 500;
             });
-            
+
             var serviceProvider = services.BuildServiceProvider();
 
-            RuleConfigs = serviceProvider.GetRequiredService<IRuleConfigs>();
+            RuleSettings = serviceProvider.GetRequiredService<IRuleSettings>();
         }
 
-        public IRuleConfigs RuleConfigs { get; private set; }
+        public IRuleSettings RuleSettings { get; private set; }
     }
 }

@@ -14,18 +14,18 @@ namespace DiBK.RuleValidator.Rules.Gml.Tests.Setup
     {
         private static readonly string[] _manifestResourceNames = Assembly.GetExecutingAssembly().GetManifestResourceNames();
 
-        public static IRuleValidator GetRuleValidator(IRuleConfigs ruleConfigs)
+        public static IRuleValidator GetRuleValidator(IRuleSettings ruleSettings)
         {
-            return new RuleValidator(new RuleService(), ruleConfigs, Mock.Of<ILogger<RuleValidator>>(), Mock.Of<ILogger<Rule>>());
+            return new RuleValidator(new RuleService(), ruleSettings, Mock.Of<ILogger<RuleValidator>>(), Mock.Of<ILogger<Rule>>());
         }
 
         public static IGmlValidationData GetGmlValidationData(
-            string plankart2DFileName = null,
-            string plankart3DFileName = null)
+            string map2DFileName = null,
+            string map3DFileName = null)
         {
             return GmlValidationData.Create(
-                GetGmlValidationData(plankart2DFileName),
-                GetGmlValidationData(plankart3DFileName)
+                GetGmlValidationData(map2DFileName),
+                GetGmlValidationData(map3DFileName)
             );
         }
 

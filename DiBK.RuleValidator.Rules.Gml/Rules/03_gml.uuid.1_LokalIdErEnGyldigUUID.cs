@@ -17,16 +17,14 @@ namespace DiBK.RuleValidator.Rules.Gml
             Description = "Egenskapen 'LokalId' må være en gyldig UUID (ref 2.1)";
         }
 
-        protected override Status Validate(IGmlValidationData data)
+        protected override void Validate(IGmlValidationData data)
         {
             if (!data.Surfaces.Any() && !data.Solids.Any())
-                return Status.NOT_EXECUTED;
+                SkipRule();
 
             data.Surfaces.Concat(data.Solids)
                 .ToList()
                 .ForEach(Validate);
-
-            return HasMessages ? Status.FAILED : Status.PASSED;
         }
 
         private void Validate(GmlDocument document)
@@ -44,7 +42,7 @@ namespace DiBK.RuleValidator.Rules.Gml
                 if (!_uuidRegex.IsMatch(lokalId))
                 {
                     this.AddMessage(
-                        $"{GmlHelper.GetNameAndId(GmlHelper.GetFeature(element))}: Egenskapen 'LokalId' må være en gyldig UUID.",
+                        $"{GmlHelper.GetNameAndId(GmlHelper.GetFeatureElement(element))}: Egenskapen 'LokalId' må være en gyldig UUID.",
                         document.FileName,
                         new[] { element.GetXPath() },
                         new[] { GmlHelper.GetFeatureGmlId(element) }
@@ -53,7 +51,7 @@ namespace DiBK.RuleValidator.Rules.Gml
                 else if (uuids.Any(id => id == lokalId))
                 {
                     this.AddMessage(
-                        $"{GmlHelper.GetNameAndId(GmlHelper.GetFeature(element))}: Det kan ikke finnes flere like 'LokalId'. 'LokalId' må være unik.",
+                        $"{GmlHelper.GetNameAndId(GmlHelper.GetFeatureElement(element))}: Det kan ikke finnes flere like 'LokalId'. 'LokalId' må være unik.",
                         document.FileName,
                         new[] { element.GetXPath() },
                         new[] { GmlHelper.GetFeatureGmlId(element) }

@@ -15,10 +15,10 @@ namespace DiBK.RuleValidator.Rules.Gml
             Name = "GML-ID for alle objekter i planen skal være unike";
         }
 
-        protected override Status Validate(IGmlValidationData data)
+        protected override void Validate(IGmlValidationData data)
         {
             if (!data.Surfaces.Any() && !data.Solids.Any())
-                return Status.NOT_EXECUTED;
+                SkipRule();
 
             var duplicates = GetGmlIds(data)
                 .GroupBy(tuple => new { tuple.FileName, tuple.Attribute.Value })
@@ -37,8 +37,6 @@ namespace DiBK.RuleValidator.Rules.Gml
                     );
                 }
             }
-
-            return HasMessages ? Status.FAILED : Status.PASSED;
         }
 
         private static List<(string FileName, XAttribute Attribute)> GetGmlIds(IGmlValidationData data)

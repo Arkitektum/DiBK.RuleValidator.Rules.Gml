@@ -12,14 +12,12 @@ namespace DiBK.RuleValidator.Rules.Gml
             Documentation = "https://dibk.atlassian.net/wiki/spaces/FP/pages/1918763029/gml.kurve.1";
         }
 
-        protected override Status Validate(IGmlValidationData data)
+        protected override void Validate(IGmlValidationData data)
         {
             if (!data.Surfaces.Any())
-                return Status.NOT_EXECUTED;
+                SkipRule();
 
             data.Surfaces.ForEach(Validate);
-
-            return HasMessages ? Status.FAILED : Status.PASSED;
         }
 
         private void Validate(GmlDocument document)

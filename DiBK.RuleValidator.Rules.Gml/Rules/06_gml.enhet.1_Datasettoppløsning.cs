@@ -17,14 +17,12 @@ namespace DiBK.RuleValidator.Rules.Gml
             MessageType = MessageType.WARNING;
         }
 
-        protected override Status Validate(IGmlValidationData data)
+        protected override void Validate(IGmlValidationData data)
         {
             if (!data.Surfaces.Any() && !data.Solids.Any())
-                return Status.NOT_EXECUTED;
+                SkipRule();
 
             data.Surfaces.Concat(data.Solids).ToList().ForEach(Validate);
-
-            return HasMessages ? Status.WARNING : Status.PASSED;
         }
 
         private void Validate(GmlDocument document)

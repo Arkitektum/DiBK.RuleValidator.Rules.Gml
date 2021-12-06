@@ -13,18 +13,16 @@ namespace DiBK.RuleValidator.Rules.Gml
             Documentation = "https://dibk.atlassian.net/wiki/spaces/FP/pages/1828814869/rpf.xlink.1";
         }
 
-        protected override Status Validate(IGmlValidationData data)
+        protected override void Validate(IGmlValidationData data)
         {
             if (!data.Surfaces.Any() && !data.Solids.Any())
-                return Status.NOT_EXECUTED;
+                SkipRule();
 
             var documents = data.Surfaces.Concat(data.Solids);
             var allGmlIds = GetGmlIds(documents);
 
             foreach (var document in documents)
                 Validate(document, allGmlIds);
-
-            return HasMessages ? Status.FAILED : Status.PASSED;
         }
 
         private void Validate(GmlDocument document, Dictionary<string, IEnumerable<string>> allGmlIds)
@@ -56,7 +54,7 @@ namespace DiBK.RuleValidator.Rules.Gml
                 if (allGmlIds.TryGetValue(fileName, out var gmlIds) && gmlIds.Contains(gmlId))
                     continue;
 
-                var feature = GmlHelper.GetFeature(element);
+                var feature = GmlHelper.GetFeatureElement(element);
 
                 this.AddMessage(
                     $"Referansen fra {feature.GetName()} '{feature.GetAttribute("gml:id")}' til {element.GetName()} '{gmlId}' fungerer ikke.", 

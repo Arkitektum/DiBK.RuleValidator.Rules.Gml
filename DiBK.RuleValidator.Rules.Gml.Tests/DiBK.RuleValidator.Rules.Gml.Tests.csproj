@@ -89,4 +89,8 @@
 		<PackageReference Include="MaxRev.Gdal.WindowsRuntime.Minimal" Version="3.2.0.310" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <ProjectReference Include="..\DiBK.RuleValidator.Rules.Gml\DiBK.RuleValidator.Rules.Gml.csproj" />
+	</ItemGroup>
+
 </Project>

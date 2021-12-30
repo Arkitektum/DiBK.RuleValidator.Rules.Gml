@@ -1,6 +1,7 @@
 ﻿using DiBK.RuleValidator.Extensions;
 using DiBK.RuleValidator.Rules.Gml.Constants;
 using OSGeo.OGR;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
@@ -27,7 +28,7 @@ namespace DiBK.RuleValidator.Rules.Gml
 
         private void Validate(GmlDocument document)
         {
-            var surfaceElements = document.GetFeatures().GetElements("*/gml:MultiSurface | */gml:Surface | */gml:Polygon");
+            var surfaceElements = document.GetFeatures().GetElements("*/gml:MultiSurface | */gml:Surface | */gml:Polygon").ToList();
 
             foreach (var element in surfaceElements)
             {
@@ -41,54 +42,31 @@ namespace DiBK.RuleValidator.Rules.Gml
                 if (polygon.IsSimple())
                     continue;
 
-                DetectSelfIntersections(document, element, polygon);
+                DetectSelfIntersection(document, element, polygon);
             }
 
             SetData(string.Format(DataKey.Selvkryss, document.Id), _xPaths);
         }
 
-        private void DetectSelfIntersections(GmlDocument document, XElement element, Geometry polygon)
+        private void DetectSelfIntersection(GmlDocument document, XElement element, Geometry polygon)
         {
-            var lineSegmentsList = GeometryHelper.GetLineSegmentsOfPolygon(polygon);
+            var point = GeometryHelper.DetectSelfIntersection(polygon);
 
-            foreach (var lineSegments in lineSegmentsList)
-            {
-                for (var i = 0; i < lineSegments.Count; i++)
-                {
-                    var lineSegment = lineSegments[i];
-                    var otherLineSegments = lineSegments.Skip(i + 1).ToList();
+            if (point == default)
+                return;
 
-                    for (int j = 0; j < otherLineSegments.Count; j++)
-                    {
-                        var otherLineSegment = otherLineSegments[j];
+            var pointWkt = FormattableString.Invariant($"POINT ({point.X} {point.Y})");
+            var xPath = element.GetXPath();
 
-                        if (GeometryHelper.LineSegmentsAreConnected(lineSegment, otherLineSegment))
-                            continue;
+            this.AddMessage(
+                FormattableString.Invariant($"{GmlHelper.GetNameAndId(element)}: Avgrensningen krysser seg selv ved punktet ({point.X}, {point.Y})."),
+                document.FileName,
+                new[] { xPath },
+                new[] { GmlHelper.GetFeatureGmlId(element) },
+                pointWkt
+            );
 
-                        using var intersection = lineSegment.Intersection(otherLineSegment);
-
-                        if (intersection.IsEmpty())
-                            continue;
-
-                        var point = intersection.GetPoint(0);
-                        var pointWkt = $"POINT ({point[0]} {point[1]})";
-                        var gmlId = GmlHelper.GetClosestGmlId(element);
-                        var xPath = element.GetXPath();
-
-                        this.AddMessage(
-                            $"{GmlHelper.GetNameAndId(element)}: Avgrensningen krysser seg selv.",
-                            document.FileName,
-                            new[] { xPath },
-                            new[] { GmlHelper.GetFeatureGmlId(element) },
-                            pointWkt                            
-                        );
-
-                        _xPaths.Add(xPath);
-                    }
-                }
-            }
-
-            lineSegmentsList.ForEach(lineSegments => lineSegments.Dispose());
+            _xPaths.Add(xPath);
         }
     }
 }

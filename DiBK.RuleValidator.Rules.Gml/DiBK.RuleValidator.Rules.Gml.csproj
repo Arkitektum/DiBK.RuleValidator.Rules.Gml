@@ -7,12 +7,36 @@
     <Copyright>Direktoratet for byggkvalitet (DiBK)</Copyright>
     <Authors>Direktoratet for byggkvalitet (DiBK)</Authors>
     <RepositoryUrl>https://github.com/Arkitektum/DiBK.RuleValidator.Rules.Gml</RepositoryUrl>
-    <Version>1.0.8</Version>
+    <Version>2.0.0-alpha</Version>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\DiBK.RuleValidator.Extensions\DiBK.RuleValidator.Extensions\DiBK.RuleValidator.Extensions.csproj" />
-    <ProjectReference Include="..\..\DiBK.RuleValidator\DiBK.RuleValidator\DiBK.RuleValidator.csproj" />
+    <PackageReference Include="DiBK.RuleValidator" Version="2.0.0-alpha" />
+    <PackageReference Include="DiBK.RuleValidator.Extensions" Version="2.0.0-alpha" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Translations\gml.bue.1.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>gml.bue.1.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Translations\gml.epsg.1.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>gml.epsg.1.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Translations\gml.bue.1.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>gml.bue.1.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Translations\gml.epsg.1.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>gml.epsg.1.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
 
 </Project>

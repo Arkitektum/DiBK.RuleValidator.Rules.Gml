@@ -7,13 +7,13 @@ namespace DiBK.RuleValidator.Rules.Gml
 {
     public class KoordinatreferansesystemForKart2D : Rule<IGmlValidationData>
     {
-        private static readonly string _messageTemplate = "Koordinatsystem '{0}' er ikke i henhold til godkjente koordinatsystem/EPSG-koder på https://register.geonorge.no/epsg-koder";
+        private static readonly string _messageTemplate = "Koordinatsystem '{0}' er ikke i henhold til godkjente koordinatsystem/EPSG-koder på https://register.geonorge.no/epsg-koder.";
 
         public override void Create()
         {
             Id = "gml.epsg.1";
             Name = "Koordinatreferansesystem for kart i 2D";
-            Description = "Koordinatsystemet for 2D-kart må være i UTM 32, 33 eller 35 (EPSG-kode 25832, 25833, 25835).";
+            Description = "Koordinatsystemet for 2D-kart må være i henhold til godkjente koordinatsystem/EPSG-koder.";
         }
 
         protected override void Validate(IGmlValidationData data)
@@ -21,110 +21,140 @@ namespace DiBK.RuleValidator.Rules.Gml
             if (!data.Surfaces.Any())
                 SkipRule();
 
-            var espgCodes = GetSetting<int[]>("EspgCodes2D");
+            var validEpsgCodes = GetSetting<string[]>("ValidEpsgCodes2D");
 
-            data.Surfaces.ForEach(document => Validate(document, espgCodes));
+            data.Surfaces.ForEach(document => Validate(document, validEpsgCodes));
         }
 
-        public void Validate(GmlDocument document, int[] espgCodes)
+        public void Validate(GmlDocument document, string[] validEpsgCodes)
         {
-            var codes = new List<int>();
-            var envElement = document.GetElement("*/*:boundedBy/*:Envelope");
-            int? envEpsg = null;
+            var envelopeElement = document.Document.Root.GetElement("*:boundedBy/*:Envelope");
+            string envelopeEpsgCode = null;
 
-            if (envElement != null)
+            if (envelopeElement != null)
             {
-                var srsName = envElement.GetAttribute("srsName");
+                var srsName = envelopeElement.Attribute("srsName")?.Value;
 
                 if (srsName == null)
                 {
                     this.AddMessage(
-                        $"{envElement.GetName()} mangler gyldig koordinatsystem",
+                        $"{envelopeElement.GetName()} mangler gyldig koordinatsystem.",
                         document.FileName,
-                        new[] { envElement.GetXPath() }
+                        new[] { envelopeElement.GetXPath() }
                     );
+
+                    return;
                 }
                 else
                 {
                     var epsg = GmlHelper.GetEpsgCode(srsName);
 
-                    if (!epsg.HasValue)
+                    if (epsg == null)
                     {
                         this.AddMessage(
                             string.Format(_messageTemplate, srsName),
                             document.FileName,
-                            new[] { envElement.GetXPath() }
+                            new[] { envelopeElement.GetXPath() }
                         );
+
+                        return;
                     }
-                    else if (!espgCodes.Contains(epsg.Value))
+                    else if (!validEpsgCodes.Contains(epsg))
                     {
                         this.AddMessage(
-                            string.Format(_messageTemplate, epsg.Value),
+                            string.Format(_messageTemplate, epsg),
                             document.FileName,
-                            new[] { envElement.GetXPath() }
+                            new[] { envelopeElement.GetXPath() }
                         );
+
+                        return;
                     }
                     else
                     {
-                        envEpsg = epsg;
-                        codes.Add(epsg.Value);
+                        envelopeEpsgCode = epsg;
                     }
                 }
             }
 
-            var geoElements = document.GetFeatures().GetElements("//gml:*[@gml:id]");
+            var epgsDictionary = CreateEpsgDictionary(document, envelopeEpsgCode);
 
-            foreach (var element in geoElements)
-            {
-                var srsName = element.GetAttribute("srsName");
-
-                if (srsName != null)
-                {
-                    var epsg = GmlHelper.GetEpsgCode(srsName);
-
-                    if (!epsg.HasValue)
-                    {
-                        this.AddMessage(
-                            string.Format(_messageTemplate, srsName),
-                            document.FileName,
-                            new[] { element.GetXPath() },
-                            new[] { GmlHelper.GetFeatureGmlId(element) }
-                        );
-                    }
-                    else if (!espgCodes.Contains(epsg.Value))
-                    {
-                        this.AddMessage(
-                            string.Format(_messageTemplate, epsg.Value),
-                            document.FileName,
-                            new[] { element.GetXPath() },
-                            new[] { GmlHelper.GetFeatureGmlId(element) }
-                        );
-                    }
-                    else
-                    {
-                        codes.Add(epsg.Value);
-                    }
-                }
-                else if (!envEpsg.HasValue)
-                {                    
-                    this.AddMessage(
-                        $"{GmlHelper.GetNameAndId(element)} mangler gyldig koordinatsystem.",
-                        document.FileName,
-                        new[] { element.GetXPath() },
-                        new[] { GmlHelper.GetFeatureGmlId(element) }
-                    );
-                }
-            }
-
-            var codeGroupings = codes.GroupBy(code => code);
-
-            if (codeGroupings.Count() > 1)
+            if (epgsDictionary.Count > 1)
             {
                 this.AddMessage(
-                    $"Geometriene i datasettet har ulike koordinatreferansesystemkoder: {string.Join(", ", codeGroupings.Select(grouping => grouping.Key))}.",
+                    $"Geometriene i datasettet har ulike koordinatreferansesystemkoder: {string.Join(", ", epgsDictionary.Select(grouping => grouping.Key))}.",
                     document.FileName
                 );
+
+                return;
             }
+
+            if (envelopeEpsgCode == null)
+            {
+                var geometryElements = document.GetFeatures()
+                    .SelectMany(featureElement => GmlHelper.GetFeatureGeometryElements(featureElement))
+                    .ToList();
+
+                foreach (var element in geometryElements)
+                {
+                    var srsName = element.Attribute("srsName")?.Value;
+
+                    if (srsName == null)
+                    {
+                        this.AddMessage(
+                            $"{element.GetName()} mangler gyldig koordinatsystem",
+                            document.FileName,
+                            new[] { element.GetXPath() },
+                            new[] { GmlHelper.GetFeatureGmlId(element) }
+                        );
+                    }
+                    else
+                    {
+                        var epsg = GmlHelper.GetEpsgCode(srsName);
+
+                        if (epsg == null)
+                        {
+                            this.AddMessage(
+                                string.Format(_messageTemplate, srsName),
+                                document.FileName,
+                                new[] { element.GetXPath() },
+                                new[] { GmlHelper.GetFeatureGmlId(element) }
+                            );
+                        }
+                        else if (!validEpsgCodes.Contains(epsg))
+                        {
+                            this.AddMessage(
+                                string.Format(_messageTemplate, epsg),
+                                document.FileName,
+                                new[] { element.GetXPath() },
+                                new[] { GmlHelper.GetFeatureGmlId(element) }
+                            );
+                        }
+                    }
+                }
+            }
+        }
+
+        private static Dictionary<string, int> CreateEpsgDictionary(GmlDocument document, string envelopeEpsg)
+        {
+            var epgsDictionary = document.GetFeatures()
+                .SelectMany(featureElement => featureElement.Descendants().Where(element => element.Attribute("srsName") != null))
+                .Select(element =>
+                {
+                    var srsName = element.Attribute("srsName").Value;
+                    return GmlHelper.GetEpsgCode(srsName) ?? srsName;
+                })
+                .GroupBy(epsg => epsg)
+                .ToDictionary(grouping => grouping.Key, grouping => grouping.Count());
+
+            if (envelopeEpsg != null)
+            {
+                if (epgsDictionary.ContainsKey(envelopeEpsg))
+                    epgsDictionary[envelopeEpsg]++;
+                else
+                    epgsDictionary.Add(envelopeEpsg, 1);
+            }
+
+            return epgsDictionary;
         }
     }
 }

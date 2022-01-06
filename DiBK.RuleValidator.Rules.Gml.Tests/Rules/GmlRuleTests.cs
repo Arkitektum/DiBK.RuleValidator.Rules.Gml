@@ -125,16 +125,6 @@ namespace DiBK.RuleValidator.Rules.Gml.Tests.Rules
             rule.Passed.Should().BeTrue();
         }
 
-        [Fact(DisplayName = "gml.enhet.1: Datasettoppløsning - FAILED")]
-        public async Task Datasettoppløsning_RuleWillFail()
-        {
-            var validationData = TestHelper.GetGmlValidationData("gml.enhet.1-fail.gml");
-            var rule = _validator.GetRule<Datasettoppløsning, IGmlValidationData>();
-
-            await rule.Execute(validationData);
-            rule.Passed.Should().BeFalse();
-        }
-
         [Fact(DisplayName = "gml.kurve.1: Kurver skal ha gyldig geometri - FAILED")]
         public async Task KurverSkalHaGyldigGeometri_RuleWillFail()
         {

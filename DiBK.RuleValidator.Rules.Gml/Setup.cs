@@ -14,7 +14,6 @@ namespace DiBK.RuleValidator.Rules.Gml
                     .AddRule<LokalIdErEnGyldigUUID>()
                     .AddRule<KoordinatreferansesystemForKart2D>()
                     .AddRule<KoordinatreferansesystemForKart3D>()
-                    .AddRule<Datasettoppløsning>()
                     .AddRule<KurverSkalHaGyldigGeometri>()
                     .AddRule<FlaterSkalHaGyldigGeometri>()
                     .AddRule<AvgrensningenTilEnFlateKanIkkeKrysseSegSelv>()

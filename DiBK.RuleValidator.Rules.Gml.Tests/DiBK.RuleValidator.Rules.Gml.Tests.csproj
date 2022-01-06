@@ -11,7 +11,6 @@
 	  <None Remove="TestData\gml.bue.1-pass.gml" />
 	  <None Remove="TestData\gml.bue.2-fail.gml" />
 	  <None Remove="TestData\gml.bue.2-pass.gml" />
-	  <None Remove="TestData\gml.enhet.1-fail.gml" />
 	  <None Remove="TestData\gml.epsg.1-fail.gml" />
 	  <None Remove="TestData\gml.epsg.1-pass-1.gml" />
 	  <None Remove="TestData\gml.epsg.1-pass-2.gml" />
@@ -40,7 +39,6 @@
 	  <EmbeddedResource Include="TestData\gml.bue.1-pass.gml" />
 	  <EmbeddedResource Include="TestData\gml.bue.2-fail.gml" />
 	  <EmbeddedResource Include="TestData\gml.bue.2-pass.gml" />
-	  <EmbeddedResource Include="TestData\gml.enhet.1-fail.gml" />
 	  <EmbeddedResource Include="TestData\gml.epsg.1-fail.gml" />
 	  <EmbeddedResource Include="TestData\gml.epsg.1-pass-1.gml" />
 	  <EmbeddedResource Include="TestData\gml.epsg.1-pass-2.gml" />

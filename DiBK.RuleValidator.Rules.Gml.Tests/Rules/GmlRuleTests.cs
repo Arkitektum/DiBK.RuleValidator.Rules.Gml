@@ -19,7 +19,7 @@ namespace DiBK.RuleValidator.Rules.Gml.Tests.Rules
         public async Task FungerendeReferanserMellomObjekter_RuleWillFail()
         {
             var validationData = TestHelper.GetGmlValidationData("gml.xlink.1-2D-fail.gml", "gml.xlink.1-3D-fail.gml");
-            var rule = _validator.GetRule<FungerendeReferanserMellomObjekter, IGmlValidationData>();
+            using var rule = _validator.GetRule<FungerendeReferanserMellomObjekter, IGmlValidationData>();
 
             await rule.Execute(validationData);
             rule.Passed.Should().BeFalse();
@@ -29,7 +29,7 @@ namespace DiBK.RuleValidator.Rules.Gml.Tests.Rules
         public async Task FungerendeReferanserMellomObjekter_RuleWillPass()
         {
             var validationData = TestHelper.GetGmlValidationData("gml.xlink.1-2D-pass.gml", "gml.xlink.1-3D-pass.gml");
-            var rule = _validator.GetRule<FungerendeReferanserMellomObjekter, IGmlValidationData>();
+            using var rule = _validator.GetRule<FungerendeReferanserMellomObjekter, IGmlValidationData>();
 
             await rule.Execute(validationData);
             rule.Passed.Should().BeTrue();
@@ -39,7 +39,7 @@ namespace DiBK.RuleValidator.Rules.Gml.Tests.Rules
         public async Task UnikGmlIdForAlleObjekterInnenforDatasettet_RuleWillFail()
         {
             var validationData = TestHelper.GetGmlValidationData("gml.gmlid.1-2D-fail.gml", "gml.gmlid.1-3D-fail.gml");
-            var rule = _validator.GetRule<UnikGmlIdForAlleObjekterInnenforDatasettet, IGmlValidationData>();
+            using var rule = _validator.GetRule<UnikGmlIdForAlleObjekterInnenforDatasettet, IGmlValidationData>();
 
             await rule.Execute(validationData);
             rule.Passed.Should().BeFalse();
@@ -49,7 +49,7 @@ namespace DiBK.RuleValidator.Rules.Gml.Tests.Rules
         public async Task UnikGmlIdForAlleObjekterInnenforDatasettet_RuleWillPass()
         {
             var validationData = TestHelper.GetGmlValidationData("gml.gmlid.1-2D-pass.gml", "gml.gmlid.1-3D-pass.gml");
-            var rule = _validator.GetRule<UnikGmlIdForAlleObjekterInnenforDatasettet, IGmlValidationData>();
+            using var rule = _validator.GetRule<UnikGmlIdForAlleObjekterInnenforDatasettet, IGmlValidationData>();
 
             await rule.Execute(validationData);
             rule.Passed.Should().BeTrue();
@@ -59,7 +59,7 @@ namespace DiBK.RuleValidator.Rules.Gml.Tests.Rules
         public async Task LokalIdErEnGyldigUUID_RuleWillFail()
         {
             var validationData = TestHelper.GetGmlValidationData("gml.uuid.1-fail.gml");
-            var rule = _validator.GetRule<LokalIdErEnGyldigUUID, IGmlValidationData>();
+            using var rule = _validator.GetRule<LokalIdErEnGyldigUUID, IGmlValidationData>();
 
             await rule.Execute(validationData);
             rule.Passed.Should().BeFalse();
@@ -69,7 +69,7 @@ namespace DiBK.RuleValidator.Rules.Gml.Tests.Rules
         public async Task LokalIdErEnGyldigUUID_RuleWillPass()
         {
             var validationData = TestHelper.GetGmlValidationData("gml.uuid.1-pass.gml");
-            var rule = _validator.GetRule<LokalIdErEnGyldigUUID, IGmlValidationData>();
+            using var rule = _validator.GetRule<LokalIdErEnGyldigUUID, IGmlValidationData>();
 
             await rule.Execute(validationData);
             rule.Passed.Should().BeTrue();
@@ -79,7 +79,7 @@ namespace DiBK.RuleValidator.Rules.Gml.Tests.Rules
         public async Task KoordinatreferansesystemForKart2D_RuleWillFail()
         {
             var validationData = TestHelper.GetGmlValidationData("gml.epsg.1-fail.gml");
-            var rule = _validator.GetRule<KoordinatreferansesystemForKart2D, IGmlValidationData>();
+            using var rule = _validator.GetRule<KoordinatreferansesystemForKart2D, IGmlValidationData>();
 
             await rule.Execute(validationData);
             rule.Passed.Should().BeFalse();
@@ -89,7 +89,7 @@ namespace DiBK.RuleValidator.Rules.Gml.Tests.Rules
         public async Task KoordinatreferansesystemForKart2D_RuleWillPass()
         {
             var validationData = TestHelper.GetGmlValidationData("gml.epsg.1-pass-1.gml");
-            var rule = _validator.GetRule<KoordinatreferansesystemForKart2D, IGmlValidationData>();
+            using var rule = _validator.GetRule<KoordinatreferansesystemForKart2D, IGmlValidationData>();
 
             await rule.Execute(validationData);
             rule.Passed.Should().BeTrue();
@@ -99,7 +99,7 @@ namespace DiBK.RuleValidator.Rules.Gml.Tests.Rules
         public async Task KoordinatreferansesystemForKart2D_RuleWillAlsoPass()
         {
             var validationData = TestHelper.GetGmlValidationData("gml.epsg.1-pass-2.gml");
-            var rule = _validator.GetRule<KoordinatreferansesystemForKart2D, IGmlValidationData>();
+            using var rule = _validator.GetRule<KoordinatreferansesystemForKart2D, IGmlValidationData>();
 
             await rule.Execute(validationData);
             rule.Passed.Should().BeTrue();
@@ -109,7 +109,7 @@ namespace DiBK.RuleValidator.Rules.Gml.Tests.Rules
         public async Task KoordinatreferansesystemForKart3D_RuleWillFail()
         {
             var validationData = TestHelper.GetGmlValidationData("gml.epsg.2-fail.gml");
-            var rule = _validator.GetRule<KoordinatreferansesystemForKart3D, IGmlValidationData>();
+            using var rule = _validator.GetRule<KoordinatreferansesystemForKart3D, IGmlValidationData>();
 
             await rule.Execute(validationData);
             rule.Passed.Should().BeFalse();
@@ -119,7 +119,7 @@ namespace DiBK.RuleValidator.Rules.Gml.Tests.Rules
         public async Task KoordinatreferansesystemForKart3D_RuleWillPass()
         {
             var validationData = TestHelper.GetGmlValidationData(null, "gml.epsg.2-pass.gml");
-            var rule = _validator.GetRule<KoordinatreferansesystemForKart3D, IGmlValidationData>();
+            using var rule = _validator.GetRule<KoordinatreferansesystemForKart3D, IGmlValidationData>();
 
             await rule.Execute(validationData);
             rule.Passed.Should().BeTrue();
@@ -129,7 +129,7 @@ namespace DiBK.RuleValidator.Rules.Gml.Tests.Rules
         public async Task KurverSkalHaGyldigGeometri_RuleWillFail()
         {
             var validationData = TestHelper.GetGmlValidationData("gml.kurve.1-fail.gml");
-            var rule = _validator.GetRule<KurverSkalHaGyldigGeometri, IGmlValidationData>();
+            using var rule = _validator.GetRule<KurverSkalHaGyldigGeometri, IGmlValidationData>();
 
             await rule.Execute(validationData);
             rule.Passed.Should().BeFalse();
@@ -139,7 +139,7 @@ namespace DiBK.RuleValidator.Rules.Gml.Tests.Rules
         public async Task FlaterSkalHaGyldigGeometri_RuleWillFail()
         {
             var validationData = TestHelper.GetGmlValidationData("gml.flate.1-fail.gml");
-            var rule = _validator.GetRule<FlaterSkalHaGyldigGeometri, IGmlValidationData>();
+            using var rule = _validator.GetRule<FlaterSkalHaGyldigGeometri, IGmlValidationData>();
 
             await rule.Execute(validationData);
             rule.Passed.Should().BeFalse();
@@ -149,7 +149,7 @@ namespace DiBK.RuleValidator.Rules.Gml.Tests.Rules
         public async Task AvgrensningenTilEnFlateKanIkkeKrysseSegSelv_RuleWillFail()
         {
             var validationData = TestHelper.GetGmlValidationData("gml.flate.2-fail.gml");
-            var rule = _validator.GetRule<AvgrensningenTilEnFlateKanIkkeKrysseSegSelv, IGmlValidationData>();
+            using var rule = _validator.GetRule<AvgrensningenTilEnFlateKanIkkeKrysseSegSelv, IGmlValidationData>();
 
             await rule.Execute(validationData);
             rule.Passed.Should().BeFalse();
@@ -159,7 +159,7 @@ namespace DiBK.RuleValidator.Rules.Gml.Tests.Rules
         public async Task AvgrensningeneTilEnFlateSkalNøstesRiktig_RuleWillFail()
         {
             var validationData = TestHelper.GetGmlValidationData("gml.flate.3-fail.gml");
-            var rule = _validator.GetRule<AvgrensningeneTilEnFlateSkalNøstesRiktig, IGmlValidationData>();
+            using var rule = _validator.GetRule<AvgrensningeneTilEnFlateSkalNøstesRiktig, IGmlValidationData>();
 
             await rule.Execute(validationData);
             rule.Passed.Should().BeFalse();
@@ -169,7 +169,7 @@ namespace DiBK.RuleValidator.Rules.Gml.Tests.Rules
         public async Task HullMåLiggeInnenforFlatensYtreAvgrensning_RuleWillFail()
         {
             var validationData = TestHelper.GetGmlValidationData("gml.flate.4-fail.gml");
-            var rule = _validator.GetRule<HullMåLiggeInnenforFlatensYtreAvgrensning, IGmlValidationData>();
+            using var rule = _validator.GetRule<HullMåLiggeInnenforFlatensYtreAvgrensning, IGmlValidationData>();
 
             await rule.Execute(validationData);
             rule.Passed.Should().BeFalse();
@@ -179,7 +179,7 @@ namespace DiBK.RuleValidator.Rules.Gml.Tests.Rules
         public async Task HullKanIkkeOverlappeAndreHullISammeFlate_RuleWillFail()
         {
             var validationData = TestHelper.GetGmlValidationData("gml.flate.5-fail.gml");
-            var rule = _validator.GetRule<HullKanIkkeOverlappeAndreHullISammeFlate, IGmlValidationData>();
+            using var rule = _validator.GetRule<HullKanIkkeOverlappeAndreHullISammeFlate, IGmlValidationData>();
 
             await rule.Execute(validationData);
             rule.Passed.Should().BeFalse();
@@ -189,7 +189,7 @@ namespace DiBK.RuleValidator.Rules.Gml.Tests.Rules
         public async Task BueKanIkkeHaDobbeltpunkter_RuleWillFail()
         {
             var validationData = TestHelper.GetGmlValidationData("gml.bue.1-fail.gml");
-            var rule = _validator.GetRule<BueKanIkkeHaDobbeltpunkter, IGmlValidationData>();
+            using var rule = _validator.GetRule<BueKanIkkeHaDobbeltpunkter, IGmlValidationData>();
 
             await rule.Execute(validationData);
             rule.Passed.Should().BeFalse();
@@ -199,7 +199,7 @@ namespace DiBK.RuleValidator.Rules.Gml.Tests.Rules
         public async Task BueKanIkkeHaDobbeltpunkter_RuleWillPass()
         {
             var validationData = TestHelper.GetGmlValidationData("gml.bue.1-pass.gml");
-            var rule = _validator.GetRule<BueKanIkkeHaDobbeltpunkter, IGmlValidationData>();
+            using var rule = _validator.GetRule<BueKanIkkeHaDobbeltpunkter, IGmlValidationData>();
 
             await rule.Execute(validationData);
             rule.Passed.Should().BeTrue();
@@ -209,7 +209,7 @@ namespace DiBK.RuleValidator.Rules.Gml.Tests.Rules
         public async Task BueKanIkkeHaPunkterPåRettLinje_RuleWillFail()
         {
             var validationData = TestHelper.GetGmlValidationData("gml.bue.2-fail.gml");
-            var rule = _validator.GetRule<BueKanIkkeHaPunkterPåRettLinje, IGmlValidationData>();
+            using var rule = _validator.GetRule<BueKanIkkeHaPunkterPåRettLinje, IGmlValidationData>();
 
             await rule.Execute(validationData);
             rule.Passed.Should().BeFalse();
@@ -219,7 +219,7 @@ namespace DiBK.RuleValidator.Rules.Gml.Tests.Rules
         public async Task BueKanIkkeHaPunkterPåRettLinje_RuleWillPass()
         {
             var validationData = TestHelper.GetGmlValidationData("gml.bue.2-pass.gml");
-            var rule = _validator.GetRule<BueKanIkkeHaPunkterPåRettLinje, IGmlValidationData>();
+            using var rule = _validator.GetRule<BueKanIkkeHaPunkterPåRettLinje, IGmlValidationData>();
 
             await rule.Execute(validationData);
             rule.Passed.Should().BeTrue();

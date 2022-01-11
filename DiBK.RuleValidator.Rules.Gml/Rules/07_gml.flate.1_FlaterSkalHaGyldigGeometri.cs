@@ -1,4 +1,5 @@
 ﻿using DiBK.RuleValidator.Extensions;
+using DiBK.RuleValidator.Extensions.Gml;
 using DiBK.RuleValidator.Rules.Gml.Constants;
 using System.Collections.Generic;
 using System.Linq;

@@ -1,5 +1,6 @@
 ﻿using DiBK.RuleValidator.Config;
 using DiBK.RuleValidator.Extensions;
+using DiBK.RuleValidator.Extensions.Gml;
 using DiBK.RuleValidator.Rules.Gml.Tests.Model;
 using Microsoft.Extensions.Logging;
 using Moq;

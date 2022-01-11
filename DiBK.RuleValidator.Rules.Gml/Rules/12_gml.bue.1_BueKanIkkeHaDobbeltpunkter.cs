@@ -1,4 +1,5 @@
 ﻿using DiBK.RuleValidator.Extensions;
+using DiBK.RuleValidator.Extensions.Gml;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -65,7 +66,7 @@ namespace DiBK.RuleValidator.Rules.Gml
                 if (hasDoublePoint)
                 {
                     this.AddMessage(
-                        Translate("En bue beregnes med tre punkter, og sirkelbuen kan ikke ha dobbeltpunkter."), 
+                        "En bue beregnes med tre punkter, og sirkelbuen kan ikke ha dobbeltpunkter.", 
                         document.FileName, 
                         new[] { element.GetXPath() },
                         new[] { GmlHelper.GetFeatureGmlId(element) }

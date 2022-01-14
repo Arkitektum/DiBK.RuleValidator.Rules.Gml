@@ -108,7 +108,7 @@ namespace DiBK.RuleValidator.Rules.Gml.Tests.Rules
         [Fact(DisplayName = "gml.epsg.2: Koordinatreferansesystem for kart i 3D - FAILED")]
         public async Task KoordinatreferansesystemForKart3D_RuleWillFail()
         {
-            var validationData = TestHelper.GetGmlValidationData("gml.epsg.2-fail.gml");
+            var validationData = TestHelper.GetGmlValidationData(null, "gml.epsg.2-fail.gml");
             using var rule = _validator.GetRule<KoordinatreferansesystemForKart3D, IGmlValidationData>();
 
             await rule.Execute(validationData);

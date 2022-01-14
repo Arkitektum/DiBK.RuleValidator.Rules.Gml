@@ -1,9 +1,12 @@
 ﻿using DiBK.RuleValidator.Extensions;
 using DiBK.RuleValidator.Extensions.Gml;
 using DiBK.RuleValidator.Rules.Gml.Constants;
+using NetTopologySuite.IO;
 using OSGeo.OGR;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using NtsGeometry = NetTopologySuite.Geometries.Geometry;
 
 namespace DiBK.RuleValidator.Rules.Gml
 {
@@ -31,26 +34,28 @@ namespace DiBK.RuleValidator.Rules.Gml
 
             foreach (var element in polygonElements)
             {
-                var exteriorElement = element.GetElement("*:exterior");
-                Geometry exterior;
+                var exteriorElement = element.GetElement("*:exterior/*");
+                Geometry exterior = null;
 
                 try
                 {
-                    exterior = GeometryHelper.CreatePolygon(exteriorElement);
+                    using var exteriorRing = Geometry.CreateFromGML(exteriorElement.ToString());
+                    exterior = GeometryHelper.CreatePolygonFromRing(exteriorRing);
                 }
                 catch
                 {
                     continue;
                 }
 
-                var interiorElements = element.GetElements("*:interior");
+                var interiorElements = element.GetElements("*:interior/*");
 
                 foreach (var interiorElement in interiorElements)
                 {
                     try
                     {
-                        using var interior = GeometryHelper.CreatePolygon(interiorElement);
-                        
+                        using var interiorRing = Geometry.CreateFromGML(interiorElement.ToString());
+                        using var interior = GeometryHelper.CreatePolygonFromRing(interiorRing);
+
                         if (!exterior.Contains(interior))
                         {
                             this.AddMessage(

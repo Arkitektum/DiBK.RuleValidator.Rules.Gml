@@ -32,18 +32,23 @@ namespace DiBK.RuleValidator.Rules.Gml
 
             foreach (var element in polygonElements)
             {
-                var interiorElements = element.GetElements("*:interior");
+                var interiorRingElements = element.GetElements("*:interior/*");
 
-                if (interiorElements.Count() < 2)
+                if (interiorRingElements.Count() < 2)
                     continue;
 
                 var interiors = new List<(XElement, Geometry)>();
 
-                foreach (var interiorElement in interiorElements)
+                foreach (var interiorRingElement in interiorRingElements)
                 {
                     try
                     {
-                        interiors.Add((interiorElement, GeometryHelper.CreatePolygon(interiorElement)));
+                        using var interiorRing = document.GetOrCreateGeometry(interiorRingElement, out var errorMessage);
+
+                        if (interiorRing != null)
+                        {
+                            interiors.Add((interiorRingElement, GeometryHelper.CreatePolygonFromRing(interiorRing)));
+                        }
                     }
                     catch
                     {

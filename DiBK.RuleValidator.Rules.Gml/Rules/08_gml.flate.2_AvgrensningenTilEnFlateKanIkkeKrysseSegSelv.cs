@@ -35,15 +35,10 @@ namespace DiBK.RuleValidator.Rules.Gml
             {
                 using var geometry = document.GetOrCreateGeometry(element, out var errorMessage);
 
-                if (geometry == null)
+                if (geometry == null || geometry.IsSimple())
                     continue;
 
-                using var polygon = geometry.GetGeometryType() == wkbGeometryType.wkbPolygon ? geometry : Ogr.ForceToPolygon(geometry);
-
-                if (polygon.IsSimple())
-                    continue;
-
-                DetectSelfIntersection(document, element, polygon);
+                DetectSelfIntersection(document, element, geometry);
             }
 
             SetData(string.Format(DataKey.Selvkryss, document.Id), _xPaths);

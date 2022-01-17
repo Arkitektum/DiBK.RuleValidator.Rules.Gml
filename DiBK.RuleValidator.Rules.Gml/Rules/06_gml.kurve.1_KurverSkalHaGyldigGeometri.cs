@@ -23,7 +23,7 @@ namespace DiBK.RuleValidator.Rules.Gml
 
         private void Validate(GmlDocument document)
         {
-            var curveElements = document.GetFeatures().GetElements("//gml:Curve");
+            var curveElements = document.GetFeatureGeometryElements(GmlGeometry.Curve);
 
             foreach (var element in curveElements)
             {

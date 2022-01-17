@@ -3,6 +3,7 @@ using DiBK.RuleValidator.Extensions.Gml;
 using DiBK.RuleValidator.Rules.Gml.Constants;
 using System.Collections.Generic;
 using System.Linq;
+using System.Xml.Linq;
 
 namespace DiBK.RuleValidator.Rules.Gml
 {
@@ -29,11 +30,7 @@ namespace DiBK.RuleValidator.Rules.Gml
 
         private void Validate(GmlDocument document)
         {
-            var invalidSurfaceXPaths = GetInvalidSurfaceXPaths(document.Id);
-
-            var surfaceElements = document.GetFeatures()
-                .GetElements("*/gml:MultiSurface | */gml:Surface | */gml:Polygon")
-                .Where(element => !invalidSurfaceXPaths.Contains(element.GetXPath()));
+            var surfaceElements = GetSurfaceElements(document);
 
             foreach (var element in surfaceElements)
             {
@@ -42,9 +39,9 @@ namespace DiBK.RuleValidator.Rules.Gml
                 if (geometry == null)
                 {
                     this.AddMessage(
-                        errorMessage, 
-                        document.FileName, 
-                        new[] { element.GetXPath() }, 
+                        errorMessage,
+                        document.FileName,
+                        new[] { element.GetXPath() },
                         new[] { GmlHelper.GetFeatureGmlId(element) }
                     );
                 }
@@ -59,6 +56,21 @@ namespace DiBK.RuleValidator.Rules.Gml
                 }
             }
         }
+
+        private List<XElement> GetSurfaceElements(GmlDocument document)
+        {
+            var surfaceElements = document.GetFeatureGeometryElements(GmlGeometry.MultiSurface, GmlGeometry.Surface, GmlGeometry.Polygon);
+
+            var invalidSurfaceXPaths = GetInvalidSurfaceXPaths(document.Id);
+
+            if (!invalidSurfaceXPaths.Any())
+                return surfaceElements.ToList();
+
+            return surfaceElements
+                .Where(element => !invalidSurfaceXPaths.Contains(element.GetXPath()))
+                .ToList();
+        }
+
 
         private List<string> GetInvalidSurfaceXPaths(string documentId)
         {

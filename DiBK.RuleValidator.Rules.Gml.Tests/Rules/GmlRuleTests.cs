@@ -224,5 +224,25 @@ namespace DiBK.RuleValidator.Rules.Gml.Tests.Rules
             await rule.Execute(validationData);
             rule.Passed.Should().BeTrue();
         }
+
+        [Fact(DisplayName = "gml.avgr.1: Samsvarende avgrensingsgeometri - PASSED")]
+        public async Task SamsvarendeAvgrensingsgeometri_RuleWillPass()
+        {
+            using var validationData = TestHelper.GetGmlValidationData("gml.avgr.1-pass.gml");
+            using var rule = _validator.GetRule<SamsvarendeAvgrensingsgeometri, IGmlValidationData>();
+
+            await rule.Execute(validationData);
+            rule.Passed.Should().BeTrue();
+        }
+
+        [Fact(DisplayName = "gml.avgr.1: Samsvarende avgrensingsgeometri - FAILED")]
+        public async Task SamsvarendeAvgrensingsgeometri_RuleWillFail()
+        {
+            using var validationData = TestHelper.GetGmlValidationData("gml.avgr.1-fail.gml");
+            using var rule = _validator.GetRule<SamsvarendeAvgrensingsgeometri, IGmlValidationData>();
+
+            await rule.Execute(validationData);
+            rule.Passed.Should().BeFalse();
+        }
     }
 }

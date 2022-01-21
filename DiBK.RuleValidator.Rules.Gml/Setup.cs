@@ -22,6 +22,7 @@ namespace DiBK.RuleValidator.Rules.Gml
                     .AddRule<HullKanIkkeOverlappeAndreHullISammeFlate>()
                     .AddRule<BueKanIkkeHaDobbeltpunkter>()
                     .AddRule<BueKanIkkeHaPunkterPåRettLinje>()
+                    .AddRule<SamsvarendeAvgrensingsgeometri>()
                 )
                 .WithGlobalSettings(new()
                 {

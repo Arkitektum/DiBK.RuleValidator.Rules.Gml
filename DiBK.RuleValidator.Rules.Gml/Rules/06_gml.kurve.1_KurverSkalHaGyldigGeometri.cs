@@ -4,13 +4,12 @@ using System.Linq;
 
 namespace DiBK.RuleValidator.Rules.Gml
 {
+    [Translation("gml.kurve.1")]
     public class KurverSkalHaGyldigGeometri : Rule<IGmlValidationData>
     {
         public override void Create()
         {
             Id = "gml.kurve.1";
-            Name = "Kurver skal ha gyldig geometri";
-            Documentation = "https://dibk.atlassian.net/wiki/spaces/FP/pages/1918763029/gml.kurve.1";
         }
 
         protected override void Validate(IGmlValidationData data)

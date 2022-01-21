@@ -117,19 +117,10 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Description" xml:space="preserve">
-    <value>Koordinatsystemet for 2D-kart må være i UTM 32, 33 eller 35 (EPSG-kode 25832, 25833, 25835).</value>
-  </data>
-  <data name="Message1" xml:space="preserve">
-    <value>{0} mangler gyldig koordinatsystem.</value>
-  </data>
-  <data name="Message2" xml:space="preserve">
-    <value>Koordinatsystem '{0}' er ikke i henhold til godkjente koordinatsystem/EPSG-koder på https://register.geonorge.no/epsg-koder.</value>
-  </data>
-  <data name="Message3" xml:space="preserve">
-    <value>Geometriene i datasettet har ulike koordinatreferansesystemkoder: {0}.</value>
+  <data name="Message" xml:space="preserve">
+    <value>{0}: Avgrensningen krysser seg selv ved punktet ({1}, {2}).</value>
   </data>
   <data name="Name" xml:space="preserve">
-    <value>Koordinatreferansesystem for kart i 2D</value>
+    <value>Avgrensningen til en flate kan ikke krysse seg selv</value>
   </data>
 </root>

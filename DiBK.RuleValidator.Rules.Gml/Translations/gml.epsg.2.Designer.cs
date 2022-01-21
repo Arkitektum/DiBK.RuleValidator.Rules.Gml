@@ -22,14 +22,14 @@ namespace DiBK.RuleValidator.Rules.Gml.Translations {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class gml_epsg_1 {
+    internal class gml_epsg_2 {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal gml_epsg_1() {
+        internal gml_epsg_2() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace DiBK.RuleValidator.Rules.Gml.Translations {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("DiBK.RuleValidator.Rules.Gml.Translations.gml.epsg.1", typeof(gml_epsg_1).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("DiBK.RuleValidator.Rules.Gml.Translations.gml.epsg.2", typeof(gml_epsg_2).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,7 +61,7 @@ namespace DiBK.RuleValidator.Rules.Gml.Translations {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Koordinatsystemet for 2D-kart må være i UTM 32, 33 eller 35 (EPSG-kode 25832, 25833, 25835)..
+        ///   Looks up a localized string similar to Koordinatsystemet for 3D-kart må være i UTM 32, 33 eller 35 (EPSG-kode 5972, 5973, 5975)..
         /// </summary>
         internal static string Description {
             get {
@@ -97,7 +97,7 @@ namespace DiBK.RuleValidator.Rules.Gml.Translations {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Koordinatreferansesystem for kart i 2D.
+        ///   Looks up a localized string similar to Koordinatreferansesystem for kart i 3D.
         /// </summary>
         internal static string Name {
             get {

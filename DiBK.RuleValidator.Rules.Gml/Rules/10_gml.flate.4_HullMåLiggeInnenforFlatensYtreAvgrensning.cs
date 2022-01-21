@@ -1,15 +1,13 @@
 ﻿using DiBK.RuleValidator.Extensions;
 using DiBK.RuleValidator.Extensions.Gml;
 using DiBK.RuleValidator.Rules.Gml.Constants;
-using NetTopologySuite.IO;
 using OSGeo.OGR;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using NtsGeometry = NetTopologySuite.Geometries.Geometry;
 
 namespace DiBK.RuleValidator.Rules.Gml
 {
+    [Translation("gml.flate.4")]
     public class HullMåLiggeInnenforFlatensYtreAvgrensning : Rule<IGmlValidationData>
     {
         private readonly HashSet<string> _xPaths = new();
@@ -17,7 +15,6 @@ namespace DiBK.RuleValidator.Rules.Gml
         public override void Create()
         {
             Id = "gml.flate.4";
-            Name = "Hull i flate må ligge innenfor flatens ytre avgrensning";
         }
 
         protected override void Validate(IGmlValidationData data)
@@ -59,7 +56,7 @@ namespace DiBK.RuleValidator.Rules.Gml
                         if (!exterior.Contains(interior))
                         {
                             this.AddMessage(
-                                $"{GmlHelper.GetNameAndId(element)}: Et hull i flaten ligger utenfor flatens ytre avgrensning.",
+                                Translate("Message", GmlHelper.GetNameAndId(element)),
                                 document.FileName,
                                 new[] { interiorElement.GetXPath() },
                                 new[] { GmlHelper.GetFeatureGmlId(element) }

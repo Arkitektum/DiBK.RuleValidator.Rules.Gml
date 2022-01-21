@@ -7,16 +7,64 @@
     <Copyright>Direktoratet for byggkvalitet (DiBK)</Copyright>
     <Authors>Direktoratet for byggkvalitet (DiBK)</Authors>
     <RepositoryUrl>https://github.com/Arkitektum/DiBK.RuleValidator.Rules.Gml</RepositoryUrl>
-    <Version>2.0.0-alpha.6</Version>
+    <Version>2.0.0-alpha.7</Version>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="DiBK.RuleValidator" Version="2.0.0-alpha.3" />
-    <PackageReference Include="DiBK.RuleValidator.Extensions" Version="2.0.0-alpha.5" />
-    <PackageReference Include="DiBK.RuleValidator.Extensions.Gml" Version="2.0.0-alpha.3" />
+    <PackageReference Include="DiBK.RuleValidator.Extensions.Gml" Version="2.0.0-alpha.4" />
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Translations\gml.bue.2.Designer.cs">
+      <DependentUpon>gml.bue.2.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="Translations\gml.flate.5.Designer.cs">
+      <DependentUpon>gml.flate.5.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="Translations\gml.flate.4.Designer.cs">
+      <DependentUpon>gml.flate.4.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="Translations\gml.flate.3.Designer.cs">
+      <DependentUpon>gml.flate.3.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="Translations\gml.flate.2.Designer.cs">
+      <DependentUpon>gml.flate.2.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="Translations\gml.flate.1.Designer.cs">
+      <DependentUpon>gml.flate.1.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="Translations\gml.kurve.1.Designer.cs">
+      <DependentUpon>gml.kurve.1.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="Translations\gml.epsg.2.Designer.cs">
+      <DependentUpon>gml.epsg.2.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="Translations\gml.uuid.1.Designer.cs">
+      <DependentUpon>gml.uuid.1.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="Translations\gml.gmlid.1.Designer.cs">
+      <DependentUpon>gml.gmlid.1.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
     <Compile Update="Translations\gml.bue.1.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -27,9 +75,54 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>gml.epsg.1.resx</DependentUpon>
     </Compile>
+    <Compile Update="Translations\gml.xlink.1.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>gml.xlink.1.resx</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Update="Translations\gml.bue.2.resx">
+      <LastGenOutput>gml.bue.2.Designer.cs</LastGenOutput>
+      <Generator>ResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Translations\gml.flate.5.resx">
+      <LastGenOutput>gml.flate.5.Designer.cs</LastGenOutput>
+      <Generator>ResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Translations\gml.flate.4.resx">
+      <LastGenOutput>gml.flate.4.Designer.cs</LastGenOutput>
+      <Generator>ResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Translations\gml.flate.3.resx">
+      <LastGenOutput>gml.flate.3.Designer.cs</LastGenOutput>
+      <Generator>ResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Translations\gml.flate.2.resx">
+      <LastGenOutput>gml.flate.2.Designer.cs</LastGenOutput>
+      <Generator>ResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Translations\gml.flate.1.resx">
+      <LastGenOutput>gml.flate.1.Designer.cs</LastGenOutput>
+      <Generator>ResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Translations\gml.kurve.1.resx">
+      <LastGenOutput>gml.kurve.1.Designer.cs</LastGenOutput>
+      <Generator>ResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Translations\gml.epsg.2.resx">
+      <LastGenOutput>gml.epsg.2.Designer.cs</LastGenOutput>
+      <Generator>ResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Translations\gml.uuid.1.resx">
+      <LastGenOutput>gml.uuid.1.Designer.cs</LastGenOutput>
+      <Generator>ResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Translations\gml.gmlid.1.resx">
+      <LastGenOutput>gml.gmlid.1.Designer.cs</LastGenOutput>
+      <Generator>ResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
     <EmbeddedResource Update="Translations\gml.bue.1.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>gml.bue.1.Designer.cs</LastGenOutput>
@@ -37,6 +130,10 @@
     <EmbeddedResource Update="Translations\gml.epsg.1.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>gml.epsg.1.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Translations\gml.xlink.1.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>gml.xlink.1.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
 

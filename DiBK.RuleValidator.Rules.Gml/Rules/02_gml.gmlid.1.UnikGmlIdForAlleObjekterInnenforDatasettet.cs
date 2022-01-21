@@ -6,6 +6,7 @@ using System.Xml.Linq;
 
 namespace DiBK.RuleValidator.Rules.Gml
 {
+    [Translation("gml.gmlid.1")]
     public class UnikGmlIdForAlleObjekterInnenforDatasettet : Rule<IGmlValidationData>
     {
         private static readonly XNamespace _gmlNs = "http://www.opengis.net/gml/3.2";
@@ -13,7 +14,6 @@ namespace DiBK.RuleValidator.Rules.Gml
         public override void Create()
         {
             Id = "gml.gmlid.1";
-            Name = "GML-ID for alle objekter i planen skal være unike";
         }
 
         protected override void Validate(IGmlValidationData data)
@@ -32,7 +32,7 @@ namespace DiBK.RuleValidator.Rules.Gml
                     var element = Attribute.Parent;
 
                     this.AddMessage(
-                        $"GML-ID '{Attribute.Value}' til objektet '{element.GetName()}' finnes to eller flere ganger.",
+                        Translate("Message", Attribute.Value, element.GetName()),
                         FileName,
                         new[] { element.GetXPath() }
                     );

@@ -5,13 +5,12 @@ using System.Linq;
 
 namespace DiBK.RuleValidator.Rules.Gml
 {
+    [Translation("gml.flate.3")]
     public class AvgrensningeneTilEnFlateSkalNøstesRiktig : Rule<IGmlValidationData>
     {
         public override void Create()
         {
             Id = "gml.flate.3";
-            Name = "Avgrensningene til en flate skal nøstes i riktig retning";
-            Description = "Ytre flateavgrensning skal nøstes i retning mot klokken, og indre avgrensing i retning med klokken.";
         }
 
         protected override void Validate(IGmlValidationData data)
@@ -39,7 +38,7 @@ namespace DiBK.RuleValidator.Rules.Gml
                         var gmlId = element.GetAttribute("gml:id");
 
                         this.AddMessage(
-                            $"{GmlHelper.GetNameAndId(element)} er ugyldig: Ytre avgrensning går i retning med klokka, men skal gå i motsatt retning.",
+                            Translate("Message1", GmlHelper.GetNameAndId(element)),
                             document.FileName,
                             new[] { exteriorElement.GetXPath() },
                             new[] { GmlHelper.GetFeatureGmlId(element) }
@@ -67,7 +66,7 @@ namespace DiBK.RuleValidator.Rules.Gml
                         if (!GeometryHelper.PointsAreClockWise(interiorPoints))
                         {
                             this.AddMessage(
-                                $"{GmlHelper.GetNameAndId(element)} er ugyldig: Indre avgrensning går i retning mot klokka, men skal gå med klokka.",
+                                Translate("Message2", GmlHelper.GetNameAndId(element)),
                                 document.FileName,
                                 new[] { interiorElement.GetXPath() },
                                 new[] { GmlHelper.GetFeatureGmlId(element) }
@@ -76,7 +75,12 @@ namespace DiBK.RuleValidator.Rules.Gml
                     }
                     catch (Exception exception)
                     {
-                        this.AddMessage(exception.Message, document.FileName, new[] { interiorElement.GetXPath() }, new[] { GmlHelper.GetFeatureGmlId(element) });
+                        this.AddMessage(
+                            exception.Message, 
+                            document.FileName, 
+                            new[] { interiorElement.GetXPath() }, 
+                            new[] { GmlHelper.GetFeatureGmlId(element) }
+                        );
                     }
                 }
             }

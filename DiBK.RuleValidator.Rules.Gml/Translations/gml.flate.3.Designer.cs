@@ -22,14 +22,14 @@ namespace DiBK.RuleValidator.Rules.Gml.Translations {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class gml_epsg_1 {
+    internal class gml_flate_3 {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal gml_epsg_1() {
+        internal gml_flate_3() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace DiBK.RuleValidator.Rules.Gml.Translations {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("DiBK.RuleValidator.Rules.Gml.Translations.gml.epsg.1", typeof(gml_epsg_1).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("DiBK.RuleValidator.Rules.Gml.Translations.gml.flate.3", typeof(gml_flate_3).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,7 +61,7 @@ namespace DiBK.RuleValidator.Rules.Gml.Translations {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Koordinatsystemet for 2D-kart må være i UTM 32, 33 eller 35 (EPSG-kode 25832, 25833, 25835)..
+        ///   Looks up a localized string similar to Ytre flateavgrensning skal nøstes i retning mot klokken, og indre avgrensing i retning med klokken..
         /// </summary>
         internal static string Description {
             get {
@@ -70,7 +70,7 @@ namespace DiBK.RuleValidator.Rules.Gml.Translations {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} mangler gyldig koordinatsystem..
+        ///   Looks up a localized string similar to {0} er ugyldig: Ytre avgrensning går i retning med klokka, men skal gå i motsatt retning..
         /// </summary>
         internal static string Message1 {
             get {
@@ -79,7 +79,7 @@ namespace DiBK.RuleValidator.Rules.Gml.Translations {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Koordinatsystem &apos;{0}&apos; er ikke i henhold til godkjente koordinatsystem/EPSG-koder på https://register.geonorge.no/epsg-koder..
+        ///   Looks up a localized string similar to {0} er ugyldig: Indre avgrensning går i retning mot klokka, men skal gå med klokka..
         /// </summary>
         internal static string Message2 {
             get {
@@ -88,16 +88,7 @@ namespace DiBK.RuleValidator.Rules.Gml.Translations {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Geometriene i datasettet har ulike koordinatreferansesystemkoder: {0}..
-        /// </summary>
-        internal static string Message3 {
-            get {
-                return ResourceManager.GetString("Message3", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Koordinatreferansesystem for kart i 2D.
+        ///   Looks up a localized string similar to Avgrensningene til en flate skal nøstes i riktig retning.
         /// </summary>
         internal static string Name {
             get {

@@ -5,13 +5,12 @@ using System.Linq;
 
 namespace DiBK.RuleValidator.Rules.Gml
 {
+    [Translation("gml.xlink.1")]
     public class FungerendeReferanserMellomObjekter : Rule<IGmlValidationData>
     {
         public override void Create()
         {
             Id = "gml.xlink.1";
-            Name = "Fungerende referanser mellom objekter";
-            Documentation = "https://dibk.atlassian.net/wiki/spaces/FP/pages/1828814869/rpf.xlink.1";
         }
 
         protected override void Validate(IGmlValidationData data)
@@ -40,7 +39,7 @@ namespace DiBK.RuleValidator.Rules.Gml
                 if (xlink.Length != 2)
                 {
                     this.AddMessage(
-                        $"Referansen fra {GmlHelper.GetFeatureType(element)} til {element.GetName()} '{xlink[0]}' har ugyldig format.",
+                        Translate("Message1", GmlHelper.GetFeatureType(element), element.GetName(), xlink[0]),
                         document.FileName,
                         new[] { element.GetXPath() },
                         new[] { GmlHelper.GetFeatureGmlId(element) }
@@ -55,10 +54,8 @@ namespace DiBK.RuleValidator.Rules.Gml
                 if (allGmlIds.TryGetValue(fileName, out var gmlIds) && gmlIds.Contains(gmlId))
                     continue;
 
-                var feature = GmlHelper.GetFeatureElement(element);
-
                 this.AddMessage(
-                    $"Referansen fra {feature.GetName()} '{feature.GetAttribute("gml:id")}' til {element.GetName()} '{gmlId}' fungerer ikke.", 
+                    Translate("Message2", GmlHelper.GetNameAndId(GmlHelper.GetFeatureElement(element)), element.GetName(), gmlId),
                     document.FileName,
                     new[] { element.GetXPath() },
                     new[] { GmlHelper.GetFeatureGmlId(element) }

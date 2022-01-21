@@ -2,13 +2,14 @@
 using DiBK.RuleValidator.Extensions.Gml;
 using DiBK.RuleValidator.Rules.Gml.Constants;
 using OSGeo.OGR;
-using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Xml.Linq;
 
 namespace DiBK.RuleValidator.Rules.Gml
 {
+    [Translation("gml.flate.2")]
     public class AvgrensningenTilEnFlateKanIkkeKrysseSegSelv : Rule<IGmlValidationData>
     {
         private readonly HashSet<string> _xPaths = new();
@@ -16,7 +17,6 @@ namespace DiBK.RuleValidator.Rules.Gml
         public override void Create()
         {
             Id = "gml.flate.2";
-            Name = "Avgrensningen til en flate kan ikke krysse seg selv";
         }
 
         protected override void Validate(IGmlValidationData data)
@@ -51,15 +51,16 @@ namespace DiBK.RuleValidator.Rules.Gml
             if (point == default)
                 return;
 
-            var pointWkt = FormattableString.Invariant($"POINT ({point.X} {point.Y})");
+            var pointX = point.X.ToString(CultureInfo.InvariantCulture);
+            var pointY = point.Y.ToString(CultureInfo.InvariantCulture);
             var xPath = element.GetXPath();
 
             this.AddMessage(
-                FormattableString.Invariant($"{GmlHelper.GetNameAndId(element)}: Avgrensningen krysser seg selv ved punktet ({point.X}, {point.Y})."),
+                Translate("Message", GmlHelper.GetNameAndId(element), pointX, pointY),
                 document.FileName,
                 new[] { xPath },
                 new[] { GmlHelper.GetFeatureGmlId(element) },
-                pointWkt
+                $"POINT ({pointX} {pointY})"
             );
 
             _xPaths.Add(xPath);

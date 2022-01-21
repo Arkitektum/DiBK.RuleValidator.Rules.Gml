@@ -22,14 +22,14 @@ namespace DiBK.RuleValidator.Rules.Gml.Translations {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class gml_epsg_1 {
+    internal class gml_xlink_1 {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal gml_epsg_1() {
+        internal gml_xlink_1() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace DiBK.RuleValidator.Rules.Gml.Translations {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("DiBK.RuleValidator.Rules.Gml.Translations.gml.epsg.1", typeof(gml_epsg_1).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("DiBK.RuleValidator.Rules.Gml.Translations.gml.xlink.1", typeof(gml_xlink_1).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,16 +61,16 @@ namespace DiBK.RuleValidator.Rules.Gml.Translations {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Koordinatsystemet for 2D-kart må være i UTM 32, 33 eller 35 (EPSG-kode 25832, 25833, 25835)..
+        ///   Looks up a localized string similar to https://dibk.atlassian.net/wiki/spaces/FP/pages/1828814869/rpf.xlink.1.
         /// </summary>
-        internal static string Description {
+        internal static string Documentation {
             get {
-                return ResourceManager.GetString("Description", resourceCulture);
+                return ResourceManager.GetString("Documentation", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} mangler gyldig koordinatsystem..
+        ///   Looks up a localized string similar to Referansen fra {0} til {1} &apos;{2}&apos; har ugyldig format..
         /// </summary>
         internal static string Message1 {
             get {
@@ -79,7 +79,7 @@ namespace DiBK.RuleValidator.Rules.Gml.Translations {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Koordinatsystem &apos;{0}&apos; er ikke i henhold til godkjente koordinatsystem/EPSG-koder på https://register.geonorge.no/epsg-koder..
+        ///   Looks up a localized string similar to Referansen fra {0} til {1} &apos;{2}&apos; fungerer ikke..
         /// </summary>
         internal static string Message2 {
             get {
@@ -88,16 +88,7 @@ namespace DiBK.RuleValidator.Rules.Gml.Translations {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Geometriene i datasettet har ulike koordinatreferansesystemkoder: {0}..
-        /// </summary>
-        internal static string Message3 {
-            get {
-                return ResourceManager.GetString("Message3", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Koordinatreferansesystem for kart i 2D.
+        ///   Looks up a localized string similar to Fungerende referanser mellom objekter.
         /// </summary>
         internal static string Name {
             get {

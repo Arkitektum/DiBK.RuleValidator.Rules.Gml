@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 
 namespace DiBK.RuleValidator.Rules.Gml
 {
+    [Translation("gml.uuid.1")]
     public class LokalIdErEnGyldigUUID : Rule<IGmlValidationData>
     {
         private static readonly Regex _uuidRegex = 
@@ -14,8 +15,6 @@ namespace DiBK.RuleValidator.Rules.Gml
         public override void Create()
         {
             Id = "gml.uuid.1";
-            Name = "LokalId er en gyldig UUID";
-            Description = "Egenskapen 'LokalId' må være en gyldig UUID (ref 2.1)";
         }
 
         protected override void Validate(IGmlValidationData data)
@@ -43,7 +42,7 @@ namespace DiBK.RuleValidator.Rules.Gml
                 if (!_uuidRegex.IsMatch(lokalId))
                 {
                     this.AddMessage(
-                        $"{GmlHelper.GetNameAndId(GmlHelper.GetFeatureElement(element))}: Egenskapen 'LokalId' må være en gyldig UUID.",
+                        Translate("Message1", GmlHelper.GetNameAndId(GmlHelper.GetFeatureElement(element))),
                         document.FileName,
                         new[] { element.GetXPath() },
                         new[] { GmlHelper.GetFeatureGmlId(element) }
@@ -52,7 +51,7 @@ namespace DiBK.RuleValidator.Rules.Gml
                 else if (uuids.Any(id => id == lokalId))
                 {
                     this.AddMessage(
-                        $"{GmlHelper.GetNameAndId(GmlHelper.GetFeatureElement(element))}: Det kan ikke finnes flere like 'LokalId'. 'LokalId' må være unik.",
+                        Translate("Message2", GmlHelper.GetNameAndId(GmlHelper.GetFeatureElement(element))),
                         document.FileName,
                         new[] { element.GetXPath() },
                         new[] { GmlHelper.GetFeatureGmlId(element) }

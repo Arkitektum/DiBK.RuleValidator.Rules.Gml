@@ -7,13 +7,12 @@ using System.Xml.Linq;
 
 namespace DiBK.RuleValidator.Rules.Gml
 {
+    [Translation("gml.flate.1")]
     public class FlaterSkalHaGyldigGeometri : Rule<IGmlValidationData>
     {
         public override void Create()
         {
             Id = "gml.flate.1";
-            Name = "Flater skal ha gyldig geometri";
-            Documentation = "https://dibk.atlassian.net/wiki/spaces/FP/pages/1933574255/gml.flate.1";
 
             DependOn<AvgrensningenTilEnFlateKanIkkeKrysseSegSelv>().ToExecute();
             DependOn<HullMåLiggeInnenforFlatensYtreAvgrensning>().ToExecute();
@@ -48,7 +47,7 @@ namespace DiBK.RuleValidator.Rules.Gml
                 else if (!geometry.IsValid())
                 {
                     this.AddMessage(
-                        $"{GmlHelper.GetNameAndId(element)}: Geometrien er ugyldig.",
+                        Translate("Message", GmlHelper.GetNameAndId(element)),
                         document.FileName,
                         new[] { element.GetXPath() },
                         new[] { GmlHelper.GetFeatureGmlId(element) }

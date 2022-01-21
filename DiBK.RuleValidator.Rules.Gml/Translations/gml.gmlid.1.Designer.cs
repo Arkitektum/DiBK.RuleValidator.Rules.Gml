@@ -22,14 +22,14 @@ namespace DiBK.RuleValidator.Rules.Gml.Translations {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class gml_epsg_1 {
+    internal class gml_gmlid_1 {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal gml_epsg_1() {
+        internal gml_gmlid_1() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace DiBK.RuleValidator.Rules.Gml.Translations {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("DiBK.RuleValidator.Rules.Gml.Translations.gml.epsg.1", typeof(gml_epsg_1).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("DiBK.RuleValidator.Rules.Gml.Translations.gml.gmlid.1", typeof(gml_gmlid_1).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,43 +61,16 @@ namespace DiBK.RuleValidator.Rules.Gml.Translations {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Koordinatsystemet for 2D-kart må være i UTM 32, 33 eller 35 (EPSG-kode 25832, 25833, 25835)..
+        ///   Looks up a localized string similar to GML-ID &apos;{0}&apos; til objektet &apos;{1}&apos; finnes to eller flere ganger..
         /// </summary>
-        internal static string Description {
+        internal static string Message {
             get {
-                return ResourceManager.GetString("Description", resourceCulture);
+                return ResourceManager.GetString("Message", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} mangler gyldig koordinatsystem..
-        /// </summary>
-        internal static string Message1 {
-            get {
-                return ResourceManager.GetString("Message1", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Koordinatsystem &apos;{0}&apos; er ikke i henhold til godkjente koordinatsystem/EPSG-koder på https://register.geonorge.no/epsg-koder..
-        /// </summary>
-        internal static string Message2 {
-            get {
-                return ResourceManager.GetString("Message2", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Geometriene i datasettet har ulike koordinatreferansesystemkoder: {0}..
-        /// </summary>
-        internal static string Message3 {
-            get {
-                return ResourceManager.GetString("Message3", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Koordinatreferansesystem for kart i 2D.
+        ///   Looks up a localized string similar to GML-ID for alle objekter i planen skal være unike.
         /// </summary>
         internal static string Name {
             get {

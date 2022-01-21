@@ -8,6 +8,7 @@ using System.Xml.Linq;
 
 namespace DiBK.RuleValidator.Rules.Gml
 {
+    [Translation("gml.flate.5")]
     public class HullKanIkkeOverlappeAndreHullISammeFlate : Rule<IGmlValidationData>
     {
         private readonly HashSet<string> _xPaths = new();
@@ -15,7 +16,6 @@ namespace DiBK.RuleValidator.Rules.Gml
         public override void Create()
         {
             Id = "gml.flate.5";
-            Name = "Hull i flate kan ikke overlappe andre hull i samme flate";
         }
 
         protected override void Validate(IGmlValidationData data)
@@ -70,7 +70,7 @@ namespace DiBK.RuleValidator.Rules.Gml
                         if (geometry.Overlaps(otherGeometry))
                         {
                             this.AddMessage(
-                                $"{GmlHelper.GetNameAndId(element)}': Et hull i flaten overlapper et annet hull i samme flate.",
+                                Translate("Message", GmlHelper.GetNameAndId(element)),
                                 document.FileName,
                                 new[] { geoElement.GetXPath(), otherGeoElement.GetXPath() },
                                 new[] { GmlHelper.GetFeatureGmlId(element) }

@@ -6,6 +6,7 @@ using System.Linq;
 
 namespace DiBK.RuleValidator.Rules.Gml
 {
+    [Translation("gml.bue.2")]
     public class BueKanIkkeHaPunkterPåRettLinje : Rule<IGmlValidationData>
     {
         private const double MIN_SANGITTA = 0.02;
@@ -13,7 +14,6 @@ namespace DiBK.RuleValidator.Rules.Gml
         public override void Create()
         {
             Id = "gml.bue.2";
-            Name = "Punktene kan ikke ligge på rett linje for sirkelbue";
         }
 
         protected override void Validate(IGmlValidationData data)
@@ -63,7 +63,7 @@ namespace DiBK.RuleValidator.Rules.Gml
                     continue;
 
                 this.AddMessage(
-                    "Punktene som danner sirkelbuen ligger i rett linje og bør fremstilles som kurve.", 
+                    Translate("Message"),
                     document.FileName, 
                     new[] { element.GetXPath() },
                     new[] { GmlHelper.GetFeatureGmlId(element) }

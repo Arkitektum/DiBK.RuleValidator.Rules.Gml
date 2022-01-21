@@ -1,18 +1,17 @@
 ﻿using DiBK.RuleValidator.Extensions;
 using DiBK.RuleValidator.Extensions.Gml;
-using OSGeo.OGR;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace DiBK.RuleValidator.Rules.Gml
 {
+    [Translation("gml.bue.1")]
     public class BueKanIkkeHaDobbeltpunkter : Rule<IGmlValidationData>
     {
         public override void Create()
         {
             Id = "gml.bue.1";
-            Name = "Sirkelbuer kan ikke inneholde dobbeltpunkter";
         }
 
         protected override void Validate(IGmlValidationData data)
@@ -39,7 +38,7 @@ namespace DiBK.RuleValidator.Rules.Gml
                     if (coordinatePairs.Count != 3)
                     {
                         this.AddMessage(
-                            "En bue kan kun inneholde tre punkter.",
+                            Translate("Message1"),
                             document.FileName, 
                             new[] { element.GetXPath() },
                             new[] { GmlHelper.GetFeatureGmlId(element) }
@@ -68,7 +67,7 @@ namespace DiBK.RuleValidator.Rules.Gml
                 if (hasDoublePoint)
                 {
                     this.AddMessage(
-                        "En bue beregnes med tre punkter, og sirkelbuen kan ikke ha dobbeltpunkter.", 
+                        Translate("Message2"), 
                         document.FileName, 
                         new[] { element.GetXPath() },
                         new[] { GmlHelper.GetFeatureGmlId(element) }

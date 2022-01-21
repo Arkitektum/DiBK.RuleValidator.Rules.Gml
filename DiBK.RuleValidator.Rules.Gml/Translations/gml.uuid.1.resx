@@ -118,18 +118,15 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Description" xml:space="preserve">
-    <value>Koordinatsystemet for 2D-kart må være i UTM 32, 33 eller 35 (EPSG-kode 25832, 25833, 25835).</value>
+    <value>Egenskapen 'LokalId' må være en gyldig UUID (ref 2.1)</value>
   </data>
   <data name="Message1" xml:space="preserve">
-    <value>{0} mangler gyldig koordinatsystem.</value>
+    <value>{0}: Egenskapen 'LokalId' må være en gyldig UUID.</value>
   </data>
   <data name="Message2" xml:space="preserve">
-    <value>Koordinatsystem '{0}' er ikke i henhold til godkjente koordinatsystem/EPSG-koder på https://register.geonorge.no/epsg-koder.</value>
-  </data>
-  <data name="Message3" xml:space="preserve">
-    <value>Geometriene i datasettet har ulike koordinatreferansesystemkoder: {0}.</value>
+    <value>{0}: Det kan ikke finnes flere like 'LokalId'. 'LokalId' må være unik.</value>
   </data>
   <data name="Name" xml:space="preserve">
-    <value>Koordinatreferansesystem for kart i 2D</value>
+    <value>LokalId er en gyldig UUID</value>
   </data>
 </root>

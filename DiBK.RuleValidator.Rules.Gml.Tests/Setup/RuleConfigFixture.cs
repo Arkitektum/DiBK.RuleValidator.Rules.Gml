@@ -11,7 +11,7 @@ namespace DiBK.RuleValidator.Rules.Gml.Tests.Setup
 
             services.AddRuleValidator(settings =>
             {
-                settings.AddAssemblies("DiBK.RuleValidator.Rules.Gml");
+                settings.AddRules("DiBK.RuleValidator.Rules.Gml");
                 settings.MaxMessageCount = 500;
             });
 

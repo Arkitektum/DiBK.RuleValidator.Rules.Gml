@@ -17,7 +17,7 @@ namespace DiBK.RuleValidator.Rules.Gml.Tests.Setup
 
         public static IRuleValidator GetRuleValidator(IRuleSettings ruleSettings)
         {
-            return new RuleValidator(new RuleService(), ruleSettings, Mock.Of<ILogger<RuleValidator>>(), Mock.Of<ILogger<Rule>>());
+            return new RuleValidator(new RuleService(), new TranslationService(ruleSettings), ruleSettings, Mock.Of<ILogger<RuleValidator>>(), Mock.Of<ILogger<Rule>>());
         }
 
         public static IGmlValidationData GetGmlValidationData(

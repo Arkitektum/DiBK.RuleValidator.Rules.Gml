@@ -6,7 +6,6 @@ using System.Linq;
 
 namespace DiBK.RuleValidator.Rules.Gml
 {
-    [Translation("gml.bue.1")]
     public class BueKanIkkeHaDobbeltpunkter : Rule<IGmlValidationData>
     {
         public override void Create()

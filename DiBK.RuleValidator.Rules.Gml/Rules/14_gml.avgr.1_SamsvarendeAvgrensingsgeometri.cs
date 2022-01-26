@@ -5,7 +5,6 @@ using System.Linq;
 
 namespace DiBK.RuleValidator.Rules.Gml
 {
-    [Translation("gml.avgr.1")]
     public class SamsvarendeAvgrensingsgeometri : Rule<IGmlValidationData>
     {
         public override void Create()

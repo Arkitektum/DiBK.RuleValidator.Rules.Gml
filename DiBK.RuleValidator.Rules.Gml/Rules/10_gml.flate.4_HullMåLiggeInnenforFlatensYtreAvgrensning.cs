@@ -7,7 +7,6 @@ using System.Linq;
 
 namespace DiBK.RuleValidator.Rules.Gml
 {
-    [Translation("gml.flate.4")]
     public class HullMåLiggeInnenforFlatensYtreAvgrensning : Rule<IGmlValidationData>
     {
         private readonly HashSet<string> _xPaths = new();

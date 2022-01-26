@@ -6,7 +6,6 @@ using System.Text.RegularExpressions;
 
 namespace DiBK.RuleValidator.Rules.Gml
 {
-    [Translation("gml.uuid.1")]
     public class LokalIdErEnGyldigUUID : Rule<IGmlValidationData>
     {
         private static readonly Regex _uuidRegex = 

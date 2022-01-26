@@ -6,7 +6,6 @@ using System.Linq;
 
 namespace DiBK.RuleValidator.Rules.Gml
 {
-    [Translation("gml.bue.2")]
     public class BueKanIkkeHaPunkterPåRettLinje : Rule<IGmlValidationData>
     {
         private const double MIN_SANGITTA = 0.02;
@@ -20,7 +19,7 @@ namespace DiBK.RuleValidator.Rules.Gml
         {
             if (!data.Surfaces.Any())
                 SkipRule();
-
+            
             data.Surfaces.ForEach(Validate);
         }
 

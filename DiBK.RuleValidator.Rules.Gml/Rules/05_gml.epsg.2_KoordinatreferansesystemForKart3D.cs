@@ -5,7 +5,6 @@ using System.Linq;
 
 namespace DiBK.RuleValidator.Rules.Gml
 {
-    [Translation("gml.epsg.2")]
     public class KoordinatreferansesystemForKart3D : Rule<IGmlValidationData>
     {
         public override void Create()

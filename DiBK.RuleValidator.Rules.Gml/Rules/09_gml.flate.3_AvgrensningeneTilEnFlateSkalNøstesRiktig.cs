@@ -5,7 +5,6 @@ using System.Linq;
 
 namespace DiBK.RuleValidator.Rules.Gml
 {
-    [Translation("gml.flate.3")]
     public class AvgrensningeneTilEnFlateSkalNøstesRiktig : Rule<IGmlValidationData>
     {
         public override void Create()

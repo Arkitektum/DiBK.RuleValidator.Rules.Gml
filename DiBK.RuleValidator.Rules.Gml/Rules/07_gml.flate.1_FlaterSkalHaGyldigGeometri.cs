@@ -7,7 +7,6 @@ using System.Xml.Linq;
 
 namespace DiBK.RuleValidator.Rules.Gml
 {
-    [Translation("gml.flate.1")]
     public class FlaterSkalHaGyldigGeometri : Rule<IGmlValidationData>
     {
         public override void Create()

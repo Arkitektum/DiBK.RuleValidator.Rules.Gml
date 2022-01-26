@@ -9,7 +9,6 @@ using System.Xml.Linq;
 
 namespace DiBK.RuleValidator.Rules.Gml
 {
-    [Translation("gml.flate.2")]
     public class AvgrensningenTilEnFlateKanIkkeKrysseSegSelv : Rule<IGmlValidationData>
     {
         private readonly HashSet<string> _xPaths = new();

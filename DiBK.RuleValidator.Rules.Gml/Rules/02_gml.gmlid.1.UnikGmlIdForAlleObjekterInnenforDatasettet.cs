@@ -6,7 +6,6 @@ using System.Xml.Linq;
 
 namespace DiBK.RuleValidator.Rules.Gml
 {
-    [Translation("gml.gmlid.1")]
     public class UnikGmlIdForAlleObjekterInnenforDatasettet : Rule<IGmlValidationData>
     {
         private static readonly XNamespace _gmlNs = "http://www.opengis.net/gml/3.2";

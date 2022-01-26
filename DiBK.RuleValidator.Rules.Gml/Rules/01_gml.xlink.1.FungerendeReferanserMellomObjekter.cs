@@ -5,7 +5,6 @@ using System.Linq;
 
 namespace DiBK.RuleValidator.Rules.Gml
 {
-    [Translation("gml.xlink.1")]
     public class FungerendeReferanserMellomObjekter : Rule<IGmlValidationData>
     {
         public override void Create()

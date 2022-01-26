@@ -8,7 +8,6 @@ using System.Xml.Linq;
 
 namespace DiBK.RuleValidator.Rules.Gml
 {
-    [Translation("gml.flate.5")]
     public class HullKanIkkeOverlappeAndreHullISammeFlate : Rule<IGmlValidationData>
     {
         private readonly HashSet<string> _xPaths = new();

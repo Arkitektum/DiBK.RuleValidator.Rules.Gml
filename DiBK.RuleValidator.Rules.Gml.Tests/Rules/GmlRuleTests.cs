@@ -20,7 +20,7 @@ namespace DiBK.RuleValidator.Rules.Gml.Tests.Rules
         {
             using var validationData = TestHelper.GetGmlValidationData("gml.xlink.1-2D-fail.gml", "gml.xlink.1-3D-fail.gml");
             using var rule = _validator.GetRule<FungerendeReferanserMellomObjekter, IGmlValidationData>();
-
+            
             await rule.Execute(validationData);
             rule.Passed.Should().BeFalse();
         }

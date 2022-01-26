@@ -4,7 +4,6 @@ using System.Linq;
 
 namespace DiBK.RuleValidator.Rules.Gml
 {
-    [Translation("gml.kurve.1")]
     public class KurverSkalHaGyldigGeometri : Rule<IGmlValidationData>
     {
         public override void Create()

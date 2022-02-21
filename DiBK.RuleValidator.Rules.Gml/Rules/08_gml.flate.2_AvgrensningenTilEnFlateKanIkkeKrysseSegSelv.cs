@@ -40,7 +40,7 @@ namespace DiBK.RuleValidator.Rules.Gml
                 DetectSelfIntersection(document, element, geometry);
             }
 
-            SetData(string.Format(DataKey.Selvkryss, document.Id), _xPaths);
+            SetData(string.Format(DataKey.SelfIntersections, document.Id), _xPaths);
         }
 
         private void DetectSelfIntersection(GmlDocument document, XElement element, Geometry polygon)

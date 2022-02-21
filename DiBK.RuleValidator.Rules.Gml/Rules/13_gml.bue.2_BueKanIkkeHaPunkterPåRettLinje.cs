@@ -25,7 +25,7 @@ namespace DiBK.RuleValidator.Rules.Gml
 
         private void Validate(GmlDocument document)
         {
-            var elements = document.GetFeatures().GetElements("//gml:Arc");
+            var elements = document.GetFeatureElements().GetElements("//gml:Arc");
 
             foreach (var element in elements)
             {

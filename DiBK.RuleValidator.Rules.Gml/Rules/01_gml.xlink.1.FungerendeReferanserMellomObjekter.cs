@@ -29,7 +29,7 @@ namespace DiBK.RuleValidator.Rules.Gml
             if (document == null)
                 return;
 
-            var xlinks = document.GetFeatures().GetElements("//*[@xlink:href]");
+            var xlinks = document.GetFeatureElements().GetElements("//*[@xlink:href]");
 
             foreach (var element in xlinks)
             {
@@ -65,7 +65,7 @@ namespace DiBK.RuleValidator.Rules.Gml
         private static Dictionary<string, IEnumerable<string>> GetGmlIds(IEnumerable<GmlDocument> documents)
         {
             return documents.Where(document => document != null)
-                .Select(document => new KeyValuePair<string, IEnumerable<string>>(document.FileName, document.GetFeatures().GetAttributes("gml:id")))
+                .Select(document => new KeyValuePair<string, IEnumerable<string>>(document.FileName, document.GetFeatureElements().GetAttributes("gml:id")))
                 .ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
         }
     }

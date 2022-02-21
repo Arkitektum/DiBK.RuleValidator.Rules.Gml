@@ -32,7 +32,7 @@ namespace DiBK.RuleValidator.Rules.Gml
                 return;
 
             var uuids = new List<string>(25000);
-            var elements = document.GetFeatures().GetElements("*:identifikasjon//*:lokalId").ToList();
+            var elements = document.GetFeatureElements().GetElements("*:identifikasjon//*:lokalId").ToList();
 
             foreach (var element in elements)
             {

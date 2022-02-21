@@ -1,9 +1,9 @@
 ﻿namespace DiBK.RuleValidator.Rules.Gml.Constants
 {
-    public class DataKey
+    public static class DataKey
     {
-        public static readonly string Selvkryss = "Selvkryss_{0}";
-        public static readonly string HullUtenforYtreAvgrensning = "HullUtenforYtreAvgrensning_{0}";
-        public static readonly string OverlappendeHull = "OverlappendeHull_{0}";
+        public const string SelfIntersections = "SelfIntersections_{0}";
+        public const string HolesOutsideBoundary = "HolesOutsideBoundary_{0}";
+        public const string OverlappingHoles = "OverlappingHoles_{0}";
     }
 }

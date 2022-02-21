@@ -72,9 +72,9 @@ namespace DiBK.RuleValidator.Rules.Gml
 
         private List<string> GetInvalidSurfaceXPaths(string documentId)
         {
-            var selfIntersections = GetData<HashSet<string>>(string.Format(DataKey.Selvkryss, documentId));
-            var overlappingHoles = GetData<HashSet<string>>(string.Format(DataKey.OverlappendeHull, documentId));
-            var holesOutsideBoundary = GetData<HashSet<string>>(string.Format(DataKey.HullUtenforYtreAvgrensning, documentId));
+            var selfIntersections = GetData<HashSet<string>>(string.Format(DataKey.SelfIntersections, documentId));
+            var overlappingHoles = GetData<HashSet<string>>(string.Format(DataKey.OverlappingHoles, documentId));
+            var holesOutsideBoundary = GetData<HashSet<string>>(string.Format(DataKey.HolesOutsideBoundary, documentId));
 
             var xPaths = new HashSet<string>();
             xPaths.UnionWith(selfIntersections);

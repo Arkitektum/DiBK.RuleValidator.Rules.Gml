@@ -61,7 +61,7 @@ namespace DiBK.RuleValidator.Rules.Gml.Translations {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Unionen av avgrensingslinjene til en flate må samsvare med flategeometrien.
+        ///   Looks up a localized string similar to Unionen av avgrensingslinjene til en flate må samsvare med flategeometrien..
         /// </summary>
         internal static string Description {
             get {

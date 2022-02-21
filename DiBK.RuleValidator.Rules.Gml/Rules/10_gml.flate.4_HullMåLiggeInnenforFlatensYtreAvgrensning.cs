@@ -26,7 +26,7 @@ namespace DiBK.RuleValidator.Rules.Gml
 
         private void Validate(GmlDocument document)
         {
-            var polygonElements = document.GetFeatures().GetElements("//gml:Polygon | //gml:PolygonPatch");
+            var polygonElements = document.GetFeatureElements().GetElements("//gml:Polygon | //gml:PolygonPatch");
 
             foreach (var element in polygonElements)
             {
@@ -73,7 +73,7 @@ namespace DiBK.RuleValidator.Rules.Gml
                 exterior.Dispose();
             }
 
-            SetData(string.Format(DataKey.HullUtenforYtreAvgrensning, document.Id), _xPaths);
+            SetData(string.Format(DataKey.HolesOutsideBoundary, document.Id), _xPaths);
         }
     }
 }

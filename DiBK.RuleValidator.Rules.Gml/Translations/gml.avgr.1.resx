@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Description" xml:space="preserve">
-    <value>Unionen av avgrensingslinjene til en flate må samsvare med flategeometrien</value>
+    <value>Unionen av avgrensingslinjene til en flate må samsvare med flategeometrien.</value>
   </data>
   <data name="Message" xml:space="preserve">
     <value>{0}: Unionen av områdets avgrensingslinjer samsvarer ikke med områdets flategeometri.</value>

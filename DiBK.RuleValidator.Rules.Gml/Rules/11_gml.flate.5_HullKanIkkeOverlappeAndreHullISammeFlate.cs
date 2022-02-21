@@ -27,7 +27,7 @@ namespace DiBK.RuleValidator.Rules.Gml
 
         private void Validate(GmlDocument document)
         {
-            var polygonElements = document.GetFeatures().GetElements("//gml:Polygon | //gml:PolygonPatch");
+            var polygonElements = document.GetFeatureElements().GetElements("//gml:Polygon | //gml:PolygonPatch");
 
             foreach (var element in polygonElements)
             {
@@ -81,7 +81,7 @@ namespace DiBK.RuleValidator.Rules.Gml
                 }
             }
 
-            SetData(string.Format(DataKey.OverlappendeHull, document.Id), _xPaths);
+            SetData(string.Format(DataKey.OverlappingHoles, document.Id), _xPaths);
         }
     }
 }

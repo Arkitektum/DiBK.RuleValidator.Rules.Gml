@@ -87,7 +87,7 @@ namespace DiBK.RuleValidator.Rules.Gml
 
             if (envelopeEpsgCode == null)
             {
-                var geometryElements = document.GetFeatures()
+                var geometryElements = document.GetFeatureElements()
                     .SelectMany(featureElement => GmlHelper.GetFeatureGeometryElements(featureElement))
                     .ToList();
 
@@ -133,7 +133,7 @@ namespace DiBK.RuleValidator.Rules.Gml
 
         private static Dictionary<string, int> CreateEpsgDictionary(GmlDocument document, string envelopeEpsg)
         {
-            var epgsDictionary = document.GetFeatures()
+            var epgsDictionary = document.GetFeatureElements()
                 .SelectMany(featureElement => featureElement.Descendants().Where(element => element.Attribute("srsName") != null))
                 .Select(element =>
                 {

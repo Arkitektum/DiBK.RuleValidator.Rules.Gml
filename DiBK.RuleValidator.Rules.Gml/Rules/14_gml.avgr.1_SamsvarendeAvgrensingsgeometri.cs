@@ -1,7 +1,9 @@
 ﻿using DiBK.RuleValidator.Extensions;
 using DiBK.RuleValidator.Extensions.Gml;
 using OSGeo.OGR;
+using System.Collections.Generic;
 using System.Linq;
+using System.Xml.Linq;
 
 namespace DiBK.RuleValidator.Rules.Gml
 {
@@ -14,14 +16,14 @@ namespace DiBK.RuleValidator.Rules.Gml
 
         protected override void Validate(IGmlValidationData data)
         {
-            if (!data.Surfaces.Any() || data.Surfaces.All(document => !Validate(data, document)))
+            if (!data.Surfaces.Any() || data.Surfaces.All(document => !Validate(document, data.Surfaces)))
                 SkipRule();
         }
 
-        private bool Validate(IGmlValidationData data, GmlDocument document)
+        private bool Validate(GmlDocument document, List<GmlDocument> documents)
         {
             var hasBoundedBy = false;
-            var featureElements = document.GetFeatures();
+            var featureElements = document.GetFeatureElements();
 
             foreach (var featureElement in featureElements)
             {
@@ -38,29 +40,7 @@ namespace DiBK.RuleValidator.Rules.Gml
 
                 foreach (var groupedBoundedByElements in elementGroupings)
                 {
-                    using var boundaryGeometries = new Geometry(wkbGeometryType.wkbMultiCurve);
-
-                    foreach (var boundedByElement in groupedBoundedByElements)
-                    {
-                        var xLink = GmlHelper.GetXLink(boundedByElement);
-
-                        if (xLink?.GmlId == null)
-                            continue;
-
-                        var boundaryElement = GmlHelper.GetElementByGmlId(data.Surfaces, xLink.GmlId, xLink?.FileName ?? document.FileName);
-
-                        if (boundaryElement == null)
-                            continue;
-
-                        var boundaryGeoElement = GmlHelper.GetFeatureGeometryElement(boundaryElement);
-                        using var boundaryGeometry = document.GetOrCreateGeometry(boundaryGeoElement, out var errorMessage1);
-
-                        if (boundaryGeometry == null)
-                            continue;
-
-                        boundaryGeometries.AddGeometry(boundaryGeometry);
-                    }
-
+                    using var boundaryGeometries = GetBoundaryGeometries(groupedBoundedByElements, document, documents);
                     var surfaceGeoElement = GmlHelper.GetFeatureGeometryElement(featureElement);
                     using var surfaceGeometry = document.GetOrCreateGeometry(surfaceGeoElement, out var errorMessage2);
 
@@ -80,6 +60,34 @@ namespace DiBK.RuleValidator.Rules.Gml
             }
 
             return hasBoundedBy;
+        }
+
+        private static Geometry GetBoundaryGeometries(IGrouping<string, XElement> groupedBoundedByElements, GmlDocument document, List<GmlDocument> documents)
+        {
+            var boundaryGeometries = new Geometry(wkbGeometryType.wkbMultiCurve);
+
+            foreach (var boundedByElement in groupedBoundedByElements)
+            {
+                var xLink = GmlHelper.GetXLink(boundedByElement);
+
+                if (xLink?.GmlId == null)
+                    continue;
+
+                var boundaryElement = GmlHelper.GetElementByGmlId(documents, xLink.GmlId, xLink?.FileName ?? document.FileName);
+
+                if (boundaryElement == null)
+                    continue;
+
+                var boundaryGeoElement = GmlHelper.GetFeatureGeometryElement(boundaryElement);
+                using var boundaryGeometry = document.GetOrCreateGeometry(boundaryGeoElement, out var errorMessage1);
+
+                if (boundaryGeometry == null)
+                    continue;
+
+                boundaryGeometries.AddGeometry(boundaryGeometry);
+            }
+
+            return boundaryGeometries;
         }
     }
 }

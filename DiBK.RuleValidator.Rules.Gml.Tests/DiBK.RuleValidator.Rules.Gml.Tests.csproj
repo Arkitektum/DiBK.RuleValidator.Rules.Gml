@@ -34,7 +34,6 @@
 	  <None Remove="TestData\gml.xlink.1-2D-pass.gml" />
 	  <None Remove="TestData\gml.xlink.1-3D-fail.gml" />
 	  <None Remove="TestData\gml.xlink.1-3D-pass.gml" />
-	  <None Remove="TestData\Samfunnssikkerhet_1120_Klepp_25832_Stormflo_GML.gml" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -65,7 +64,6 @@
 	  <EmbeddedResource Include="TestData\gml.xlink.1-2D-pass.gml" />
 	  <EmbeddedResource Include="TestData\gml.xlink.1-3D-fail.gml" />
 	  <EmbeddedResource Include="TestData\gml.xlink.1-3D-pass.gml" />
-	  <EmbeddedResource Include="TestData\Samfunnssikkerhet_1120_Klepp_25832_Stormflo_GML.gml" />
 	</ItemGroup>
 
 	<ItemGroup>

@@ -4,6 +4,7 @@ using DiBK.RuleValidator.Rules.Gml.Constants;
 using OSGeo.OGR;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace DiBK.RuleValidator.Rules.Gml
 {
@@ -45,7 +46,7 @@ namespace DiBK.RuleValidator.Rules.Gml
 
                 var interiorElements = element.GetElements("*:interior/*");
 
-                foreach (var interiorElement in interiorElements)
+                Parallel.ForEach(interiorElements, interiorElement =>
                 {
                     try
                     {
@@ -66,9 +67,8 @@ namespace DiBK.RuleValidator.Rules.Gml
                     }
                     catch
                     {
-                        continue;
                     }
-                }
+                });
 
                 exterior.Dispose();
             }

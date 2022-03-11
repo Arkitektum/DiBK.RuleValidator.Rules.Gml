@@ -4,6 +4,7 @@ using DiBK.RuleValidator.Rules.Gml.Constants;
 using OSGeo.OGR;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Xml.Linq;
 
 namespace DiBK.RuleValidator.Rules.Gml
@@ -57,28 +58,27 @@ namespace DiBK.RuleValidator.Rules.Gml
                 if (interiors.Count < 2)
                     continue;
 
-                for (var i = 0; i < interiors.Count; i++)
+                Parallel.ForEach(interiors, interior =>
                 {
-                    var (geoElement, geometry) = interiors[i];
-                    var otherInteriors = interiors.Skip(i + 1).ToList();
+                    var (geoElement, geometry) = interior;
 
-                    for (int j = 0; j < otherInteriors.Count; j++)
+                    for (int i = 0; i < interiors.Count; i++)
                     {
-                        var (otherGeoElement, otherGeometry) = otherInteriors[j];
+                        var (otherGeoElement, otherGeometry) = interiors[i];
 
-                        if (geometry.Overlaps(otherGeometry))
-                        {
-                            this.AddMessage(
-                                Translate("Message", GmlHelper.GetNameAndId(element)),
-                                document.FileName,
-                                new[] { geoElement.GetXPath(), otherGeoElement.GetXPath() },
-                                new[] { GmlHelper.GetFeatureGmlId(element) }
-                            );
+                        if (geoElement == otherGeoElement || !GeometryHelper.Overlaps(geometry, otherGeometry))
+                            continue;
 
-                            _xPaths.Add(GmlHelper.GetBaseGmlElement(element).GetXPath());
-                        }
+                        this.AddMessage(
+                            Translate("Message", GmlHelper.GetNameAndId(element)),
+                            document.FileName,
+                            new[] { geoElement.GetXPath(), otherGeoElement.GetXPath() },
+                            new[] { GmlHelper.GetFeatureGmlId(element) }
+                        );
+
+                        _xPaths.Add(GmlHelper.GetBaseGmlElement(element).GetXPath());
                     }
-                }
+                });
             }
 
             SetData(string.Format(DataKey.OverlappingHoles, document.Id), _xPaths);

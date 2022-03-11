@@ -41,7 +41,7 @@ namespace DiBK.RuleValidator.Rules.Gml
                 if (!_uuidRegex.IsMatch(lokalId))
                 {
                     this.AddMessage(
-                        Translate("Message1", GmlHelper.GetNameAndId(GmlHelper.GetFeatureElement(element))),
+                        Translate("Message1", GmlHelper.GetNameAndId(GmlHelper.GetFeatureElement(element)), lokalId),
                         document.FileName,
                         new[] { element.GetXPath() },
                         new[] { GmlHelper.GetFeatureGmlId(element) }
@@ -50,7 +50,7 @@ namespace DiBK.RuleValidator.Rules.Gml
                 else if (uuids.Any(id => id == lokalId))
                 {
                     this.AddMessage(
-                        Translate("Message2", GmlHelper.GetNameAndId(GmlHelper.GetFeatureElement(element))),
+                        Translate("Message2", GmlHelper.GetNameAndId(GmlHelper.GetFeatureElement(element)), lokalId),
                         document.FileName,
                         new[] { element.GetXPath() },
                         new[] { GmlHelper.GetFeatureGmlId(element) }

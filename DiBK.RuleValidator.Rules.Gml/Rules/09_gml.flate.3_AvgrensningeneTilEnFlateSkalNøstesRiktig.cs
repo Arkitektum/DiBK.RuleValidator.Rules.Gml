@@ -54,21 +54,26 @@ namespace DiBK.RuleValidator.Rules.Gml
                     );
                 }
 
-                var interiorElements = element.GetElements("*:interior");
+                var ringElements = element.GetElements("*:interior/*");
 
-                foreach (var interiorElement in interiorElements)
+                foreach (var ringElement in ringElements)
                 {
                     try
                     {
-                        var interiorPoints = GeometryHelper.GetCoordinates(interiorElement);
+                        var ringPoints = GeometryHelper.GetCoordinates(ringElement);
 
-                        if (!GeometryHelper.PointsAreClockWise(interiorPoints))
+                        if (!GeometryHelper.PointsAreClockWise(ringPoints))
                         {
+                            using var ring = GeometryHelper.GeometryFromGML(ringElement);
+                            using var polygon = GeometryHelper.CreatePolygonFromRing(ring);
+                            using var point = polygon.PointOnSurface();
+
                             this.AddMessage(
                                 Translate("Message2", GmlHelper.GetNameAndId(element)),
                                 document.FileName,
-                                new[] { interiorElement.GetXPath() },
-                                new[] { GmlHelper.GetFeatureGmlId(element) }
+                                new[] { ringElement.GetXPath() },
+                                new[] { GmlHelper.GetFeatureGmlId(element) },
+                                GeometryHelper.GetZoomToPoint(point)
                             );
                         }
                     }
@@ -77,7 +82,7 @@ namespace DiBK.RuleValidator.Rules.Gml
                         this.AddMessage(
                             exception.Message, 
                             document.FileName, 
-                            new[] { interiorElement.GetXPath() }, 
+                            new[] { ringElement.GetXPath() }, 
                             new[] { GmlHelper.GetFeatureGmlId(element) }
                         );
                     }

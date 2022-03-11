@@ -118,13 +118,13 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Description" xml:space="preserve">
-    <value>Egenskapen 'LokalId' må være en gyldig UUID (ref 2.1)</value>
+    <value>Egenskapen 'LokalId' må være en gyldig UUID</value>
   </data>
   <data name="Message1" xml:space="preserve">
-    <value>{0}: Egenskapen 'LokalId' må være en gyldig UUID.</value>
+    <value>{0}: '{1}' er ikke en gyldig UUID.</value>
   </data>
   <data name="Message2" xml:space="preserve">
-    <value>{0}: Det kan ikke finnes flere like 'LokalId'. 'LokalId' må være unik.</value>
+    <value>{0}: Det kan ikke finnes flere like 'LokalId'. Verdien '{1}' er ikke unik.</value>
   </data>
   <data name="Name" xml:space="preserve">
     <value>LokalId er en gyldig UUID</value>

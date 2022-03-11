@@ -45,13 +45,13 @@ namespace DiBK.RuleValidator.Rules.Gml
 
         private void DetectSelfIntersection(GmlDocument document, XElement element, Geometry polygon)
         {
-            var point = GeometryHelper.DetectSelfIntersection(polygon);
+            using var point = GeometryHelper.DetectSelfIntersection(polygon);
 
-            if (point == default)
+            if (point == null)
                 return;
 
-            var pointX = point.X.ToString(CultureInfo.InvariantCulture);
-            var pointY = point.Y.ToString(CultureInfo.InvariantCulture);
+            var pointX = point.GetX(0).ToString(CultureInfo.InvariantCulture);
+            var pointY = point.GetY(0).ToString(CultureInfo.InvariantCulture);
             var xPath = element.GetXPath();
 
             this.AddMessage(
@@ -59,7 +59,7 @@ namespace DiBK.RuleValidator.Rules.Gml
                 document.FileName,
                 new[] { xPath },
                 new[] { GmlHelper.GetFeatureGmlId(element) },
-                $"POINT ({pointX} {pointY})"
+                GeometryHelper.GetZoomToPoint(point)
             );
 
             _xPaths.Add(xPath);

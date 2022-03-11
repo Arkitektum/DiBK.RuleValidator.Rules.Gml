@@ -61,7 +61,7 @@ namespace DiBK.RuleValidator.Rules.Gml.Translations {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Egenskapen &apos;LokalId&apos; må være en gyldig UUID (ref 2.1).
+        ///   Looks up a localized string similar to Egenskapen &apos;LokalId&apos; må være en gyldig UUID.
         /// </summary>
         internal static string Description {
             get {
@@ -70,7 +70,7 @@ namespace DiBK.RuleValidator.Rules.Gml.Translations {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0}: Egenskapen &apos;LokalId&apos; må være en gyldig UUID..
+        ///   Looks up a localized string similar to {0}: &apos;{1}&apos; er ikke en gyldig UUID..
         /// </summary>
         internal static string Message1 {
             get {
@@ -79,7 +79,7 @@ namespace DiBK.RuleValidator.Rules.Gml.Translations {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0}: Det kan ikke finnes flere like &apos;LokalId&apos;. &apos;LokalId&apos; må være unik..
+        ///   Looks up a localized string similar to {0}: Det kan ikke finnes flere like &apos;LokalId&apos;. Verdien &apos;{1}&apos; er ikke unik..
         /// </summary>
         internal static string Message2 {
             get {

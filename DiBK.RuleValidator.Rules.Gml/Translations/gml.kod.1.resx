@@ -117,13 +117,13 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Message1" xml:space="preserve">
-    <value>En bue kan kun inneholde tre punkter.</value>
+  <data name="Documentation" xml:space="preserve">
+    <value>https://register.geonorge.no/sosi-kodelister/malemetode</value>
   </data>
-  <data name="Message2" xml:space="preserve">
-    <value>Sirkelbuen inneholder et dobbeltpunkt ({0}, {1}).</value>
+  <data name="Message" xml:space="preserve">
+    <value>{0}: Målemetode '{1}' er ikke gyldig i henhold til kodelisten.</value>
   </data>
   <data name="Name" xml:space="preserve">
-    <value>Sirkelbuer kan ikke inneholde dobbeltpunkter</value>
+    <value>Målemetode må være i henhold til verdi fra kodeliste</value>
   </data>
 </root>

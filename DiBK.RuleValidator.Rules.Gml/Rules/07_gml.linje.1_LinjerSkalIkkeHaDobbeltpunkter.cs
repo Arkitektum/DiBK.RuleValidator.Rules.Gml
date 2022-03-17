@@ -4,14 +4,15 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Xml.Linq;
 
 namespace DiBK.RuleValidator.Rules.Gml
 {
-    public class BueKanIkkeHaDobbeltpunkter : Rule<IGmlValidationData>
+    public class LinjeKanIkkeHaDobbeltpunkter : Rule<IGmlValidationData>
     {
         public override void Create()
         {
-            Id = "gml.bue.1";
+            Id = "gml.linje.1";
         }
 
         protected override void Validate(IGmlValidationData data)
@@ -22,12 +23,11 @@ namespace DiBK.RuleValidator.Rules.Gml
             data.Surfaces.ForEach(Validate);
         }
 
-
         private void Validate(GmlDocument document)
         {
-            var elements = document.GetFeatureElements().GetElements("//gml:Arc");
+            var lineElements = GetLineElements(document);
 
-            foreach (var element in elements)
+            foreach (var element in lineElements)
             {
                 var pointTuples = new List<(double[] PointA, double[] PointB)>();
 
@@ -35,30 +35,18 @@ namespace DiBK.RuleValidator.Rules.Gml
                 {
                     var coordinatePairs = GeometryHelper.GetCoordinates(element);
 
-                    if (coordinatePairs.Count != 3)
-                    {
-                        this.AddMessage(
-                            Translate("Message1"),
-                            document.FileName, 
-                            new[] { element.GetXPath() },
-                            new[] { GmlHelper.GetFeatureGmlId(element) }
-                        );
-                        
-                        continue;
-                    }
-
                     for (var i = 1; i < coordinatePairs.Count; i++)
                         pointTuples.Add((coordinatePairs[i - 1], coordinatePairs[i]));
                 }
                 catch (Exception exception)
                 {
                     this.AddMessage(
-                        exception.Message, 
-                        document.FileName, 
+                        exception.Message,
+                        document.FileName,
                         new[] { element.GetXPath() },
                         new[] { GmlHelper.GetFeatureGmlId(element) }
                     );
-                    
+
                     continue;
                 }
 
@@ -72,14 +60,29 @@ namespace DiBK.RuleValidator.Rules.Gml
                     using var point = GeometryHelper.CreatePoint(x, y);
 
                     this.AddMessage(
-                        Translate("Message2", x.ToString(CultureInfo.InvariantCulture), y.ToString(CultureInfo.InvariantCulture)), 
-                        document.FileName, 
+                        Translate("Message", element.Name.LocalName, x.ToString(CultureInfo.InvariantCulture), y.ToString(CultureInfo.InvariantCulture)),
+                        document.FileName,
                         new[] { element.GetXPath() },
                         new[] { GmlHelper.GetFeatureGmlId(element) },
                         GeometryHelper.GetZoomToPoint(point)
                     );
                 }
             }
+        }
+
+        private static IEnumerable<XElement> GetLineElements(GmlDocument document)
+        {
+            var lineStringElements = document.GetFeatureGeometryElements(GmlGeometry.LineString);
+
+            var lineStringSegmentElements = document.GetGeometryElements(GmlGeometry.Curve)
+                .Descendants(GmlHelper.GmlNs + "LineStringSegment");
+
+            var linearRingElements = document.GetGeometryElements(GmlGeometry.Polygon)
+                .Descendants(GmlHelper.GmlNs + "LinearRing");
+
+            return lineStringElements
+                .Concat(lineStringSegmentElements)
+                .Concat(linearRingElements);
         }
     }
 }

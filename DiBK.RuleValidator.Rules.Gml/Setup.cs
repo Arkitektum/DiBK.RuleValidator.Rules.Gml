@@ -20,9 +20,11 @@ namespace DiBK.RuleValidator.Rules.Gml
                     .AddRule<AvgrensningeneTilEnFlateSkalNøstesRiktig>()
                     .AddRule<HullMåLiggeInnenforFlatensYtreAvgrensning>()
                     .AddRule<HullKanIkkeOverlappeAndreHullISammeFlate>()
+                    .AddRule<LinjeKanIkkeHaDobbeltpunkter>()
                     .AddRule<BueKanIkkeHaDobbeltpunkter>()
                     .AddRule<BueKanIkkeHaPunkterPåRettLinje>()
                     .AddRule<SamsvarendeAvgrensingsgeometri>()
+                    .AddRule<MålemetodeMåVæreIHenholdTilKodeliste>()
                 )
                 .WithGlobalSettings(new()
                 {

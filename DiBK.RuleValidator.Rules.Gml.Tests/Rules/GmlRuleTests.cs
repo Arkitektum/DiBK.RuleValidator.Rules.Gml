@@ -185,6 +185,16 @@ namespace DiBK.RuleValidator.Rules.Gml.Tests.Rules
             rule.Passed.Should().BeFalse();
         }
 
+        [Fact(DisplayName = "gml.linje.1: Linjer kan ikke inneholde dobbeltpunkter - FAILED")]
+        public async Task LinjeKanIkkeHaDobbeltpunkter_RuleWillFail()
+        {
+            using var validationData = TestHelper.GetGmlValidationData("gml.linje.1-fail.gml");
+            using var rule = _validator.GetRule<LinjeKanIkkeHaDobbeltpunkter, IGmlValidationData>();
+
+            await rule.Execute(validationData);
+            rule.Passed.Should().BeFalse();
+        }
+
         [Fact(DisplayName = "gml.bue.1: Sirkelbuer kan ikke inneholde dobbeltpunkter - FAILED")]
         public async Task BueKanIkkeHaDobbeltpunkter_RuleWillFail()
         {
@@ -240,6 +250,16 @@ namespace DiBK.RuleValidator.Rules.Gml.Tests.Rules
         {
             using var validationData = TestHelper.GetGmlValidationData("gml.avgr.1-fail.gml");
             using var rule = _validator.GetRule<SamsvarendeAvgrensingsgeometri, IGmlValidationData>();
+
+            await rule.Execute(validationData);
+            rule.Passed.Should().BeFalse();
+        }
+
+        [Fact(DisplayName = "gml.kod.1: Målemetode må være i henhold til verdi fra kodeliste - FAILED")]
+        public async Task MålemetodeMåVæreIHenholdTilKodeliste_RuleWillFail()
+        {
+            using var validationData = TestHelper.GetGmlValidationData("gml.kod.1-fail.gml");
+            using var rule = _validator.GetRule<MålemetodeMåVæreIHenholdTilKodeliste, IGmlValidationData>();
 
             await rule.Execute(validationData);
             rule.Passed.Should().BeFalse();

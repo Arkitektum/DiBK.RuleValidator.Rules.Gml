@@ -7,7 +7,7 @@
     <Copyright>Direktoratet for byggkvalitet (DiBK)</Copyright>
     <Authors>Direktoratet for byggkvalitet (DiBK)</Authors>
     <RepositoryUrl>https://github.com/Arkitektum/DiBK.RuleValidator.Rules.Gml</RepositoryUrl>
-    <Version>2.0.0-alpha.14</Version>
+    <Version>2.0.0-alpha.15</Version>
   </PropertyGroup>
 
   <ItemGroup>
@@ -50,6 +50,11 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
+    <Compile Update="Translations\gml.kod.1.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>gml.kod.1.resx</DependentUpon>
+    </Compile>
     <Compile Update="Translations\gml.kurve.1.Designer.cs">
       <DependentUpon>gml.kurve.1.resx</DependentUpon>
       <DesignTime>True</DesignTime>
@@ -59,6 +64,11 @@
       <DependentUpon>gml.epsg.2.resx</DependentUpon>
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="Translations\gml.linje.1.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>gml.linje.1.resx</DependentUpon>
     </Compile>
     <Compile Update="Translations\gml.uuid.1.Designer.cs">
       <DependentUpon>gml.uuid.1.resx</DependentUpon>
@@ -116,6 +126,10 @@
       <LastGenOutput>gml.flate.1.Designer.cs</LastGenOutput>
       <Generator>ResXFileCodeGenerator</Generator>
     </EmbeddedResource>
+    <EmbeddedResource Update="Translations\gml.kod.1.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>gml.kod.1.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Update="Translations\gml.kurve.1.resx">
       <LastGenOutput>gml.kurve.1.Designer.cs</LastGenOutput>
       <Generator>ResXFileCodeGenerator</Generator>
@@ -123,6 +137,10 @@
     <EmbeddedResource Update="Translations\gml.epsg.2.resx">
       <LastGenOutput>gml.epsg.2.Designer.cs</LastGenOutput>
       <Generator>ResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Translations\gml.linje.1.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>gml.linje.1.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Update="Translations\gml.uuid.1.resx">
       <LastGenOutput>gml.uuid.1.Designer.cs</LastGenOutput>

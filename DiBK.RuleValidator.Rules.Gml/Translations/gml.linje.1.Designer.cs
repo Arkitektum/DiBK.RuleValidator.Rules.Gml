@@ -22,14 +22,14 @@ namespace DiBK.RuleValidator.Rules.Gml.Translations {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class gml_bue_1 {
+    internal class gml_linje_1 {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal gml_bue_1() {
+        internal gml_linje_1() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace DiBK.RuleValidator.Rules.Gml.Translations {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("DiBK.RuleValidator.Rules.Gml.Translations.gml.bue.1", typeof(gml_bue_1).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("DiBK.RuleValidator.Rules.Gml.Translations.gml.linje.1", typeof(gml_linje_1).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,25 +61,16 @@ namespace DiBK.RuleValidator.Rules.Gml.Translations {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to En bue kan kun inneholde tre punkter..
+        ///   Looks up a localized string similar to {0}: Linjen har et dobbeltpunkt ({1}, {2})..
         /// </summary>
-        internal static string Message1 {
+        internal static string Message {
             get {
-                return ResourceManager.GetString("Message1", resourceCulture);
+                return ResourceManager.GetString("Message", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Sirkelbuen inneholder et dobbeltpunkt ({0}, {1})..
-        /// </summary>
-        internal static string Message2 {
-            get {
-                return ResourceManager.GetString("Message2", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Sirkelbuer kan ikke inneholde dobbeltpunkter.
+        ///   Looks up a localized string similar to Linjer skal ikke ha dobbeltpunkter.
         /// </summary>
         internal static string Name {
             get {

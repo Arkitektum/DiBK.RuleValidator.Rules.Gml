@@ -24,7 +24,6 @@ namespace DiBK.RuleValidator.Rules.Gml
                     .AddRule<BueKanIkkeHaDobbeltpunkter>()
                     .AddRule<BueKanIkkeHaPunkterPåRettLinje>()
                     .AddRule<SamsvarendeAvgrensingsgeometri>()
-                    .AddRule<RpGrenseSkalFølgeRpFormålGrense>()
                     .AddRule<MålemetodeMåVæreIHenholdTilKodeliste>()
                 )
                 .WithGlobalSettings(new()

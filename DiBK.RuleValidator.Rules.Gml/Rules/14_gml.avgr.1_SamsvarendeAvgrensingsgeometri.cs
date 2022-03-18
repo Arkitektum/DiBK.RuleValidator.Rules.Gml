@@ -16,7 +16,12 @@ namespace DiBK.RuleValidator.Rules.Gml
 
         protected override void Validate(IGmlValidationData data)
         {
-            if (!data.Surfaces.Any() || data.Surfaces.All(document => !Validate(document, data.Surfaces)))
+            if (!data.Surfaces.Any())
+                SkipRule();
+
+            var result = data.Surfaces.Select(document => Validate(document, data.Surfaces));
+
+            if (!result.Contains(true))
                 SkipRule();
         }
 

@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace DiBK.RuleValidator.Rules.Gml
 {
-    public class BueKanIkkeHaPunkterPåRettLinje : Rule<IGmlValidationData>
+    public class SirkelbuerKanIkkeHaPunkterPåRettLinje : Rule<IGmlValidationData>
     {
         private const double MIN_SANGITTA = 0.02;
 

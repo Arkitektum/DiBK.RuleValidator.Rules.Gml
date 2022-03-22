@@ -117,13 +117,10 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Message1" xml:space="preserve">
+  <data name="Message" xml:space="preserve">
     <value>En bue kan kun inneholde tre punkter.</value>
   </data>
-  <data name="Message2" xml:space="preserve">
-    <value>Sirkelbuen inneholder et dobbeltpunkt ({0}, {1}).</value>
-  </data>
   <data name="Name" xml:space="preserve">
-    <value>Sirkelbuer kan ikke inneholde dobbeltpunkter</value>
+    <value>Sirkelbuer kan kun inneholde tre punkter</value>
   </data>
 </root>

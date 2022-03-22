@@ -22,14 +22,14 @@ namespace DiBK.RuleValidator.Rules.Gml.Translations {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class gml_linje_1 {
+    internal class gml_kurve_2 {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal gml_linje_1() {
+        internal gml_kurve_2() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace DiBK.RuleValidator.Rules.Gml.Translations {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("DiBK.RuleValidator.Rules.Gml.Translations.gml.linje.1", typeof(gml_linje_1).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("DiBK.RuleValidator.Rules.Gml.Translations.gml.kurve.2", typeof(gml_kurve_2).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,7 +61,7 @@ namespace DiBK.RuleValidator.Rules.Gml.Translations {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0}: Linjen har et dobbeltpunkt ({1}, {2})..
+        ///   Looks up a localized string similar to {0}: Kurven har et dobbeltpunkt ({1}, {2})..
         /// </summary>
         internal static string Message {
             get {
@@ -70,7 +70,7 @@ namespace DiBK.RuleValidator.Rules.Gml.Translations {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Linjer skal ikke ha dobbeltpunkter.
+        ///   Looks up a localized string similar to Kurver skal ikke ha dobbeltpunkter.
         /// </summary>
         internal static string Name {
             get {

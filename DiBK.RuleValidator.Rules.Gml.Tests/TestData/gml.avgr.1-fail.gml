@@ -103,7 +103,7 @@
 						<gml:Polygon gml:id="_1deb7804-8671-469f-a0af-0ce6d5fa0b5c-1">
 							<gml:exterior>
 								<gml:LinearRing>
-									<gml:posList>3.93849944511471 1.01466001625998 3.63426035693578 1.01726035034698 3.62718502930371 2.81439356889225 2.31824941737113 2.12808678858165 2.304098762107 -0.90722876557552 4.79461408859494 -0.914304093207588 4.77338810569873 -0.37657919317042 4.79561302269819 -0.059874125928085 3.93849944511471 -0.065264777359427 3.93849944511471 1.01466001625998</gml:posList>
+									<gml:posList>3.93 1.01 3.63 1.01 3.62 2.81 2.31 2.12 2.30 -0.90 4.79 -0.91 4.77 -0.37 4.79 -0.05 3.93 -0.06 3.93 1.01</gml:posList>
 								</gml:LinearRing>
 							</gml:exterior>
 						</gml:Polygon>
@@ -242,7 +242,7 @@
 				<gml:Curve gml:id="_af6f620e-77f6-4e12-9281-f648f3dcbc16-0">
 					<gml:segments>
 						<gml:LineStringSegment>
-							<gml:posList srsDimension="2">3.93849944511471017 1.01466001625997992 3.63426035693577987 1.01726035034697992 3.62718502930371001 2.81439356889225012 2.31824941737112988 2.1280867885816499</gml:posList>
+							<gml:posList srsDimension="2">3.93 1.01 3.63 1.01 3.62 2.81 2.31 2.12</gml:posList>
 						</gml:LineStringSegment>
 					</gml:segments>
 				</gml:Curve>
@@ -271,7 +271,7 @@
 				<gml:Curve gml:id="_612d7aac-5fea-4ed2-857f-594fc37d543a-0">
 					<gml:segments>
 						<gml:LineStringSegment>
-							<gml:posList srsDimension="2">2.31824941737112988 2.1280867885816499 2.30409876210699993 -0.90722876557552001 4.79461408859494043 -0.91430409320758799 4.7733881056987304 -0.37657919317041999</gml:posList>
+							<gml:posList srsDimension="2">2.31 2.12 2.30 -0.90 4.79 -0.91 4.77 -0.37</gml:posList>
 						</gml:LineStringSegment>
 					</gml:segments>
 				</gml:Curve>
@@ -300,7 +300,7 @@
 				<gml:Curve gml:id="_3eba76fe-4291-4e08-a239-0746c88d8e87-0">
 					<gml:segments>
 						<gml:LineStringSegment>
-							<gml:posList srsDimension="2">4.79561302269819034 -0.059874125928085 3.93849944511471017 -0.065264777359427 3.93849944511471017 1.01466001625997992</gml:posList>
+							<gml:posList srsDimension="2">4.77 -0.37 4.79 -0.05 3.93 -0.06 3.93 1.05</gml:posList>
 						</gml:LineStringSegment>
 					</gml:segments>
 				</gml:Curve>

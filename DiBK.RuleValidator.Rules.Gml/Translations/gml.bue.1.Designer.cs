@@ -63,23 +63,14 @@ namespace DiBK.RuleValidator.Rules.Gml.Translations {
         /// <summary>
         ///   Looks up a localized string similar to En bue kan kun inneholde tre punkter..
         /// </summary>
-        internal static string Message1 {
+        internal static string Message {
             get {
-                return ResourceManager.GetString("Message1", resourceCulture);
+                return ResourceManager.GetString("Message", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Sirkelbuen inneholder et dobbeltpunkt ({0}, {1})..
-        /// </summary>
-        internal static string Message2 {
-            get {
-                return ResourceManager.GetString("Message2", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Sirkelbuer kan ikke inneholde dobbeltpunkter.
+        ///   Looks up a localized string similar to Sirkelbuer kan kun inneholde tre punkter.
         /// </summary>
         internal static string Name {
             get {

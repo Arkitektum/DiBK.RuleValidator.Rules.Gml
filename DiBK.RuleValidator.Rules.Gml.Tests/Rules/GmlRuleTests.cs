@@ -135,6 +135,16 @@ namespace DiBK.RuleValidator.Rules.Gml.Tests.Rules
             rule.Passed.Should().BeFalse();
         }
 
+        [Fact(DisplayName = "gml.kurve.2: Kurver kan ikke inneholde dobbeltpunkter - FAILED")]
+        public async Task LinjeKanIkkeHaDobbeltpunkter_RuleWillFail()
+        {
+            using var validationData = TestHelper.GetGmlValidationData("gml.kurve.2-fail.gml");
+            using var rule = _validator.GetRule<KurverKanIkkeHaDobbeltpunkter, IGmlValidationData>();
+
+            await rule.Execute(validationData);
+            rule.Passed.Should().BeFalse();
+        }
+
         [Fact(DisplayName = "gml.flate.1: Flater skal ha gyldig geometri - FAILED")]
         public async Task FlaterSkalHaGyldigGeometri_RuleWillFail()
         {
@@ -185,31 +195,21 @@ namespace DiBK.RuleValidator.Rules.Gml.Tests.Rules
             rule.Passed.Should().BeFalse();
         }
 
-        [Fact(DisplayName = "gml.linje.1: Linjer kan ikke inneholde dobbeltpunkter - FAILED")]
-        public async Task LinjeKanIkkeHaDobbeltpunkter_RuleWillFail()
-        {
-            using var validationData = TestHelper.GetGmlValidationData("gml.linje.1-fail.gml");
-            using var rule = _validator.GetRule<LinjeKanIkkeHaDobbeltpunkter, IGmlValidationData>();
-
-            await rule.Execute(validationData);
-            rule.Passed.Should().BeFalse();
-        }
-
-        [Fact(DisplayName = "gml.bue.1: Sirkelbuer kan ikke inneholde dobbeltpunkter - FAILED")]
+        [Fact(DisplayName = "gml.bue.1: Sirkelbuer kan kun inneholde tre punkter - FAILED")]
         public async Task BueKanIkkeHaDobbeltpunkter_RuleWillFail()
         {
             using var validationData = TestHelper.GetGmlValidationData("gml.bue.1-fail.gml");
-            using var rule = _validator.GetRule<BueKanIkkeHaDobbeltpunkter, IGmlValidationData>();
+            using var rule = _validator.GetRule<SirkelbuerKanKunInneholdeTrePunkter, IGmlValidationData>();
 
             await rule.Execute(validationData);
             rule.Passed.Should().BeFalse();
         }
 
-        [Fact(DisplayName = "gml.bue.1: Sirkelbuer kan ikke inneholde dobbeltpunkter - PASSED")]
+        [Fact(DisplayName = "gml.bue.1: Sirkelbuer kan kun inneholde tre punkter - PASSED")]
         public async Task BueKanIkkeHaDobbeltpunkter_RuleWillPass()
         {
             using var validationData = TestHelper.GetGmlValidationData("gml.bue.1-pass.gml");
-            using var rule = _validator.GetRule<BueKanIkkeHaDobbeltpunkter, IGmlValidationData>();
+            using var rule = _validator.GetRule<SirkelbuerKanKunInneholdeTrePunkter, IGmlValidationData>();
 
             await rule.Execute(validationData);
             rule.Passed.Should().BeTrue();
@@ -219,7 +219,7 @@ namespace DiBK.RuleValidator.Rules.Gml.Tests.Rules
         public async Task BueKanIkkeHaPunkterPåRettLinje_RuleWillFail()
         {
             using var validationData = TestHelper.GetGmlValidationData("gml.bue.2-fail.gml");
-            using var rule = _validator.GetRule<BueKanIkkeHaPunkterPåRettLinje, IGmlValidationData>();
+            using var rule = _validator.GetRule<SirkelbuerKanIkkeHaPunkterPåRettLinje, IGmlValidationData>();
 
             await rule.Execute(validationData);
             rule.Passed.Should().BeFalse();
@@ -229,7 +229,7 @@ namespace DiBK.RuleValidator.Rules.Gml.Tests.Rules
         public async Task BueKanIkkeHaPunkterPåRettLinje_RuleWillPass()
         {
             using var validationData = TestHelper.GetGmlValidationData("gml.bue.2-pass.gml");
-            using var rule = _validator.GetRule<BueKanIkkeHaPunkterPåRettLinje, IGmlValidationData>();
+            using var rule = _validator.GetRule<SirkelbuerKanIkkeHaPunkterPåRettLinje, IGmlValidationData>();
 
             await rule.Execute(validationData);
             rule.Passed.Should().BeTrue();

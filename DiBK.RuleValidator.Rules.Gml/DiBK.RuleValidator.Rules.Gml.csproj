@@ -65,10 +65,10 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
-    <Compile Update="Translations\gml.linje.1.Designer.cs">
+    <Compile Update="Translations\gml.kurve.2.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
-      <DependentUpon>gml.linje.1.resx</DependentUpon>
+      <DependentUpon>gml.kurve.2.resx</DependentUpon>
     </Compile>
     <Compile Update="Translations\gml.uuid.1.Designer.cs">
       <DependentUpon>gml.uuid.1.resx</DependentUpon>
@@ -138,9 +138,9 @@
       <LastGenOutput>gml.epsg.2.Designer.cs</LastGenOutput>
       <Generator>ResXFileCodeGenerator</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Translations\gml.linje.1.resx">
+    <EmbeddedResource Update="Translations\gml.kurve.2.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>gml.linje.1.Designer.cs</LastGenOutput>
+      <LastGenOutput>gml.kurve.2.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Update="Translations\gml.uuid.1.resx">
       <LastGenOutput>gml.uuid.1.Designer.cs</LastGenOutput>

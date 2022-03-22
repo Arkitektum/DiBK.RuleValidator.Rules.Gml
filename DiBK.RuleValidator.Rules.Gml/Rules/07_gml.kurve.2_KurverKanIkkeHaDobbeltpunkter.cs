@@ -8,11 +8,11 @@ using System.Xml.Linq;
 
 namespace DiBK.RuleValidator.Rules.Gml
 {
-    public class LinjeKanIkkeHaDobbeltpunkter : Rule<IGmlValidationData>
+    public class KurverKanIkkeHaDobbeltpunkter : Rule<IGmlValidationData>
     {
         public override void Create()
         {
-            Id = "gml.linje.1";
+            Id = "gml.kurve.2";
         }
 
         protected override void Validate(IGmlValidationData data)
@@ -25,9 +25,9 @@ namespace DiBK.RuleValidator.Rules.Gml
 
         private void Validate(GmlDocument document)
         {
-            var lineElements = GetLineElements(document);
+            var curveElements = GetCurveElements(document);
 
-            foreach (var element in lineElements)
+            foreach (var element in curveElements)
             {
                 var pointTuples = new List<(double[] PointA, double[] PointB)>();
 
@@ -70,18 +70,18 @@ namespace DiBK.RuleValidator.Rules.Gml
             }
         }
 
-        private static IEnumerable<XElement> GetLineElements(GmlDocument document)
+        private static IEnumerable<XElement> GetCurveElements(GmlDocument document)
         {
             var lineStringElements = document.GetFeatureGeometryElements(GmlGeometry.LineString);
 
-            var lineStringSegmentElements = document.GetGeometryElements(GmlGeometry.Curve)
-                .Descendants(GmlHelper.GmlNs + "LineStringSegment");
+            var curveSegmentElements = document.GetGeometryElements(GmlGeometry.Curve)
+                .GetElements("*:segments/*");
 
             var linearRingElements = document.GetGeometryElements(GmlGeometry.Polygon)
-                .Descendants(GmlHelper.GmlNs + "LinearRing");
+                .GetElements("*:LinearRing");
 
             return lineStringElements
-                .Concat(lineStringSegmentElements)
+                .Concat(curveSegmentElements)
                 .Concat(linearRingElements);
         }
     }

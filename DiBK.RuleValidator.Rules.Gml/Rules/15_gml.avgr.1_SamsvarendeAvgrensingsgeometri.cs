@@ -1,5 +1,6 @@
 ﻿using DiBK.RuleValidator.Extensions;
 using DiBK.RuleValidator.Extensions.Gml;
+using DiBK.RuleValidator.Extensions.Gml.Models;
 using OSGeo.OGR;
 using System.Collections.Generic;
 using System.Linq;
@@ -43,16 +44,14 @@ namespace DiBK.RuleValidator.Rules.Gml
                 var elementGroupings = boundedByElements
                     .GroupBy(element => element.Name.LocalName);
 
+                var surfaceGeoElement = GmlHelper.GetFeatureGeometryElements(featureElement).First();
+                using var multiSurface = document.GetOrCreateGeometry(surfaceGeoElement, out var errorMessage);
+
                 foreach (var groupedBoundedByElements in elementGroupings)
                 {
-                    using var boundaryGeometries = GetBoundaryGeometries(groupedBoundedByElements, document, documents);
-                    var surfaceGeoElement = GmlHelper.GetFeatureGeometryElement(featureElement);
-                    using var surfaceGeometry = document.GetOrCreateGeometry(surfaceGeoElement, out var errorMessage2);
+                    using var boundariesMultiSurface = GetBoundariesAsMultiSurface(groupedBoundedByElements, document, documents);
 
-                    if (surfaceGeometry == null ||
-                        !boundaryGeometries.TryConvertToNtsGeometry(out var ntsMultiLineString) ||
-                        !surfaceGeometry.TryConvertToNtsGeometry(out var ntsMultiPolygon) ||
-                        !ntsMultiPolygon.Boundary.EqualsTopologically(ntsMultiLineString))
+                    if (!multiSurface.EqualsTopologically(boundariesMultiSurface))
                     {
                         this.AddMessage(
                             Translate("Message", GmlHelper.GetNameAndId(featureElement)),
@@ -67,9 +66,10 @@ namespace DiBK.RuleValidator.Rules.Gml
             return hasBoundedBy;
         }
 
-        private static Geometry GetBoundaryGeometries(IGrouping<string, XElement> groupedBoundedByElements, GmlDocument document, List<GmlDocument> documents)
+        private static Geometry GetBoundariesAsMultiSurface(IGrouping<string, XElement> groupedBoundedByElements, GmlDocument document, List<GmlDocument> documents)
         {
-            var boundaryGeometries = new Geometry(wkbGeometryType.wkbMultiCurve);
+            var multiSurface = new Geometry(wkbGeometryType.wkbMultiSurface);
+            var segments = new List<Segment>();
 
             foreach (var boundedByElement in groupedBoundedByElements)
             {
@@ -83,16 +83,37 @@ namespace DiBK.RuleValidator.Rules.Gml
                 if (boundaryElement == null)
                     continue;
 
-                var boundaryGeoElement = GmlHelper.GetFeatureGeometryElement(boundaryElement);
-                using var boundaryGeometry = document.GetOrCreateGeometry(boundaryGeoElement, out var errorMessage1);
+                var boundaryGeoElement = GmlHelper.GetFeatureGeometryElements(boundaryElement).First();
+                var segmentElements = boundaryGeoElement.GetElements("*:segments/*");
 
-                if (boundaryGeometry == null)
-                    continue;
+                foreach (var segmentElement in segmentElements)
+                {
+                    var points = GeometryHelper.GetCoordinates(segmentElement)
+                        .Select(coordinate => new Point(coordinate[0], coordinate[1]))
+                        .ToList();
 
-                boundaryGeometries.AddGeometry(boundaryGeometry);
+                    var segmentType = segmentElement.Name.LocalName == "Arc" ? SegmentType.Arc : SegmentType.LineStringSegment;
+
+                    segments.Add(new Segment(points, segmentType));
+                }
             }
 
-            return boundaryGeometries;
+            var surfaces = GeometryHelper.ConvertSegmentsToSurfaces(segments);
+            var surfaceWkts = surfaces.Select(surface => surface.ToWkt());
+
+            foreach (var wkt in surfaceWkts)
+            {
+                try
+                {
+                    using var geometry = Geometry.CreateFromWkt(wkt);
+                    multiSurface.AddGeometry(geometry);
+                }
+                catch
+                {
+                }
+            }
+
+            return multiSurface;
         }
     }
 }

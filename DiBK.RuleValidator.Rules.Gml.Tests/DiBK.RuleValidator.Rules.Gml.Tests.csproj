@@ -26,7 +26,6 @@
 	  <None Remove="TestData\gml.gmlid.1-2D-pass.gml" />
 	  <None Remove="TestData\gml.gmlid.1-3D-fail.gml" />
 	  <None Remove="TestData\gml.gmlid.1-3D-pass.gml" />
-	  <None Remove="TestData\gml.kod.1-fail.gml" />
 	  <None Remove="TestData\gml.kurve.1-fail.gml" />
 	  <None Remove="TestData\gml.kurve.2-fail.gml" />
 	  <None Remove="TestData\gml.uuid.1-fail.gml" />
@@ -38,7 +37,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <EmbeddedResource Include="TestData\gml.kod.1-fail.gml" />
 	  <EmbeddedResource Include="TestData\gml.kurve.2-fail.gml" />
 	  <EmbeddedResource Include="TestData\gml.avgr.1-fail.gml" />
 	  <EmbeddedResource Include="TestData\gml.avgr.1-pass.gml" />

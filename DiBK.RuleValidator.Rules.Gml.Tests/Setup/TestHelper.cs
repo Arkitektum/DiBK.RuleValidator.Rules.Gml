@@ -26,11 +26,7 @@ namespace DiBK.RuleValidator.Rules.Gml.Tests.Setup
         {
             return GmlValidationData.Create(
                 GetGmlValidationData(map2DFileName),
-                GetGmlValidationData(map3DFileName),
-                new List<CodelistItem> 
-                { 
-                    new CodelistItem("Frihåndstegning på skjerm", "82", "Digitalisert ut fra frihåndstegning (direkte på skjerm)") 
-                }
+                GetGmlValidationData(map3DFileName)
             );
         }
 

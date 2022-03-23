@@ -24,7 +24,6 @@ namespace DiBK.RuleValidator.Rules.Gml
                     .AddRule<HullMåLiggeInnenforFlatensYtreAvgrensning>()
                     .AddRule<HullKanIkkeOverlappeAndreHullISammeFlate>()
                     .AddRule<SamsvarendeAvgrensingsgeometri>()
-                    .AddRule<MålemetodeMåVæreIHenholdTilKodeliste>()
                 )
                 .WithGlobalSettings(new()
                 {

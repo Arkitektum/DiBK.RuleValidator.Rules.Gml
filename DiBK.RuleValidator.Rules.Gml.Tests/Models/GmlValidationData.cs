@@ -1,5 +1,4 @@
-﻿using DiBK.RuleValidator.Extensions;
-using DiBK.RuleValidator.Extensions.Gml;
+﻿using DiBK.RuleValidator.Extensions.Gml;
 using System;
 using System.Collections.Generic;
 
@@ -10,18 +9,16 @@ namespace DiBK.RuleValidator.Rules.Gml.Tests.Model
         private bool _disposed = false;
         public List<GmlDocument> Surfaces { get; } = new();
         public List<GmlDocument> Solids { get; } = new();
-        public List<CodelistItem> Målemetoder { get; } = new();
 
-        private GmlValidationData(List<GmlDocument> surfaces, List<GmlDocument> solids, List<CodelistItem> målemetoder)
+        private GmlValidationData(List<GmlDocument> surfaces, List<GmlDocument> solids)
         {
             Surfaces.AddRange(surfaces);
             Solids.AddRange(solids);
-            Målemetoder.AddRange(målemetoder);
         }
 
-        public static IGmlValidationData Create(List<GmlDocument> surfaces, List<GmlDocument> solids, List<CodelistItem> målemetoder)
+        public static IGmlValidationData Create(List<GmlDocument> surfaces, List<GmlDocument> solids)
         {
-            return new GmlValidationData(surfaces, solids, målemetoder);
+            return new GmlValidationData(surfaces, solids);
         }
 
         public void Dispose()

@@ -1,5 +1,4 @@
-﻿using DiBK.RuleValidator.Extensions;
-using DiBK.RuleValidator.Extensions.Gml;
+﻿using DiBK.RuleValidator.Extensions.Gml;
 using System;
 using System.Collections.Generic;
 
@@ -9,6 +8,5 @@ namespace DiBK.RuleValidator.Rules.Gml
     {
         List<GmlDocument> Surfaces { get; }
         List<GmlDocument> Solids { get; }
-        List<CodelistItem> Målemetoder { get; }
     }
 }

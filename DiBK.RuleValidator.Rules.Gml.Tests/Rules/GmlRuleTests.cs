@@ -254,15 +254,5 @@ namespace DiBK.RuleValidator.Rules.Gml.Tests.Rules
             await rule.Execute(validationData);
             rule.Passed.Should().BeFalse();
         }
-
-        [Fact(DisplayName = "gml.kod.1: Målemetode må være i henhold til verdi fra kodeliste - FAILED")]
-        public async Task MålemetodeMåVæreIHenholdTilKodeliste_RuleWillFail()
-        {
-            using var validationData = TestHelper.GetGmlValidationData("gml.kod.1-fail.gml");
-            using var rule = _validator.GetRule<MålemetodeMåVæreIHenholdTilKodeliste, IGmlValidationData>();
-
-            await rule.Execute(validationData);
-            rule.Passed.Should().BeFalse();
-        }
     }
 }

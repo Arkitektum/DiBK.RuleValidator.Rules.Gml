@@ -92,7 +92,6 @@
           <gml:segments>
             <gml:Arc>
               <gml:pos>-13222.01 196669.69</gml:pos>
-              <gml:pos>-13230.74 196705.69</gml:pos>
               <gml:pos>-13222.01 196669.69</gml:pos>
             </gml:Arc>
           </gml:segments>

@@ -2,15 +2,16 @@
 using DiBK.RuleValidator.Extensions.Gml;
 using DiBK.RuleValidator.Rules.Gml.Constants;
 using OSGeo.OGR;
-using System.Collections.Generic;
+using System.Collections.Concurrent;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace DiBK.RuleValidator.Rules.Gml
 {
     public class HullMåLiggeInnenforFlatensYtreAvgrensning : Rule<IGmlValidationData>
     {
-        private readonly HashSet<string> _xPaths = new();
+        private readonly ConcurrentBag<string> _xPaths = new();
 
         public override void Create()
         {
@@ -19,15 +20,21 @@ namespace DiBK.RuleValidator.Rules.Gml
 
         protected override void Validate(IGmlValidationData data)
         {
-            if (!data.Surfaces.Any())
+            if (!data.Surfaces.Any() && !data.Solids.Any())
                 SkipRule();
 
-            data.Surfaces.ForEach(Validate);
+            data.Surfaces.ForEach(document => Validate(document, 2));
+            data.Solids.ForEach(document => Validate(document, 3));
         }
 
-        private void Validate(GmlDocument document)
+        private void Validate(GmlDocument document, int dimensions)
         {
-            var polygonElements = document.GetFeatureElements().GetElements("//gml:Polygon | //gml:PolygonPatch");
+            SetData(DataKey.HolesOutsideBoundary + document.Id, _xPaths);
+
+            var polygonElements = document.GetIndexedGeometries()
+                .Where(geometry => !geometry.IsValid)
+                .SelectMany(geometry => geometry.GeoElement.GetElements("//gml:Polygon | //gml:PolygonPatch"))
+                .ToList();
 
             foreach (var element in polygonElements)
             {
@@ -36,6 +43,9 @@ namespace DiBK.RuleValidator.Rules.Gml
 
                 try
                 {
+                    if (dimensions == 3)
+                        AddSrsDimensionAttribute(exteriorElement);
+
                     using var exteriorRing = Geometry.CreateFromGML(exteriorElement.ToString());
                     exterior = GeometryHelper.CreatePolygonFromRing(exteriorRing);
                 }
@@ -50,6 +60,9 @@ namespace DiBK.RuleValidator.Rules.Gml
                 {
                     try
                     {
+                        if (dimensions == 3)
+                            AddSrsDimensionAttribute(interiorElement);
+
                         using var interiorRing = Geometry.CreateFromGML(interiorElement.ToString());
                         using var interior = GeometryHelper.CreatePolygonFromRing(interiorRing);
 
@@ -72,8 +85,12 @@ namespace DiBK.RuleValidator.Rules.Gml
 
                 exterior.Dispose();
             }
+        }
 
-            SetData(string.Format(DataKey.HolesOutsideBoundary, document.Id), _xPaths);
+        private static void AddSrsDimensionAttribute(XElement geoElement)
+        {
+            if (geoElement.Attribute("srsDimension") == null)
+                geoElement.Add(new XAttribute("srsDimension", 3));
         }
     }
 }

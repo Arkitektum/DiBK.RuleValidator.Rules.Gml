@@ -15,22 +15,22 @@ namespace DiBK.RuleValidator.Rules.Gml
 
         protected override void Validate(IGmlValidationData data)
         {
-            if (!data.Surfaces.Any())
+            if (!data.Surfaces.Any() && !data.Solids.Any())
                 SkipRule();
 
-            data.Surfaces.ForEach(Validate);
+            data.Surfaces.ForEach(document => Validate(document, 2));
+            data.Solids.ForEach(document => Validate(document, 3));
         }
 
-
-        private void Validate(GmlDocument document)
+        private void Validate(GmlDocument document, int dimensions)
         {
             var elements = document.GetFeatureElements().Descendants(GmlHelper.GmlNs + "Arc");
-
+            
             foreach (var element in elements)
             {
                 try
                 {
-                    var coordinatePairs = GeometryHelper.GetCoordinates(element);
+                    var coordinatePairs = GeometryHelper.GetCoordinates(element, dimensions);
 
                     if (coordinatePairs.Count != 3)
                     {

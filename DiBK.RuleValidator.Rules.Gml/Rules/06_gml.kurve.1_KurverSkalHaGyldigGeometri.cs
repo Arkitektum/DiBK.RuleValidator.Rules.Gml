@@ -13,15 +13,16 @@ namespace DiBK.RuleValidator.Rules.Gml
 
         protected override void Validate(IGmlValidationData data)
         {
-            if (!data.Surfaces.Any())
+            if (!data.Surfaces.Any() && !data.Solids.Any())
                 SkipRule();
 
             data.Surfaces.ForEach(Validate);
+            data.Solids.ForEach(Validate);
         }
 
         private void Validate(GmlDocument document)
         {
-            var curveElements = document.GetFeatureGeometryElements(GmlGeometry.Curve);
+            var curveElements = document.GetFeatureGeometryElements(GmlGeometry.Curve, GmlGeometry.LineString);
 
             foreach (var element in curveElements)
             {

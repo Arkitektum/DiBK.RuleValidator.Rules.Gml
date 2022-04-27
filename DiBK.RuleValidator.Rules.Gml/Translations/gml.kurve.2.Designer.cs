@@ -61,7 +61,7 @@ namespace DiBK.RuleValidator.Rules.Gml.Translations {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0}: Kurven har et dobbeltpunkt ({1}, {2})..
+        ///   Looks up a localized string similar to {0}: Kurven har et dobbeltpunkt ({1})..
         /// </summary>
         internal static string Message {
             get {

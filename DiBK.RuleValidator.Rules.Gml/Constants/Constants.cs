@@ -2,8 +2,8 @@
 {
     public static class DataKey
     {
-        public const string SelfIntersections = "SelfIntersections_{0}";
-        public const string HolesOutsideBoundary = "HolesOutsideBoundary_{0}";
-        public const string OverlappingHoles = "OverlappingHoles_{0}";
+        public const string SelfIntersections = "SelfIntersections_";
+        public const string HolesOutsideBoundary = "HolesOutsideBoundary_";
+        public const string OverlappingHoles = "OverlappingHoles_";
     }
 }

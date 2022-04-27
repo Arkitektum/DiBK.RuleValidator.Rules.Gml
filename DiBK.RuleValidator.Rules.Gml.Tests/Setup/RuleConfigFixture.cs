@@ -1,5 +1,7 @@
 ﻿using DiBK.RuleValidator.Config;
 using Microsoft.Extensions.DependencyInjection;
+using OSGeo.OGR;
+using System.Globalization;
 
 namespace DiBK.RuleValidator.Rules.Gml.Tests.Setup
 {
@@ -7,6 +9,13 @@ namespace DiBK.RuleValidator.Rules.Gml.Tests.Setup
     {
         public RuleConfigFixture()
         {
+            var cultureInfo = new CultureInfo("nb-NO");
+            CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
+            CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
+
+            Ogr.RegisterAll();
+            Ogr.UseExceptions();
+
             var services = new ServiceCollection();
 
             services.AddRuleValidator(settings =>

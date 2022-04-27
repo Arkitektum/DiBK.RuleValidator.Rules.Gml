@@ -1,9 +1,10 @@
 ﻿using DiBK.RuleValidator.Extensions;
 using DiBK.RuleValidator.Extensions.Gml;
 using DiBK.RuleValidator.Rules.Gml.Constants;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using System.Xml.Linq;
+using System.Threading.Tasks;
 
 namespace DiBK.RuleValidator.Rules.Gml
 {
@@ -20,68 +21,68 @@ namespace DiBK.RuleValidator.Rules.Gml
 
         protected override void Validate(IGmlValidationData data)
         {
-            if (!data.Surfaces.Any())
+            if (!data.Surfaces.Any() && !data.Solids.Any())
                 SkipRule();
 
             data.Surfaces.ForEach(Validate);
+            data.Solids.ForEach(Validate);
         }
 
         private void Validate(GmlDocument document)
         {
-            var surfaceElements = GetSurfaceElements(document);
+            var indexedSurfaceGeometries = GetInvalidIndexedSurfaceGeometries(document);
 
-            foreach (var element in surfaceElements)
+            Parallel.ForEach(indexedSurfaceGeometries, indexed =>
             {
-                using var geometry = document.GetOrCreateGeometry(element, out var errorMessage);
-
-                if (geometry == null)
+                if (indexed.Geometry == null)
                 {
                     this.AddMessage(
-                        errorMessage,
+                        indexed.ErrorMessage,
                         document.FileName,
-                        new[] { element.GetXPath() },
-                        new[] { GmlHelper.GetFeatureGmlId(element) }
+                        new[] { indexed.XPath },
+                        new[] { GmlHelper.GetFeatureGmlId(indexed.GeoElement) }
                     );
                 }
-                else if (!geometry.IsValid())
+                else
                 {
                     this.AddMessage(
-                        Translate("Message", GmlHelper.GetNameAndId(element)),
+                        Translate("Message", GmlHelper.GetNameAndId(indexed.GeoElement)),
                         document.FileName,
-                        new[] { element.GetXPath() },
-                        new[] { GmlHelper.GetFeatureGmlId(element) }
+                        new[] { indexed.XPath },
+                        new[] { GmlHelper.GetFeatureGmlId(indexed.GeoElement) }
                     );
                 }
-            }
+            });
         }
 
-        private List<XElement> GetSurfaceElements(GmlDocument document)
+        private List<IndexedGeometry> GetInvalidIndexedSurfaceGeometries(GmlDocument document)
         {
-            var surfaceElements = document.GetFeatureGeometryElements(GmlGeometry.MultiSurface, GmlGeometry.Surface, GmlGeometry.Polygon);
+            var indexedSurfaceGeometries = document.GetIndexedGeometries()
+                .Where(geometry => !geometry.IsValid &&
+                    (geometry.Type == GmlGeometry.MultiSurface || geometry.Type == GmlGeometry.Surface || geometry.Type == GmlGeometry.Polygon));
 
             var invalidSurfaceXPaths = GetInvalidSurfaceXPaths(document.Id);
 
             if (!invalidSurfaceXPaths.Any())
-                return surfaceElements.ToList();
+                return indexedSurfaceGeometries.ToList();
 
-            return surfaceElements
-                .Where(element => !invalidSurfaceXPaths.Contains(element.GetXPath()))
+            return indexedSurfaceGeometries
+                .Where(indexed => !invalidSurfaceXPaths.Contains(indexed.XPath))
                 .ToList();
         }
 
-
-        private List<string> GetInvalidSurfaceXPaths(string documentId)
+        private HashSet<string> GetInvalidSurfaceXPaths(string documentId)
         {
-            var selfIntersections = GetData<HashSet<string>>(string.Format(DataKey.SelfIntersections, documentId));
-            var overlappingHoles = GetData<HashSet<string>>(string.Format(DataKey.OverlappingHoles, documentId));
-            var holesOutsideBoundary = GetData<HashSet<string>>(string.Format(DataKey.HolesOutsideBoundary, documentId));
+            var selfIntersections = GetData<ConcurrentBag<string>>(DataKey.SelfIntersections + documentId);
+            var overlappingHoles = GetData<ConcurrentBag<string>>(DataKey.OverlappingHoles + documentId);
+            var holesOutsideBoundary = GetData<ConcurrentBag<string>>(DataKey.HolesOutsideBoundary + documentId);
 
             var xPaths = new HashSet<string>();
             xPaths.UnionWith(selfIntersections);
             xPaths.UnionWith(overlappingHoles);
             xPaths.UnionWith(holesOutsideBoundary);
 
-            return xPaths.ToList();
+            return xPaths;
         }
     }
 }

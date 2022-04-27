@@ -2,6 +2,7 @@
 using DiBK.RuleValidator.Extensions.Gml;
 using System;
 using System.Linq;
+using System.Xml.Linq;
 
 namespace DiBK.RuleValidator.Rules.Gml
 {
@@ -14,13 +15,14 @@ namespace DiBK.RuleValidator.Rules.Gml
 
         protected override void Validate(IGmlValidationData data)
         {
-            if (!data.Surfaces.Any())
+            if (!data.Surfaces.Any() && !data.Solids.Any())
                 SkipRule();
 
-            data.Surfaces.ForEach(Validate);
+            data.Surfaces.ForEach(document => Validate(document, 2));
+            data.Solids.ForEach(document => Validate(document, 3));
         }
 
-        private void Validate(GmlDocument document)
+        private void Validate(GmlDocument document, int dimensions)
         {
             var polygonElements = document.GetFeatureElements().GetElements("//gml:Polygon | //gml:PolygonPatch");
 
@@ -30,7 +32,7 @@ namespace DiBK.RuleValidator.Rules.Gml
 
                 try
                 {
-                    var exteriorPoints = GeometryHelper.GetCoordinates(exteriorElement);
+                    var exteriorPoints = GeometryHelper.GetCoordinates(exteriorElement, dimensions);
 
                     if (GeometryHelper.PointsAreClockWise(exteriorPoints))
                     {
@@ -60,10 +62,13 @@ namespace DiBK.RuleValidator.Rules.Gml
                 {
                     try
                     {
-                        var ringPoints = GeometryHelper.GetCoordinates(ringElement);
+                        var ringPoints = GeometryHelper.GetCoordinates(ringElement, dimensions);
 
                         if (!GeometryHelper.PointsAreClockWise(ringPoints))
                         {
+                            if (dimensions == 3)
+                                AddSrsDimensionAttribute(ringElement);
+
                             using var ring = GeometryHelper.GeometryFromGML(ringElement);
                             using var polygon = GeometryHelper.CreatePolygonFromRing(ring);
                             using var point = polygon.PointOnSurface();
@@ -88,6 +93,12 @@ namespace DiBK.RuleValidator.Rules.Gml
                     }
                 }
             }
+        }
+
+        private static void AddSrsDimensionAttribute(XElement geoElement)
+        {
+            if (geoElement.Attribute("srsDimension") == null)
+                geoElement.Add(new XAttribute("srsDimension", 3));
         }
     }
 }

@@ -2,7 +2,7 @@
 using DiBK.RuleValidator.Extensions.Gml;
 using DiBK.RuleValidator.Rules.Gml.Constants;
 using OSGeo.OGR;
-using System.Collections.Generic;
+using System.Collections.Concurrent;
 using System.Globalization;
 using System.Linq;
 using System.Xml.Linq;
@@ -11,7 +11,7 @@ namespace DiBK.RuleValidator.Rules.Gml
 {
     public class AvgrensningenTilEnFlateKanIkkeKrysseSegSelv : Rule<IGmlValidationData>
     {
-        private readonly HashSet<string> _xPaths = new();
+        private readonly ConcurrentBag<string> _xPaths = new();
 
         public override void Create()
         {
@@ -20,32 +20,34 @@ namespace DiBK.RuleValidator.Rules.Gml
 
         protected override void Validate(IGmlValidationData data)
         {
-            if (!data.Surfaces.Any())
+            if (!data.Surfaces.Any() && !data.Solids.Any())
                 SkipRule();
 
             data.Surfaces.ForEach(Validate);
+            data.Solids.ForEach(Validate);
         }
 
         private void Validate(GmlDocument document)
         {
-            var surfaceElements = document.GetFeatureGeometryElements(GmlGeometry.MultiSurface, GmlGeometry.Surface, GmlGeometry.Polygon);
+            SetData(DataKey.SelfIntersections + document.Id, _xPaths);
 
-            foreach (var element in surfaceElements)
+            var indexedSurfaceGeometries = document.GetIndexedGeometries()
+                .Where(geometry => !geometry.IsValid && 
+                    (geometry.Type == GmlGeometry.MultiSurface || geometry.Type == GmlGeometry.Surface || geometry.Type == GmlGeometry.Polygon))                
+                .ToList();
+
+            foreach (var indexed in indexedSurfaceGeometries)
             {
-                using var geometry = document.GetOrCreateGeometry(element, out var errorMessage);
-
-                if (geometry == null || geometry.IsSimple())
+                if (indexed.Geometry == null || indexed.Geometry.IsSimple())
                     continue;
 
-                DetectSelfIntersection(document, element, geometry);
+                DetectSelfIntersection(document, indexed.GeoElement, indexed.Geometry);
             }
-
-            SetData(string.Format(DataKey.SelfIntersections, document.Id), _xPaths);
         }
 
-        private void DetectSelfIntersection(GmlDocument document, XElement element, Geometry polygon)
+        private void DetectSelfIntersection(GmlDocument document, XElement element, Geometry surface)
         {
-            using var point = GeometryHelper.DetectSelfIntersection(polygon);
+            using var point = GeometryHelper.DetectSelfIntersection(surface);
 
             if (point == null)
                 return;

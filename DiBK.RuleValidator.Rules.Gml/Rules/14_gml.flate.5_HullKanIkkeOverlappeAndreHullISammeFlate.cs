@@ -2,6 +2,8 @@
 using DiBK.RuleValidator.Extensions.Gml;
 using DiBK.RuleValidator.Rules.Gml.Constants;
 using OSGeo.OGR;
+using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -11,7 +13,7 @@ namespace DiBK.RuleValidator.Rules.Gml
 {
     public class HullKanIkkeOverlappeAndreHullISammeFlate : Rule<IGmlValidationData>
     {
-        private readonly HashSet<string> _xPaths = new();
+        private readonly ConcurrentBag<string> _xPaths = new();
 
         public override void Create()
         {
@@ -20,15 +22,21 @@ namespace DiBK.RuleValidator.Rules.Gml
 
         protected override void Validate(IGmlValidationData data)
         {
-            if (!data.Surfaces.Any())
+            if (!data.Surfaces.Any() && !data.Solids.Any())
                 SkipRule();
 
-            data.Surfaces.ForEach(Validate);
+            data.Surfaces.ForEach(document => Validate(document, 2));
+            data.Solids.ForEach(document => Validate(document, 3));
         }
 
-        private void Validate(GmlDocument document)
+        private void Validate(GmlDocument document, int dimensions)
         {
-            var polygonElements = document.GetFeatureElements().GetElements("//gml:Polygon | //gml:PolygonPatch");
+            SetData(DataKey.OverlappingHoles + document.Id, _xPaths);
+
+            var polygonElements = document.GetIndexedGeometries()
+                .Where(geometry => !geometry.IsValid)
+                .SelectMany(geometry => geometry.GeoElement.GetElements("//gml:Polygon | //gml:PolygonPatch"))
+                .ToList();
 
             foreach (var element in polygonElements)
             {
@@ -43,6 +51,9 @@ namespace DiBK.RuleValidator.Rules.Gml
                 {
                     try
                     {
+                        if (dimensions == 3)
+                            AddSrsDimensionAttribute(interiorRingElement);
+
                         using var interiorRing = document.GetOrCreateGeometry(interiorRingElement, out var errorMessage);
 
                         if (interiorRing != null)
@@ -58,30 +69,39 @@ namespace DiBK.RuleValidator.Rules.Gml
                 if (interiors.Count < 2)
                     continue;
 
-                Parallel.ForEach(interiors, interior =>
+                for (int i = 0; i < interiors.Count - 1; i++)
                 {
-                    var (geoElement, geometry) = interior;
+                    var (geoElement, geometry) = interiors[i];
 
-                    for (int i = 0; i < interiors.Count; i++)
+                    Parallel.For(i + 1, interiors.Count, index =>
                     {
-                        var (otherGeoElement, otherGeometry) = interiors[i];
+                        var (otherGeoElement, otherGeometry) = interiors[index];
 
-                        if (geoElement == otherGeoElement || !GeometryHelper.Overlaps(geometry, otherGeometry))
-                            continue;
+                        if (geometry.Overlaps(otherGeometry))
+                        {
+                            using var intersection = geometry.Intersection(otherGeometry);
+                            intersection.ExportToWkt(out var intersectionWkt);
 
-                        this.AddMessage(
-                            Translate("Message", GmlHelper.GetNameAndId(element)),
-                            document.FileName,
-                            new[] { geoElement.GetXPath(), otherGeoElement.GetXPath() },
-                            new[] { GmlHelper.GetFeatureGmlId(element) }
-                        );
+                            this.AddMessage(
+                                Translate("Message", GmlHelper.GetNameAndId(element)),
+                                document.FileName,
+                                new[] { geoElement.GetXPath(), otherGeoElement.GetXPath() },
+                                new[] { GmlHelper.GetFeatureGmlId(element) },
+                                intersectionWkt
+                            );
 
-                        _xPaths.Add(GmlHelper.GetBaseGmlElement(element).GetXPath());
-                    }
-                });
+                            _xPaths.Add(GmlHelper.GetBaseGmlElement(element).GetXPath());
+                        }
+                    });
+                }
             }
+        }
 
-            SetData(string.Format(DataKey.OverlappingHoles, document.Id), _xPaths);
+        private static void AddSrsDimensionAttribute(XElement geoElement)
+        {
+            if (geoElement.Attribute("srsDimension") == null)
+                geoElement.Add(new XAttribute("srsDimension", 3));
         }
     }
 }
+

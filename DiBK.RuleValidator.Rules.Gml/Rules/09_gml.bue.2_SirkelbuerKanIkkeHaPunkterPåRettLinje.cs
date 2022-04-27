@@ -17,13 +17,14 @@ namespace DiBK.RuleValidator.Rules.Gml
 
         protected override void Validate(IGmlValidationData data)
         {
-            if (!data.Surfaces.Any())
+            if (!data.Surfaces.Any() && !data.Solids.Any())
                 SkipRule();
-            
-            data.Surfaces.ForEach(Validate);
+
+            data.Surfaces.ForEach(document => Validate(document, 2));
+            data.Solids.ForEach(document => Validate(document, 3));
         }
 
-        private void Validate(GmlDocument document)
+        private void Validate(GmlDocument document, int dimensions)
         {
             var elements = document.GetFeatureElements().GetElements("//gml:Arc");
 
@@ -33,7 +34,7 @@ namespace DiBK.RuleValidator.Rules.Gml
 
                 try
                 {
-                    points = GeometryHelper.GetCoordinates(element);
+                    points = GeometryHelper.GetCoordinates(element, dimensions);
                 }
                 catch (Exception exception)
                 {
@@ -61,11 +62,14 @@ namespace DiBK.RuleValidator.Rules.Gml
                 if (sangitta >= MIN_SANGITTA)
                     continue;
 
+                using var middlePoint = GeometryHelper.CreatePoint(points[1][0], points[1][1]);
+
                 this.AddMessage(
                     Translate("Message"),
                     document.FileName, 
                     new[] { element.GetXPath() },
-                    new[] { GmlHelper.GetFeatureGmlId(element) }
+                    new[] { GmlHelper.GetFeatureGmlId(element) },
+                    GeometryHelper.GetZoomToPoint(middlePoint)
                 );
             }
         }

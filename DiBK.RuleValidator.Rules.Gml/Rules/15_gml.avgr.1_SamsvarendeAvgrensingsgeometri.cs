@@ -52,6 +52,9 @@ namespace DiBK.RuleValidator.Rules.Gml
                 var surfaceGeoElement = GmlHelper.GetFeatureGeometryElements(featureElement).First();
                 var multiSurface = document.GetOrCreateGeometry(surfaceGeoElement);
 
+                if (!multiSurface.IsValid)
+                    continue;
+
                 foreach (var groupedBoundedByElements in elementGroupings)
                 {
                     using var boundariesMultiSurface = GetBoundariesAsMultiSurface(groupedBoundedByElements, document, documents);

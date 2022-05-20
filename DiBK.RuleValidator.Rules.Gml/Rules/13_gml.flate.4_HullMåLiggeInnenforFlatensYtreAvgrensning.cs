@@ -2,6 +2,7 @@
 using DiBK.RuleValidator.Extensions.Gml;
 using DiBK.RuleValidator.Rules.Gml.Constants;
 using OSGeo.OGR;
+using System;
 using System.Collections.Concurrent;
 using System.Linq;
 using System.Threading.Tasks;
@@ -11,7 +12,7 @@ namespace DiBK.RuleValidator.Rules.Gml
 {
     public class HullMåLiggeInnenforFlatensYtreAvgrensning : Rule<IGmlValidationData>
     {
-        private readonly ConcurrentBag<string> _xPaths = new();
+        private readonly ConcurrentBag<XElement> _invalidElements = new();
 
         public override void Create()
         {
@@ -29,11 +30,14 @@ namespace DiBK.RuleValidator.Rules.Gml
 
         private void Validate(GmlDocument document, int dimensions)
         {
-            SetData(DataKey.HolesOutsideBoundary + document.Id, _xPaths);
+            SetData(DataKey.HolesOutsideBoundary + document.Id, _invalidElements);
 
-            var polygonElements = document.GetIndexedGeometries()
-                .Where(geometry => !geometry.IsValid)
-                .SelectMany(geometry => geometry.GeoElement.GetElements("//gml:Polygon | //gml:PolygonPatch"))
+            var polygonElements = document.GetFeatureGeometryElements(GmlGeometry.MultiSurface, GmlGeometry.Surface, GmlGeometry.Polygon)
+                .SelectMany(element =>
+                {
+                    return element.DescendantsAndSelf()
+                        .Where(element => element.Name.LocalName == GmlGeometry.Polygon || element.Name.LocalName == GmlGeometry.PolygonPatch);
+                })
                 .ToList();
 
             foreach (var element in polygonElements)
@@ -75,7 +79,7 @@ namespace DiBK.RuleValidator.Rules.Gml
                                 new[] { GmlHelper.GetFeatureGmlId(element) }
                             );
 
-                            _xPaths.Add(GmlHelper.GetBaseGmlElement(element).GetXPath());
+                            _invalidElements.Add(GmlHelper.GetBaseGmlElement(element));
                         }
                     }
                     catch

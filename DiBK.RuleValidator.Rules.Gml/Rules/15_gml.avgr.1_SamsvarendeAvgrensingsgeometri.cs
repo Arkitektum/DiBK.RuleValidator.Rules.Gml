@@ -2,6 +2,7 @@
 using DiBK.RuleValidator.Extensions.Gml;
 using DiBK.RuleValidator.Extensions.Gml.Models;
 using OSGeo.OGR;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
@@ -28,30 +29,34 @@ namespace DiBK.RuleValidator.Rules.Gml
 
         private bool Validate(GmlDocument document, List<GmlDocument> documents)
         {
-            var hasBoundedBy = false;
-            var featureElements = document.GetFeatureElements();
+            var boundaryElements = document.GetFeatureElements()
+                .Elements()
+                .Where(element => element.Name.LocalName.StartsWith("avgrensesAv"))
+                .ToList();
 
-            foreach (var featureElement in featureElements)
+            if (!boundaryElements.Any())
+                return false;
+
+            var groupedBoundaryElements = boundaryElements
+                .GroupBy(element => element.Parent)
+                .ToList();
+
+            foreach (var grouping in groupedBoundaryElements)
             {
-                var boundedByElements = featureElement.Elements()
-                    .Where(element => element.Name.LocalName.StartsWith("avgrensesAv"));
+                var featureElement = grouping.Key;
 
-                if (!boundedByElements.Any())
-                    continue;
-
-                hasBoundedBy = true;
-
-                var elementGroupings = boundedByElements
-                    .GroupBy(element => element.Name.LocalName);
+                var elementGroupings = grouping
+                    .GroupBy(element => element.Name.LocalName)
+                    .ToList();
 
                 var surfaceGeoElement = GmlHelper.GetFeatureGeometryElements(featureElement).First();
-                using var multiSurface = document.GetOrCreateGeometry(surfaceGeoElement, out var errorMessage);
+                var multiSurface = document.GetOrCreateGeometry(surfaceGeoElement);
 
                 foreach (var groupedBoundedByElements in elementGroupings)
                 {
                     using var boundariesMultiSurface = GetBoundariesAsMultiSurface(groupedBoundedByElements, document, documents);
-
-                    if (!multiSurface.EqualsTopologically(boundariesMultiSurface))
+                    
+                    if (!multiSurface.Geometry.EqualsTopologically(boundariesMultiSurface))
                     {
                         this.AddMessage(
                             Translate("Message", GmlHelper.GetNameAndId(featureElement)),
@@ -63,7 +68,7 @@ namespace DiBK.RuleValidator.Rules.Gml
                 }
             }
 
-            return hasBoundedBy;
+            return true;
         }
 
         private static Geometry GetBoundariesAsMultiSurface(IGrouping<string, XElement> groupedBoundedByElements, GmlDocument document, List<GmlDocument> documents)

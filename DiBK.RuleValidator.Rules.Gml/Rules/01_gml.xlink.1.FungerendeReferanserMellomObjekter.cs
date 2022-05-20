@@ -2,6 +2,8 @@
 using DiBK.RuleValidator.Extensions.Gml;
 using System.Collections.Generic;
 using System.Linq;
+using System.Xml.Linq;
+using static DiBK.RuleValidator.Extensions.Gml.Constants.Namespace;
 
 namespace DiBK.RuleValidator.Rules.Gml
 {
@@ -24,12 +26,15 @@ namespace DiBK.RuleValidator.Rules.Gml
                 Validate(document, allGmlIds);
         }
 
-        private void Validate(GmlDocument document, Dictionary<string, IEnumerable<string>> allGmlIds)
+        private void Validate(GmlDocument document, Dictionary<string, HashSet<string>> allGmlIds)
         {
             if (document == null)
                 return;
 
-            var xlinks = document.GetFeatureElements().GetElements("//*[@xlink:href]");
+            var xlinks = document.GetFeatureElements()
+                .Descendants()
+                .Where(element => element.Attribute(XLinkNs + "href") != null)
+                .ToList();
 
             foreach (var element in xlinks)
             {
@@ -62,11 +67,24 @@ namespace DiBK.RuleValidator.Rules.Gml
             }
         }
 
-        private static Dictionary<string, IEnumerable<string>> GetGmlIds(IEnumerable<GmlDocument> documents)
+        private static Dictionary<string, HashSet<string>> GetGmlIds(IEnumerable<GmlDocument> documents)
         {
-            return documents.Where(document => document != null)
-                .Select(document => new KeyValuePair<string, IEnumerable<string>>(document.FileName, document.GetFeatureElements().GetAttributes("gml:id")))
-                .ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+            var allGmlIds = new Dictionary<string, HashSet<string>>();
+
+            foreach (var document in documents)
+            {
+                if (document == null)
+                    continue;
+
+                var gmlIds = document.GetFeatureElements()
+                    .Attributes(GmlNs + "id")
+                    .Select(attribute => attribute.Value)
+                    .ToHashSet();
+
+                allGmlIds.Add(document.FileName, gmlIds);
+            }
+
+            return allGmlIds;
         }
     }
 }

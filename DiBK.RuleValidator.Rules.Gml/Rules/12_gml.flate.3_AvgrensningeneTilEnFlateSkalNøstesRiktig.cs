@@ -24,7 +24,13 @@ namespace DiBK.RuleValidator.Rules.Gml
 
         private void Validate(GmlDocument document, int dimensions)
         {
-            var polygonElements = document.GetFeatureElements().GetElements("//gml:Polygon | //gml:PolygonPatch");
+            var polygonElements = document.GetFeatureGeometryElements(GmlGeometry.MultiSurface, GmlGeometry.Surface, GmlGeometry.Polygon)
+                .SelectMany(element =>
+                {
+                    return element.DescendantsAndSelf()
+                        .Where(element => element.Name.LocalName == GmlGeometry.Polygon || element.Name.LocalName == GmlGeometry.PolygonPatch);
+                })
+                .ToList();
 
             foreach (var element in polygonElements)
             {

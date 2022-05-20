@@ -2,7 +2,6 @@
 using DiBK.RuleValidator.Extensions.Gml;
 using DiBK.RuleValidator.Rules.Gml.Constants;
 using OSGeo.OGR;
-using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +12,7 @@ namespace DiBK.RuleValidator.Rules.Gml
 {
     public class HullKanIkkeOverlappeAndreHullISammeFlate : Rule<IGmlValidationData>
     {
-        private readonly ConcurrentBag<string> _xPaths = new();
+        private readonly ConcurrentBag<XElement> _invalidElements = new();
 
         public override void Create()
         {
@@ -31,11 +30,14 @@ namespace DiBK.RuleValidator.Rules.Gml
 
         private void Validate(GmlDocument document, int dimensions)
         {
-            SetData(DataKey.OverlappingHoles + document.Id, _xPaths);
+            SetData(DataKey.OverlappingHoles + document.Id, _invalidElements);
 
-            var polygonElements = document.GetIndexedGeometries()
-                .Where(geometry => !geometry.IsValid)
-                .SelectMany(geometry => geometry.GeoElement.GetElements("//gml:Polygon | //gml:PolygonPatch"))
+            var polygonElements = document.GetFeatureGeometryElements(GmlGeometry.MultiSurface, GmlGeometry.Surface, GmlGeometry.Polygon)
+                .SelectMany(element =>
+                {
+                    return element.DescendantsAndSelf()
+                        .Where(element => element.Name.LocalName == GmlGeometry.Polygon || element.Name.LocalName == GmlGeometry.PolygonPatch);
+                })
                 .ToList();
 
             foreach (var element in polygonElements)
@@ -54,7 +56,7 @@ namespace DiBK.RuleValidator.Rules.Gml
                         if (dimensions == 3)
                             AddSrsDimensionAttribute(interiorRingElement);
 
-                        using var interiorRing = document.GetOrCreateGeometry(interiorRingElement, out var errorMessage);
+                        using var interiorRing = GeometryHelper.GeometryFromGML(interiorRingElement);
 
                         if (interiorRing != null)
                         {
@@ -90,7 +92,7 @@ namespace DiBK.RuleValidator.Rules.Gml
                                 intersectionWkt
                             );
 
-                            _xPaths.Add(GmlHelper.GetBaseGmlElement(element).GetXPath());
+                            _invalidElements.Add(GmlHelper.GetBaseGmlElement(element));
                         }
                     });
                 }

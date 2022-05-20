@@ -22,16 +22,20 @@ namespace DiBK.RuleValidator.Rules.Gml
 
         private void Validate(GmlDocument document)
         {
-            var curveElements = document.GetFeatureGeometryElements(GmlGeometry.Curve, GmlGeometry.LineString);
+            var indexedCurveGeometries = document.GetGeometriesByType(GmlGeometry.Curve, GmlGeometry.LineString)
+                .Where(indexed => !indexed.IsValid)
+                .ToList();
 
-            foreach (var element in curveElements)
+            foreach (var indexed in indexedCurveGeometries)
             {
-                using var geometry = document.GetOrCreateGeometry(element, out var errorMessage);
+                var errorMessage = indexed.ErrorMessage ?? "Kurven har ugyldig geometri.";
 
-                if (geometry == null)
-                {
-                    this.AddMessage(errorMessage, document.FileName, new[] { element.GetXPath() }, new[] { GmlHelper.GetFeatureGmlId(element) });
-                }
+                this.AddMessage(
+                    $"{GmlHelper.GetNameAndId(indexed.Element)}: {errorMessage}",
+                    document.FileName,
+                    new[] { indexed.Element.GetXPath() },
+                    new[] { GmlHelper.GetFeatureGmlId(indexed.Element) }
+                );
             }
         }
     }

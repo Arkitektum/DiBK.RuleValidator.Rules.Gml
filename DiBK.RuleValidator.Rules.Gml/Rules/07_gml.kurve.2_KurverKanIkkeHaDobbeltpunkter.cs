@@ -3,7 +3,9 @@ using DiBK.RuleValidator.Extensions.Gml;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Xml.Linq;
+using static DiBK.RuleValidator.Extensions.Gml.Constants.Namespace;
 
 namespace DiBK.RuleValidator.Rules.Gml
 {
@@ -26,8 +28,8 @@ namespace DiBK.RuleValidator.Rules.Gml
         private void Validate(GmlDocument document, int dimensions)
         {
             var curveElements = GetCurveElements(document);
-
-            foreach (var element in curveElements)
+            
+            Parallel.ForEach(curveElements, element =>
             {
                 var pointTuples = new List<(double[] PointA, double[] PointB)>();
 
@@ -47,7 +49,7 @@ namespace DiBK.RuleValidator.Rules.Gml
                         new[] { GmlHelper.GetFeatureGmlId(element) }
                     );
 
-                    continue;
+                    return;
                 }
 
                 var doublePoint = pointTuples
@@ -75,22 +77,24 @@ namespace DiBK.RuleValidator.Rules.Gml
                         GeometryHelper.GetZoomToPoint(point, dimensions)
                     );
                 }
-            }
+            });
         }
 
-        private static IEnumerable<XElement> GetCurveElements(GmlDocument document)
+        private static List<XElement> GetCurveElements(GmlDocument document)
         {
             var lineStringElements = document.GetFeatureGeometryElements(GmlGeometry.LineString);
 
             var curveSegmentElements = document.GetGeometryElements(GmlGeometry.Curve)
-                .GetElements("*:segments/*");
+                .Elements()
+                .Elements();
 
             var linearRingElements = document.GetGeometryElements(GmlGeometry.Polygon)
-                .GetElements("*:LinearRing");
+                .Descendants(GmlNs + GmlGeometry.LinearRing);
 
             return lineStringElements
                 .Concat(curveSegmentElements)
-                .Concat(linearRingElements);
+                .Concat(linearRingElements)
+                .ToList();
         }
     }
 }

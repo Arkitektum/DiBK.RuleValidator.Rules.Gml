@@ -11,7 +11,7 @@ namespace DiBK.RuleValidator.Rules.Gml
 {
     public class AvgrensningenTilEnFlateKanIkkeKrysseSegSelv : Rule<IGmlValidationData>
     {
-        private readonly ConcurrentBag<string> _xPaths = new();
+        private readonly ConcurrentBag<XElement> _invalidElements = new();
 
         public override void Create()
         {
@@ -29,11 +29,10 @@ namespace DiBK.RuleValidator.Rules.Gml
 
         private void Validate(GmlDocument document)
         {
-            SetData(DataKey.SelfIntersections + document.Id, _xPaths);
+            SetData(DataKey.SelfIntersections + document.Id, _invalidElements);
 
-            var indexedSurfaceGeometries = document.GetIndexedGeometries()
-                .Where(geometry => !geometry.IsValid && 
-                    (geometry.Type == GmlGeometry.MultiSurface || geometry.Type == GmlGeometry.Surface || geometry.Type == GmlGeometry.Polygon))                
+            var indexedSurfaceGeometries = document.GetGeometriesByType(GmlGeometry.MultiSurface, GmlGeometry.Surface, GmlGeometry.Polygon)
+                .Where(indexed => !indexed.IsValid)
                 .ToList();
 
             foreach (var indexed in indexedSurfaceGeometries)
@@ -41,7 +40,7 @@ namespace DiBK.RuleValidator.Rules.Gml
                 if (indexed.Geometry == null || indexed.Geometry.IsSimple())
                     continue;
 
-                DetectSelfIntersection(document, indexed.GeoElement, indexed.Geometry);
+                DetectSelfIntersection(document, indexed.Element, indexed.Geometry);
             }
         }
 
@@ -54,17 +53,16 @@ namespace DiBK.RuleValidator.Rules.Gml
 
             var pointX = point.GetX(0).ToString(CultureInfo.InvariantCulture);
             var pointY = point.GetY(0).ToString(CultureInfo.InvariantCulture);
-            var xPath = element.GetXPath();
 
             this.AddMessage(
                 Translate("Message", GmlHelper.GetNameAndId(element), pointX, pointY),
                 document.FileName,
-                new[] { xPath },
+                new[] { element.GetXPath() },
                 new[] { GmlHelper.GetFeatureGmlId(element) },
                 GeometryHelper.GetZoomToPoint(point)
             );
 
-            _xPaths.Add(xPath);
+            _invalidElements.Add(element);
         }
     }
 }

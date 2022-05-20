@@ -1,8 +1,8 @@
 ﻿using DiBK.RuleValidator.Extensions;
 using DiBK.RuleValidator.Extensions.Gml;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Xml.Linq;
 
 namespace DiBK.RuleValidator.Rules.Gml
 {
@@ -31,34 +31,38 @@ namespace DiBK.RuleValidator.Rules.Gml
             if (document == null)
                 return;
 
-            var uuids = new List<string>(25000);
-            var elements = document.GetFeatureElements().GetElements("*:identifikasjon//*:lokalId").ToList();
+            var groupedElements = document.GetFeatureElements()
+                .Descendants()
+                .Where(element => element.Name.LocalName == "lokalId")
+                .GroupBy(element => element.Value)
+                .ToList();
 
-            foreach (var element in elements)
+            foreach (var grouping in groupedElements)
             {
-                var lokalId = element.Value;
+                var lokalId = grouping.Key;
 
                 if (!_uuidRegex.IsMatch(lokalId))
                 {
-                    this.AddMessage(
-                        Translate("Message1", GmlHelper.GetNameAndId(GmlHelper.GetFeatureElement(element)), lokalId),
-                        document.FileName,
-                        new[] { element.GetXPath() },
-                        new[] { GmlHelper.GetFeatureGmlId(element) }
-                    );
+                    foreach (var element in grouping)
+                    {
+                        this.AddMessage(
+                            Translate("Message1", GmlHelper.GetNameAndId(GmlHelper.GetFeatureElement(element)), lokalId),
+                            document.FileName,
+                            new[] { element.GetXPath() },
+                            new[] { GmlHelper.GetFeatureGmlId(element) }
+                        );
+                    }
                 }
-                else if (uuids.Any(id => id == lokalId))
+                else if (grouping.Count() > 1)
                 {
+                    var firstElement = grouping.First();
+
                     this.AddMessage(
-                        Translate("Message2", GmlHelper.GetNameAndId(GmlHelper.GetFeatureElement(element)), lokalId),
+                        Translate("Message2", GmlHelper.GetNameAndId(GmlHelper.GetFeatureElement(firstElement)), lokalId),
                         document.FileName,
-                        new[] { element.GetXPath() },
-                        new[] { GmlHelper.GetFeatureGmlId(element) }
+                        grouping.Select(element => element.GetXPath()),
+                        grouping.Select(GmlHelper.GetFeatureGmlId)
                     );
-                }
-                else
-                {
-                    uuids.Add(lokalId);
                 }
             }
         }

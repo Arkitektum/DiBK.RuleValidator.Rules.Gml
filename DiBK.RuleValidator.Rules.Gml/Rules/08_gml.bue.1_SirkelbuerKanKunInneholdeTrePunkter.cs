@@ -3,6 +3,7 @@ using DiBK.RuleValidator.Extensions.Gml;
 using System;
 using System.Linq;
 using System.Xml.Linq;
+using static DiBK.RuleValidator.Extensions.Gml.Constants.Namespace;
 
 namespace DiBK.RuleValidator.Rules.Gml
 {
@@ -24,9 +25,11 @@ namespace DiBK.RuleValidator.Rules.Gml
 
         private void Validate(GmlDocument document, int dimensions)
         {
-            var elements = document.GetFeatureElements().Descendants(GmlHelper.GmlNs + "Arc");
+            var arcElements = document.GetFeatureElements()
+                .Descendants(GmlNs + "Arc")
+                .ToList();
             
-            foreach (var element in elements)
+            foreach (var element in arcElements)
             {
                 try
                 {

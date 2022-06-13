@@ -7,11 +7,11 @@
     <Copyright>Direktoratet for byggkvalitet (DiBK)</Copyright>
     <Authors>Direktoratet for byggkvalitet (DiBK)</Authors>
     <RepositoryUrl>https://github.com/Arkitektum/DiBK.RuleValidator.Rules.Gml</RepositoryUrl>
-    <Version>2.0.4</Version>
+    <Version>2.0.5</Version>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="DiBK.RuleValidator.Extensions.Gml" Version="2.0.3" />
+    <PackageReference Include="DiBK.RuleValidator.Extensions.Gml" Version="2.0.4" />
   </ItemGroup>
 
   <ItemGroup>

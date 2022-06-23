@@ -106,7 +106,7 @@ namespace DiBK.RuleValidator.Rules.Gml
                 }
             }
 
-            var surfaces = GeometryHelper.ConvertSegmentsToSurfaces(segments);
+            using var surfaces = GeometryHelper.ConvertSegmentsToSurfaces(segments);
             var surfaceWkts = surfaces.Select(surface => surface.ToWkt());
 
             foreach (var wkt in surfaceWkts)

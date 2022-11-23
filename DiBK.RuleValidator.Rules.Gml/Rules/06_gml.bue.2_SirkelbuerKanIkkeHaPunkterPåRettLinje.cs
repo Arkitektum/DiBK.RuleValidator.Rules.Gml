@@ -8,7 +8,7 @@ using static DiBK.RuleValidator.Extensions.Gml.Constants.Namespace;
 
 namespace DiBK.RuleValidator.Rules.Gml
 {
-    public class SirkelbuerKanIkkeHaPunkterPåRettLinje : Rule<IGmlValidationData>
+    public class SirkelbuerKanIkkeHaPunkterPåRettLinje : Rule<IGmlValidationInputV1>
     {
         private const double MIN_SANGITTA = 0.02;
 
@@ -17,7 +17,7 @@ namespace DiBK.RuleValidator.Rules.Gml
             Id = "gml.bue.2";
         }
 
-        protected override void Validate(IGmlValidationData data)
+        protected override void Validate(IGmlValidationInputV1 data)
         {
             if (!data.Surfaces.Any() && !data.Solids.Any())
                 SkipRule();

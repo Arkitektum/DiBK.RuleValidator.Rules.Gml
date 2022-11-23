@@ -6,7 +6,7 @@ using System.Xml.Linq;
 
 namespace DiBK.RuleValidator.Rules.Gml
 {
-    public class LokalIdErEnGyldigUUID : Rule<IGmlValidationData>
+    public class LokalIdErEnGyldigUUID : Rule<IGmlValidationInputV1>
     {
         private static readonly Regex _uuidRegex = 
             new("^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
@@ -16,7 +16,7 @@ namespace DiBK.RuleValidator.Rules.Gml
             Id = "gml.uuid.1";
         }
 
-        protected override void Validate(IGmlValidationData data)
+        protected override void Validate(IGmlValidationInputV1 data)
         {
             if (!data.Surfaces.Any() && !data.Solids.Any())
                 SkipRule();

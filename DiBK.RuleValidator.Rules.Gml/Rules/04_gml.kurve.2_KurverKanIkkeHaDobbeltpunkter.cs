@@ -9,28 +9,29 @@ using static DiBK.RuleValidator.Extensions.Gml.Constants.Namespace;
 
 namespace DiBK.RuleValidator.Rules.Gml
 {
-    public class KurverKanIkkeHaDobbeltpunkter : Rule<IGmlValidationData>
+    public class KurverKanIkkeHaDobbeltpunkter : Rule<IGmlValidationInputV1>
     {
         public override void Create()
         {
             Id = "gml.kurve.2";
         }
 
-        protected override void Validate(IGmlValidationData data)
+        protected override void Validate(IGmlValidationInputV1 data)
         {
             if (!data.Surfaces.Any() && !data.Solids.Any())
                 SkipRule();
 
-            data.Surfaces.ForEach(document => Validate(document, 2));
-            data.Solids.ForEach(document => Validate(document, 3));
+            data.Surfaces.ForEach(Validate);
+            data.Solids.ForEach(Validate);
         }
 
-        private void Validate(GmlDocument document, int dimensions)
+        private void Validate(GmlDocument document)
         {
             var curveElements = GetCurveElements(document);
             
             Parallel.ForEach(curveElements, element =>
             {
+                var dimensions = GmlHelper.GetDimensions(element);
                 var pointTuples = new List<(double[] PointA, double[] PointB)>();
 
                 try

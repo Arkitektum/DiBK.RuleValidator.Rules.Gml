@@ -7,13 +7,10 @@ namespace DiBK.RuleValidator.Rules.Gml
         public RuleConfig CreateConfig()
         {
             return RuleConfig
-                .Create<IGmlValidationData>("Generell geometri")
-                .AddGroup("GenerellGeometri", "Generell geometri", group => group
-                    .AddRule<FungerendeReferanserMellomObjekter>()
+                .Create<IGmlValidationInputV1>("Generell GML v1")
+                .AddGroup("GenerellGmlV1", "Generell GML v1", group => group
                     .AddRule<UnikGmlIdForAlleObjekterInnenforDatasettet>()
                     .AddRule<LokalIdErEnGyldigUUID>()
-                    .AddRule<KoordinatreferansesystemForKart2D>()
-                    .AddRule<KoordinatreferansesystemForKart3D>()
                     .AddRule<KurverSkalHaGyldigGeometri>()
                     .AddRule<KurverKanIkkeHaDobbeltpunkter>()
                     .AddRule<SirkelbuerKanKunInneholdeTrePunkter>()
@@ -25,11 +22,6 @@ namespace DiBK.RuleValidator.Rules.Gml
                     .AddRule<HullKanIkkeOverlappeAndreHullISammeFlate>()
                     .AddRule<SamsvarendeAvgrensingsgeometri>()
                 )
-                .WithGlobalSettings(new()
-                {
-                    { "ValidEpsgCodes2D", new[] { "25832", "25833", "25835" } },
-                    { "ValidEpsgCodes3D", new[] { "5972", "5973", "5975" } },
-                })
                 .Build();
         }
     }

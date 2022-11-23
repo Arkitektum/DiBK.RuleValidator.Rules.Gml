@@ -9,14 +9,14 @@ using System.Xml.Linq;
 
 namespace DiBK.RuleValidator.Rules.Gml
 {
-    public class SamsvarendeAvgrensingsgeometri : Rule<IGmlValidationData>
+    public class SamsvarendeAvgrensingsgeometri : Rule<IGmlValidationInputV1>
     {
         public override void Create()
         {
             Id = "gml.avgr.1";
         }
 
-        protected override void Validate(IGmlValidationData data)
+        protected override void Validate(IGmlValidationInputV1 data)
         {
             if (!data.Surfaces.Any())
                 SkipRule();

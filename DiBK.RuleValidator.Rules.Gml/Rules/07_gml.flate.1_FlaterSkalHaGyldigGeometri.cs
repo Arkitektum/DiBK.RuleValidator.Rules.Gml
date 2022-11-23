@@ -8,7 +8,7 @@ using System.Xml.Linq;
 
 namespace DiBK.RuleValidator.Rules.Gml
 {
-    public class FlaterSkalHaGyldigGeometri : Rule<IGmlValidationData>
+    public class FlaterSkalHaGyldigGeometri : Rule<IGmlValidationInputV1>
     {
         public override void Create()
         {
@@ -19,7 +19,7 @@ namespace DiBK.RuleValidator.Rules.Gml
             DependOn<HullKanIkkeOverlappeAndreHullISammeFlate>().ToExecute();
         }
 
-        protected override void Validate(IGmlValidationData data)
+        protected override void Validate(IGmlValidationInputV1 data)
         {
             if (!data.Surfaces.Any() && !data.Solids.Any())
                 SkipRule();

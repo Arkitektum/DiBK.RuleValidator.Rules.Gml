@@ -7,11 +7,11 @@
     <Copyright>Direktoratet for byggkvalitet (DiBK)</Copyright>
     <Authors>Direktoratet for byggkvalitet (DiBK)</Authors>
     <RepositoryUrl>https://github.com/Arkitektum/DiBK.RuleValidator.Rules.Gml</RepositoryUrl>
-    <Version>2.0.8</Version>
+    <Version>2.0.9</Version>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="DiBK.RuleValidator.Extensions.Gml" Version="2.0.7" />
+    <PackageReference Include="DiBK.RuleValidator.Extensions.Gml" Version="2.0.8" />
   </ItemGroup>
 
   <ItemGroup>
@@ -55,11 +55,6 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
-    <Compile Update="Translations\gml.epsg.2.Designer.cs">
-      <DependentUpon>gml.epsg.2.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
     <Compile Update="Translations\gml.kurve.2.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -79,16 +74,6 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>gml.bue.1.resx</DependentUpon>
-    </Compile>
-    <Compile Update="Translations\gml.epsg.1.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>gml.epsg.1.resx</DependentUpon>
-    </Compile>
-    <Compile Update="Translations\gml.xlink.1.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>gml.xlink.1.resx</DependentUpon>
     </Compile>
   </ItemGroup>
 
@@ -125,10 +110,6 @@
       <LastGenOutput>gml.kurve.1.Designer.cs</LastGenOutput>
       <Generator>ResXFileCodeGenerator</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Translations\gml.epsg.2.resx">
-      <LastGenOutput>gml.epsg.2.Designer.cs</LastGenOutput>
-      <Generator>ResXFileCodeGenerator</Generator>
-    </EmbeddedResource>
     <EmbeddedResource Update="Translations\gml.kurve.2.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>gml.kurve.2.Designer.cs</LastGenOutput>
@@ -144,14 +125,6 @@
     <EmbeddedResource Update="Translations\gml.bue.1.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>gml.bue.1.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Translations\gml.epsg.1.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>gml.epsg.1.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Translations\gml.xlink.1.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>gml.xlink.1.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
 

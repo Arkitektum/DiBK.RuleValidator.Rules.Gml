@@ -7,14 +7,14 @@ using static DiBK.RuleValidator.Extensions.Gml.Constants.Namespace;
 
 namespace DiBK.RuleValidator.Rules.Gml
 {
-    public class SirkelbuerKanKunInneholdeTrePunkter : Rule<IGmlValidationData>
+    public class SirkelbuerKanKunInneholdeTrePunkter : Rule<IGmlValidationInputV1>
     {
         public override void Create()
         {
             Id = "gml.bue.1";
         }
 
-        protected override void Validate(IGmlValidationData data)
+        protected override void Validate(IGmlValidationInputV1 data)
         {
             if (!data.Surfaces.Any() && !data.Solids.Any())
                 SkipRule();

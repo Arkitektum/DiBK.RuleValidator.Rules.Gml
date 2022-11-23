@@ -6,14 +6,14 @@ using System.Xml.Linq;
 
 namespace DiBK.RuleValidator.Rules.Gml
 {
-    public class AvgrensningeneTilEnFlateSkalNøstesRiktig : Rule<IGmlValidationData>
+    public class AvgrensningeneTilEnFlateSkalNøstesRiktig : Rule<IGmlValidationInputV1>
     {
         public override void Create()
         {
             Id = "gml.flate.3";
         }
 
-        protected override void Validate(IGmlValidationData data)
+        protected override void Validate(IGmlValidationInputV1 data)
         {
             if (!data.Surfaces.Any() && !data.Solids.Any())
                 SkipRule();

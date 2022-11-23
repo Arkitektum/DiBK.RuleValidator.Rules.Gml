@@ -2,24 +2,24 @@
 using DiBK.RuleValidator.Extensions.Gml;
 using DiBK.RuleValidator.Rules.Gml.Constants;
 using OSGeo.OGR;
+using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
 namespace DiBK.RuleValidator.Rules.Gml
 {
-    public class HullKanIkkeOverlappeAndreHullISammeFlate : Rule<IGmlValidationData>
+    public class HullMåLiggeInnenforFlatensYtreAvgrensning : Rule<IGmlValidationInputV1>
     {
         private readonly ConcurrentBag<XElement> _invalidElements = new();
 
         public override void Create()
         {
-            Id = "gml.flate.5";
+            Id = "gml.flate.4";
         }
 
-        protected override void Validate(IGmlValidationData data)
+        protected override void Validate(IGmlValidationInputV1 data)
         {
             if (!data.Surfaces.Any() && !data.Solids.Any())
                 SkipRule();
@@ -30,7 +30,7 @@ namespace DiBK.RuleValidator.Rules.Gml
 
         private void Validate(GmlDocument document, int dimensions)
         {
-            SetData(DataKey.OverlappingHoles + document.Id, _invalidElements);
+            SetData(DataKey.HolesOutsideBoundary + document.Id, _invalidElements);
 
             var polygonElements = document.GetFeatureGeometryElements(GmlGeometry.MultiSurface, GmlGeometry.Surface, GmlGeometry.Polygon)
                 .SelectMany(element =>
@@ -42,60 +42,52 @@ namespace DiBK.RuleValidator.Rules.Gml
 
             foreach (var element in polygonElements)
             {
-                var interiorRingElements = element.GetElements("*:interior/*");
+                var exteriorElement = element.GetElement("*:exterior/*");
+                Geometry exterior = null;
 
-                if (interiorRingElements.Count() < 2)
+                try
+                {
+                    if (dimensions == 3)
+                        AddSrsDimensionAttribute(exteriorElement);
+
+                    using var exteriorRing = Geometry.CreateFromGML(exteriorElement.ToString());
+                    exterior = GeometryHelper.CreatePolygonFromRing(exteriorRing);
+                }
+                catch
+                {
                     continue;
+                }
 
-                var interiors = new List<(XElement, Geometry)>();
+                var interiorElements = element.GetElements("*:interior/*");
 
-                foreach (var interiorRingElement in interiorRingElements)
+                Parallel.ForEach(interiorElements, interiorElement =>
                 {
                     try
                     {
                         if (dimensions == 3)
-                            AddSrsDimensionAttribute(interiorRingElement);
+                            AddSrsDimensionAttribute(interiorElement);
 
-                        using var interiorRing = GeometryHelper.GeometryFromGML(interiorRingElement);
+                        using var interiorRing = Geometry.CreateFromGML(interiorElement.ToString());
+                        using var interior = GeometryHelper.CreatePolygonFromRing(interiorRing);
 
-                        if (interiorRing != null)
+                        if (!exterior.Contains(interior))
                         {
-                            interiors.Add((interiorRingElement, GeometryHelper.CreatePolygonFromRing(interiorRing)));
+                            this.AddMessage(
+                                Translate("Message", GmlHelper.GetNameAndId(element)),
+                                document.FileName,
+                                new[] { interiorElement.GetXPath() },
+                                new[] { GmlHelper.GetFeatureGmlId(element) }
+                            );
+
+                            _invalidElements.Add(GmlHelper.GetBaseGmlElement(element));
                         }
                     }
                     catch
                     {
                     }
-                }
+                });
 
-                if (interiors.Count < 2)
-                    continue;
-
-                for (int i = 0; i < interiors.Count - 1; i++)
-                {
-                    var (geoElement, geometry) = interiors[i];
-
-                    Parallel.For(i + 1, interiors.Count, index =>
-                    {
-                        var (otherGeoElement, otherGeometry) = interiors[index];
-
-                        if (geometry.Overlaps(otherGeometry))
-                        {
-                            using var intersection = geometry.Intersection(otherGeometry);
-                            intersection.ExportToWkt(out var intersectionWkt);
-
-                            this.AddMessage(
-                                Translate("Message", GmlHelper.GetNameAndId(element)),
-                                document.FileName,
-                                new[] { geoElement.GetXPath(), otherGeoElement.GetXPath() },
-                                new[] { GmlHelper.GetFeatureGmlId(element) },
-                                intersectionWkt
-                            );
-
-                            _invalidElements.Add(GmlHelper.GetBaseGmlElement(element));
-                        }
-                    });
-                }
+                exterior.Dispose();
             }
         }
 
@@ -106,4 +98,3 @@ namespace DiBK.RuleValidator.Rules.Gml
         }
     }
 }
-

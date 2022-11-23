@@ -4,14 +4,14 @@ using System.Linq;
 
 namespace DiBK.RuleValidator.Rules.Gml
 {
-    public class KurverSkalHaGyldigGeometri : Rule<IGmlValidationData>
+    public class KurverSkalHaGyldigGeometri : Rule<IGmlValidationInputV1>
     {
         public override void Create()
         {
             Id = "gml.kurve.1";
         }
 
-        protected override void Validate(IGmlValidationData data)
+        protected override void Validate(IGmlValidationInputV1 data)
         {
             if (!data.Surfaces.Any() && !data.Solids.Any())
                 SkipRule();

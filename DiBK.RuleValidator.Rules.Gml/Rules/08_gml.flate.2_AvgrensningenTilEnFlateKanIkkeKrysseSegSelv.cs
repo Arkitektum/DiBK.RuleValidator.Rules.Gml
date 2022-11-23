@@ -9,7 +9,7 @@ using System.Xml.Linq;
 
 namespace DiBK.RuleValidator.Rules.Gml
 {
-    public class AvgrensningenTilEnFlateKanIkkeKrysseSegSelv : Rule<IGmlValidationData>
+    public class AvgrensningenTilEnFlateKanIkkeKrysseSegSelv : Rule<IGmlValidationInputV1>
     {
         private readonly ConcurrentBag<XElement> _invalidElements = new();
 
@@ -18,7 +18,7 @@ namespace DiBK.RuleValidator.Rules.Gml
             Id = "gml.flate.2";
         }
 
-        protected override void Validate(IGmlValidationData data)
+        protected override void Validate(IGmlValidationInputV1 data)
         {
             if (!data.Surfaces.Any() && !data.Solids.Any())
                 SkipRule();

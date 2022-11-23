@@ -19,13 +19,13 @@ namespace DiBK.RuleValidator.Rules.Gml
             Id = "gml.flate.4";
         }
 
-        protected override void Validate(IGmlValidationInputV1 data)
+        protected override void Validate(IGmlValidationInputV1 input)
         {
-            if (!data.Surfaces.Any() && !data.Solids.Any())
+            if (!input.Surfaces.Any() && !input.Solids.Any())
                 SkipRule();
 
-            data.Surfaces.ForEach(document => Validate(document, 2));
-            data.Solids.ForEach(document => Validate(document, 3));
+            input.Surfaces.ForEach(document => Validate(document, 2));
+            input.Solids.ForEach(document => Validate(document, 3));
         }
 
         private void Validate(GmlDocument document, int dimensions)

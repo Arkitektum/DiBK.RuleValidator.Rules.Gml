@@ -20,17 +20,17 @@ namespace DiBK.RuleValidator.Rules.Gml.Tests.Setup
             return new RuleValidator(new RuleService(), new TranslationService(ruleSettings), ruleSettings, Mock.Of<ILogger<RuleValidator>>(), Mock.Of<ILogger<Rule>>());
         }
 
-        public static IGmlValidationData GetGmlValidationData(
+        public static IGmlValidationInputV1 GetGmlValidationInputV1(
             string map2DFileName = null,
             string map3DFileName = null)
         {
-            return GmlValidationData.Create(
-                GetGmlValidationData(map2DFileName),
-                GetGmlValidationData(map3DFileName)
+            return GmlValidationInputV1.Create(
+                GetGmlValidationInputV1(map2DFileName),
+                GetGmlValidationInputV1(map3DFileName)
             );
         }
 
-        private static List<GmlDocument> GetGmlValidationData(string fileName)
+        private static List<GmlDocument> GetGmlValidationInputV1(string fileName)
         {
             if (string.IsNullOrWhiteSpace(fileName))
                 return new();

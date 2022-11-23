@@ -16,13 +16,13 @@ namespace DiBK.RuleValidator.Rules.Gml
             Id = "gml.kurve.2";
         }
 
-        protected override void Validate(IGmlValidationInputV1 data)
+        protected override void Validate(IGmlValidationInputV1 input)
         {
-            if (!data.Surfaces.Any() && !data.Solids.Any())
+            if (!input.Surfaces.Any() && !input.Solids.Any())
                 SkipRule();
 
-            data.Surfaces.ForEach(Validate);
-            data.Solids.ForEach(Validate);
+            input.Surfaces.ForEach(Validate);
+            input.Solids.ForEach(Validate);
         }
 
         private void Validate(GmlDocument document)

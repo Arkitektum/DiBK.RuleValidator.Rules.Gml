@@ -4,21 +4,21 @@ using System.Collections.Generic;
 
 namespace DiBK.RuleValidator.Rules.Gml.Tests.Model
 {
-    public class GmlValidationData : IGmlValidationData
+    public class GmlValidationInputV1 : IGmlValidationInputV1
     {
         private bool _disposed = false;
         public List<GmlDocument> Surfaces { get; } = new();
         public List<GmlDocument> Solids { get; } = new();
 
-        private GmlValidationData(List<GmlDocument> surfaces, List<GmlDocument> solids)
+        private GmlValidationInputV1(List<GmlDocument> surfaces, List<GmlDocument> solids)
         {
             Surfaces.AddRange(surfaces);
             Solids.AddRange(solids);
         }
 
-        public static IGmlValidationData Create(List<GmlDocument> surfaces, List<GmlDocument> solids)
+        public static IGmlValidationInputV1 Create(List<GmlDocument> surfaces, List<GmlDocument> solids)
         {
-            return new GmlValidationData(surfaces, solids);
+            return new GmlValidationInputV1(surfaces, solids);
         }
 
         public void Dispose()

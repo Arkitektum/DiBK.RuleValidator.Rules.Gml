@@ -84,11 +84,11 @@
 	</ItemGroup>
 
 	<ItemGroup Condition="'$(OS)' == 'Unix'">
-		<PackageReference Include="MaxRev.Gdal.LinuxRuntime.Minimal" Version="3.3.3.120" />
+		<PackageReference Include="MaxRev.Gdal.LinuxRuntime.Minimal" Version="3.7.0.100" />
 	</ItemGroup>
 
 	<ItemGroup Condition="'$(OS)' != 'Unix'">
-		<PackageReference Include="MaxRev.Gdal.WindowsRuntime.Minimal" Version="3.3.3.110" />
+		<PackageReference Include="MaxRev.Gdal.WindowsRuntime.Minimal" Version="3.7.0.100" />
 	</ItemGroup>
 
 	<ItemGroup>

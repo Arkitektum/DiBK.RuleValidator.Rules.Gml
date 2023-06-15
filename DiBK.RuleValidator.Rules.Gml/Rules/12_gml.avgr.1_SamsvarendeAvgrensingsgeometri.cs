@@ -58,8 +58,8 @@ namespace DiBK.RuleValidator.Rules.Gml
                 foreach (var groupedBoundedByElements in elementGroupings)
                 {
                     using var boundariesMultiSurface = GetBoundariesAsMultiSurface(groupedBoundedByElements, document, documents);
-                    
-                    if (!multiSurface.Geometry.EqualsTopologically(boundariesMultiSurface))
+
+                    if (!EqualsTopologically(multiSurface.Geometry, boundariesMultiSurface))
                     {
                         this.AddMessage(
                             Translate("Message", GmlHelper.GetNameAndId(featureElement)),
@@ -122,6 +122,18 @@ namespace DiBK.RuleValidator.Rules.Gml
             }
 
             return multiSurface;
+        }
+
+        private static bool EqualsTopologically(Geometry surface1, Geometry surface2)
+        {
+            try
+            {
+                return surface1.EqualsTopologically(surface2);
+            }
+            catch
+            {
+                return false;
+            }
         }
     }
 }

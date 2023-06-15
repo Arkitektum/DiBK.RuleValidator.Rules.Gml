@@ -31,7 +31,21 @@ namespace DiBK.RuleValidator.Rules.Gml
             
             Parallel.ForEach(curveElements, element =>
             {
-                var dimensions = GmlHelper.GetDimensions(element);
+                var geometry = document.GetOrCreateGeometry(element);
+
+                if (geometry.ErrorMessage != null)
+                {
+                    this.AddMessage(
+                        geometry.ErrorMessage,
+                        document.FileName,
+                        new[] { element.GetXPath() },
+                        new[] { GmlHelper.GetFeatureGmlId(element) }
+                    );
+
+                    return;
+                }
+
+                var dimensions = geometry.Geometry.GetCoordinateDimension();
                 var pointTuples = new List<(double[] PointA, double[] PointB)>();
 
                 try
@@ -68,7 +82,7 @@ namespace DiBK.RuleValidator.Rules.Gml
                     if (dimensions == 2)
                         pointString = $"{x}, {y}";
                     else
-                        pointString = $"{x}, {y}, {z}";
+                        pointString = $"{x}, {y}, {z}";                    
 
                     this.AddMessage(
                         Translate("Message", element.Name.LocalName, FormattableString.Invariant(pointString)),

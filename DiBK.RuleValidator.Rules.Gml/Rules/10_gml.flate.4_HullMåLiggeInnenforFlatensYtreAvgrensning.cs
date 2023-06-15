@@ -2,7 +2,6 @@
 using DiBK.RuleValidator.Extensions.Gml;
 using DiBK.RuleValidator.Rules.Gml.Constants;
 using OSGeo.OGR;
-using System;
 using System.Collections.Concurrent;
 using System.Linq;
 using System.Threading.Tasks;

@@ -30,6 +30,8 @@ namespace DiBK.RuleValidator.Rules.Gml
             {
                 foreach (var element in grouping)
                 {
+                    var (LineNumber, LinePosition) = XmlHelper.GetLineInfo(element);
+
                     this.AddMessage(
                         Translate("Message", grouping.Key, element.GetName()),
                         document.FileName,

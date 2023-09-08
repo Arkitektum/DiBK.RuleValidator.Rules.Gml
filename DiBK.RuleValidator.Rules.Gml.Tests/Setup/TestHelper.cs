@@ -4,7 +4,6 @@ using DiBK.RuleValidator.Extensions.Gml;
 using DiBK.RuleValidator.Rules.Gml.Tests.Model;
 using Microsoft.Extensions.Logging;
 using Moq;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -20,24 +19,20 @@ namespace DiBK.RuleValidator.Rules.Gml.Tests.Setup
             return new RuleValidator(new RuleService(), new TranslationService(ruleSettings), ruleSettings, Mock.Of<ILogger<RuleValidator>>(), Mock.Of<ILogger<Rule>>());
         }
 
-        public static IGmlValidationInputV1 GetGmlValidationInputV1(
-            string map2DFileName = null,
-            string map3DFileName = null)
+        public static IGmlValidationInputV1 GetGmlValidationInputV1(params string[] fileNames)            
         {
-            return GmlValidationInputV1.Create(
-                GetGmlValidationInputV1(map2DFileName),
-                GetGmlValidationInputV1(map3DFileName)
-            );
+            var documents = fileNames
+                .Select(fileName => GetGmlValidationInputV1(fileName))
+                .ToList();
+
+            return GmlValidationInputV1.Create(documents);
         }
 
-        private static List<GmlDocument> GetGmlValidationInputV1(string fileName)
+        private static GmlDocument GetGmlValidationInputV1(string fileName)
         {
-            if (string.IsNullOrWhiteSpace(fileName))
-                return new();
-
             using var stream = GetResourceStream(fileName);
 
-            return new List<GmlDocument> { GmlDocument.Create(new InputData(stream, fileName, null)) };
+            return GmlDocument.Create(new InputData(stream, fileName, null));
         }
 
         private static Stream GetResourceStream(string fileName)

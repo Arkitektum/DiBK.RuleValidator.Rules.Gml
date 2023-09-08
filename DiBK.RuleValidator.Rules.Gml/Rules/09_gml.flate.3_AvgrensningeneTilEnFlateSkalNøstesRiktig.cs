@@ -15,14 +15,13 @@ namespace DiBK.RuleValidator.Rules.Gml
 
         protected override void Validate(IGmlValidationInputV1 input)
         {
-            if (!input.Surfaces.Any() && !input.Solids.Any())
+            if (!input.Documents.Any())
                 SkipRule();
 
-            input.Surfaces.ForEach(document => Validate(document, 2));
-            input.Solids.ForEach(document => Validate(document, 3));
+            input.Documents.ForEach(Validate);
         }
 
-        private void Validate(GmlDocument document, int dimensions)
+        private void Validate(GmlDocument document)
         {
             var polygonElements = document.GetFeatureGeometryElements(GmlGeometry.MultiSurface, GmlGeometry.Surface, GmlGeometry.Polygon)
                 .SelectMany(element =>
@@ -38,7 +37,10 @@ namespace DiBK.RuleValidator.Rules.Gml
 
                 try
                 {
-                    var exteriorPoints = GeometryHelper.GetCoordinates(exteriorElement, dimensions);
+                    var ringElement = exteriorElement.Elements().First();
+                    using var ring = GeometryHelper.GeometryFromGML(ringElement);
+                    var exteriorPoints = GeometryHelper.GetPoints(ring);
+                    var (LineNumber, LinePosition) = element.GetLineInfo();
 
                     if (GeometryHelper.PointsAreClockWise(exteriorPoints))
                     {
@@ -48,17 +50,23 @@ namespace DiBK.RuleValidator.Rules.Gml
                             Translate("Message1", GmlHelper.GetNameAndId(element)),
                             document.FileName,
                             new[] { exteriorElement.GetXPath() },
-                            new[] { GmlHelper.GetFeatureGmlId(element) }
+                            new[] { GmlHelper.GetFeatureGmlId(element) },
+                            LineNumber,
+                            LinePosition
                         );
                     }
                 }
                 catch (Exception exception)
                 {
+                    var (LineNumber, LinePosition) = element.GetLineInfo();
+
                     this.AddMessage(
                         exception.Message, 
                         document.FileName, 
                         new[] { exteriorElement.GetXPath() }, 
-                        new[] { GmlHelper.GetFeatureGmlId(element) }
+                        new[] { GmlHelper.GetFeatureGmlId(element) },
+                        LineNumber,
+                        LinePosition
                     );
                 }
 
@@ -68,33 +76,42 @@ namespace DiBK.RuleValidator.Rules.Gml
                 {
                     try
                     {
-                        var ringPoints = GeometryHelper.GetCoordinates(ringElement, dimensions);
+                        var dimension = GmlHelper.GetDimension(ringElement);
+
+                        if (dimension == 3)
+                            AddSrsDimensionAttribute(ringElement);
+
+                        using var ring = GeometryHelper.GeometryFromGML(ringElement);
+                        var ringPoints = GeometryHelper.GetPoints(ring);
 
                         if (!GeometryHelper.PointsAreClockWise(ringPoints))
                         {
-                            if (dimensions == 3)
-                                AddSrsDimensionAttribute(ringElement);
-
-                            using var ring = GeometryHelper.GeometryFromGML(ringElement);
                             using var polygon = GeometryHelper.CreatePolygonFromRing(ring);
                             using var point = polygon.PointOnSurface();
+                            var (LineNumber, LinePosition) = ringElement.GetLineInfo();
 
                             this.AddMessage(
                                 Translate("Message2", GmlHelper.GetNameAndId(element)),
                                 document.FileName,
                                 new[] { ringElement.GetXPath() },
-                                new[] { GmlHelper.GetFeatureGmlId(element) },
+                                new[] { GmlHelper.GetFeatureGmlId(element) },                                
+                                LineNumber,
+                                LinePosition,
                                 GeometryHelper.GetZoomToPoint(point)
                             );
                         }
                     }
                     catch (Exception exception)
                     {
+                        var (LineNumber, LinePosition) = ringElement.GetLineInfo();
+
                         this.AddMessage(
                             exception.Message, 
                             document.FileName, 
                             new[] { ringElement.GetXPath() }, 
-                            new[] { GmlHelper.GetFeatureGmlId(element) }
+                            new[] { GmlHelper.GetFeatureGmlId(element) },
+                            LineNumber,
+                            LinePosition
                         );
                     }
                 }

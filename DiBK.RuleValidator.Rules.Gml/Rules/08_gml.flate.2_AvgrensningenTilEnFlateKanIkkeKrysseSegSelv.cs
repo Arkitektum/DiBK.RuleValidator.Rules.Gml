@@ -20,11 +20,10 @@ namespace DiBK.RuleValidator.Rules.Gml
 
         protected override void Validate(IGmlValidationInputV1 input)
         {
-            if (!input.Surfaces.Any() && !input.Solids.Any())
+            if (!input.Documents.Any())
                 SkipRule();
 
-            input.Surfaces.ForEach(Validate);
-            input.Solids.ForEach(Validate);
+            input.Documents.ForEach(Validate);
         }
 
         private void Validate(GmlDocument document)
@@ -53,12 +52,15 @@ namespace DiBK.RuleValidator.Rules.Gml
 
             var pointX = point.GetX(0).ToString(CultureInfo.InvariantCulture);
             var pointY = point.GetY(0).ToString(CultureInfo.InvariantCulture);
+            var (LineNumber, LinePosition) = element.GetLineInfo();
 
             this.AddMessage(
                 Translate("Message", GmlHelper.GetNameAndId(element), pointX, pointY),
                 document.FileName,
                 new[] { element.GetXPath() },
                 new[] { GmlHelper.GetFeatureGmlId(element) },
+                LineNumber,
+                LinePosition,
                 GeometryHelper.GetZoomToPoint(point)
             );
 

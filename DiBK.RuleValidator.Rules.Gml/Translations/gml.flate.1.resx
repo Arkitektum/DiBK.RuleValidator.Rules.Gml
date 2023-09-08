@@ -120,7 +120,10 @@
   <data name="Documentation" xml:space="preserve">
     <value>https://dibk.atlassian.net/wiki/spaces/FP/pages/1933574255/gml.flate.1</value>
   </data>
-  <data name="Message" xml:space="preserve">
+  <data name="Message1" xml:space="preserve">
+    <value>Flaten har ugyldig geometri.</value>
+  </data>
+  <data name="Message2" xml:space="preserve">
     <value>{0}: Geometrien er ugyldig.</value>
   </data>
   <data name="Name" xml:space="preserve">

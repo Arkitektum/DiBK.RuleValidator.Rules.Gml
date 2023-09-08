@@ -1,5 +1,6 @@
 ﻿using DiBK.RuleValidator.Extensions;
 using DiBK.RuleValidator.Extensions.Gml;
+using System;
 using System.Linq;
 
 namespace DiBK.RuleValidator.Rules.Gml
@@ -13,11 +14,10 @@ namespace DiBK.RuleValidator.Rules.Gml
 
         protected override void Validate(IGmlValidationInputV1 input)
         {
-            if (!input.Surfaces.Any() && !input.Solids.Any())
+            if (!input.Documents.Any())
                 SkipRule();
 
-            input.Surfaces.ForEach(Validate);
-            input.Solids.ForEach(Validate);
+            input.Documents.ForEach(Validate);
         }
 
         private void Validate(GmlDocument document)
@@ -30,12 +30,15 @@ namespace DiBK.RuleValidator.Rules.Gml
             {
                 foreach (var element in grouping)
                 {
-                    var (LineNumber, LinePosition) = XmlHelper.GetLineInfo(element);
+                    var (LineNumber, LinePosition) = element.GetLineInfo();
 
                     this.AddMessage(
                         Translate("Message", grouping.Key, element.GetName()),
                         document.FileName,
-                        new[] { element.GetXPath() }
+                        new[] { element.GetXPath() },
+                        Array.Empty<string>(),
+                        LineNumber,
+                        LinePosition
                     );
                 }
             }

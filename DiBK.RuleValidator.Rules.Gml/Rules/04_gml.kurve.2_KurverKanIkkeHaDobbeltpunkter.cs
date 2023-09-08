@@ -18,11 +18,10 @@ namespace DiBK.RuleValidator.Rules.Gml
 
         protected override void Validate(IGmlValidationInputV1 input)
         {
-            if (!input.Surfaces.Any() && !input.Solids.Any())
+            if (!input.Documents.Any())
                 SkipRule();
 
-            input.Surfaces.ForEach(Validate);
-            input.Solids.ForEach(Validate);
+            input.Documents.ForEach(Validate);
         }
 
         private void Validate(GmlDocument document)
@@ -35,11 +34,15 @@ namespace DiBK.RuleValidator.Rules.Gml
 
                 if (geometry.ErrorMessage != null)
                 {
+                    var (LineNumber, LinePosition) = element.GetLineInfo();
+
                     this.AddMessage(
                         geometry.ErrorMessage,
                         document.FileName,
                         new[] { element.GetXPath() },
-                        new[] { GmlHelper.GetFeatureGmlId(element) }
+                        new[] { GmlHelper.GetFeatureGmlId(element) },
+                        LineNumber,
+                        LinePosition
                     );
 
                     return;
@@ -57,11 +60,15 @@ namespace DiBK.RuleValidator.Rules.Gml
                 }
                 catch (Exception exception)
                 {
+                    var (LineNumber, LinePosition) = element.GetLineInfo();
+
                     this.AddMessage(
                         exception.Message,
                         document.FileName,
                         new[] { element.GetXPath() },
-                        new[] { GmlHelper.GetFeatureGmlId(element) }
+                        new[] { GmlHelper.GetFeatureGmlId(element) },
+                        LineNumber,
+                        LinePosition
                     );
 
                     return;
@@ -82,13 +89,17 @@ namespace DiBK.RuleValidator.Rules.Gml
                     if (dimensions == 2)
                         pointString = $"{x}, {y}";
                     else
-                        pointString = $"{x}, {y}, {z}";                    
+                        pointString = $"{x}, {y}, {z}";
+
+                    var (LineNumber, LinePosition) = element.GetLineInfo();
 
                     this.AddMessage(
                         Translate("Message", element.Name.LocalName, FormattableString.Invariant(pointString)),
                         document.FileName,
                         new[] { element.GetXPath() },
                         new[] { GmlHelper.GetFeatureGmlId(element) },
+                        LineNumber,
+                        LinePosition,
                         GeometryHelper.GetZoomToPoint(point, dimensions)
                     );
                 }

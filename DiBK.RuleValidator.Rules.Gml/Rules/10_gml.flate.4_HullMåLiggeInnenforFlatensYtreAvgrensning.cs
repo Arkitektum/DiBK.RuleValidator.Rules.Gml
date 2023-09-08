@@ -20,14 +20,13 @@ namespace DiBK.RuleValidator.Rules.Gml
 
         protected override void Validate(IGmlValidationInputV1 input)
         {
-            if (!input.Surfaces.Any() && !input.Solids.Any())
+            if (!input.Documents.Any())
                 SkipRule();
 
-            input.Surfaces.ForEach(document => Validate(document, 2));
-            input.Solids.ForEach(document => Validate(document, 3));
+            input.Documents.ForEach(Validate);
         }
 
-        private void Validate(GmlDocument document, int dimensions)
+        private void Validate(GmlDocument document)
         {
             SetData(DataKey.HolesOutsideBoundary + document.Id, _invalidElements);
 
@@ -41,12 +40,13 @@ namespace DiBK.RuleValidator.Rules.Gml
 
             foreach (var element in polygonElements)
             {
+                var dimension = GmlHelper.GetDimension(element);
                 var exteriorElement = element.GetElement("*:exterior/*");
                 Geometry exterior = null;
 
                 try
                 {
-                    if (dimensions == 3)
+                    if (dimension == 3)
                         AddSrsDimensionAttribute(exteriorElement);
 
                     using var exteriorRing = Geometry.CreateFromGML(exteriorElement.ToString());
@@ -63,7 +63,7 @@ namespace DiBK.RuleValidator.Rules.Gml
                 {
                     try
                     {
-                        if (dimensions == 3)
+                        if (dimension == 3)
                             AddSrsDimensionAttribute(interiorElement);
 
                         using var interiorRing = Geometry.CreateFromGML(interiorElement.ToString());
@@ -71,11 +71,15 @@ namespace DiBK.RuleValidator.Rules.Gml
 
                         if (!exterior.Contains(interior))
                         {
+                            var (LineNumber, LinePosition) = interiorElement.GetLineInfo();
+
                             this.AddMessage(
                                 Translate("Message", GmlHelper.GetNameAndId(element)),
                                 document.FileName,
                                 new[] { interiorElement.GetXPath() },
-                                new[] { GmlHelper.GetFeatureGmlId(element) }
+                                new[] { GmlHelper.GetFeatureGmlId(element) },
+                                LineNumber,
+                                LinePosition
                             );
 
                             _invalidElements.Add(GmlHelper.GetBaseGmlElement(element));

@@ -18,12 +18,10 @@ namespace DiBK.RuleValidator.Rules.Gml
 
         protected override void Validate(IGmlValidationInputV1 input)
         {
-            if (!input.Surfaces.Any() && !input.Solids.Any())
+            if (!input.Documents.Any())
                 SkipRule();
 
-            input.Surfaces.Concat(input.Solids)
-                .ToList()
-                .ForEach(Validate);
+            input.Documents.ForEach(Validate);
         }
 
         private void Validate(GmlDocument document)
@@ -45,11 +43,15 @@ namespace DiBK.RuleValidator.Rules.Gml
                 {
                     foreach (var element in grouping)
                     {
+                        var (LineNumber, LinePosition) = element.GetLineInfo();
+
                         this.AddMessage(
                             Translate("Message1", GmlHelper.GetNameAndId(GmlHelper.GetFeatureElement(element)), lokalId),
                             document.FileName,
                             new[] { element.GetXPath() },
-                            new[] { GmlHelper.GetFeatureGmlId(element) }
+                            new[] { GmlHelper.GetFeatureGmlId(element) },
+                            LineNumber,
+                            LinePosition
                         );
                     }
                 }

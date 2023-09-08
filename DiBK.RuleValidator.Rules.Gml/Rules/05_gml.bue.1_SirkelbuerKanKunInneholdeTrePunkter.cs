@@ -1,14 +1,16 @@
 ﻿using DiBK.RuleValidator.Extensions;
 using DiBK.RuleValidator.Extensions.Gml;
-using System;
+using DiBK.RuleValidator.Rules.Gml.Constants;
+using System.Collections.Concurrent;
 using System.Linq;
 using System.Xml.Linq;
-using static DiBK.RuleValidator.Extensions.Gml.Constants.Namespace;
 
 namespace DiBK.RuleValidator.Rules.Gml
 {
     public class SirkelbuerKanKunInneholdeTrePunkter : Rule<IGmlValidationInputV1>
     {
+        private readonly ConcurrentBag<XElement> _invalidElements = new();
+
         public override void Create()
         {
             Id = "gml.bue.1";
@@ -16,47 +18,49 @@ namespace DiBK.RuleValidator.Rules.Gml
 
         protected override void Validate(IGmlValidationInputV1 input)
         {
-            if (!input.Surfaces.Any() && !input.Solids.Any())
+            if (!input.Documents.Any())
                 SkipRule();
 
-            input.Surfaces.ForEach(document => Validate(document, 2));
-            input.Solids.ForEach(document => Validate(document, 3));
+            input.Documents.ForEach(Validate);
         }
 
-        private void Validate(GmlDocument document, int dimensions)
+        private void Validate(GmlDocument document)
         {
-            var arcElements = document.GetFeatureElements()
-                .Descendants(GmlNs + "Arc")
-                .ToList();
-            
-            foreach (var element in arcElements)
-            {
-                try
-                {
-                    var coordinatePairs = GeometryHelper.GetCoordinates(element, dimensions);
+            SetData(DataKey.InvalidArcs + document.Id, _invalidElements);
 
-                    if (coordinatePairs.Count != 3)
-                    {
-                        this.AddMessage(
-                            Translate("Message"),
-                            document.FileName, 
-                            new[] { element.GetXPath() },
-                            new[] { GmlHelper.GetFeatureGmlId(element) }
-                        );
-                        
-                        continue;
-                    }
-                }
-                catch (Exception exception)
+            var indexedGeometries = document.GetGeometriesByType(GmlGeometry.Arc);
+
+            foreach (var indexed in indexedGeometries)
+            {  
+                if (indexed.ErrorMessage != null)
                 {
+                    var (LineNumber, LinePosition) = indexed.Element.GetLineInfo();
+
                     this.AddMessage(
-                        exception.Message, 
-                        document.FileName, 
-                        new[] { element.GetXPath() },
-                        new[] { GmlHelper.GetFeatureGmlId(element) }
+                        indexed.ErrorMessage,
+                        document.FileName,
+                        new[] { indexed.Element.GetXPath() },
+                        new[] { GmlHelper.GetFeatureGmlId(indexed.Element) },
+                        LineNumber,
+                        LinePosition
                     );
-                    
-                    continue;
+
+                    _invalidElements.Add(indexed.Element);
+                }
+                else if (indexed.Geometry.GetPointCount() != 3)
+                {
+                    var (LineNumber, LinePosition) = indexed.Element.GetLineInfo();
+
+                    this.AddMessage(
+                        Translate("Message"),
+                        document.FileName,
+                        new[] { indexed.Element.GetXPath() },
+                        new[] { GmlHelper.GetFeatureGmlId(indexed.Element) },
+                        LineNumber,
+                        LinePosition
+                    );
+
+                    _invalidElements.Add(indexed.Element);
                 }
             }
         }

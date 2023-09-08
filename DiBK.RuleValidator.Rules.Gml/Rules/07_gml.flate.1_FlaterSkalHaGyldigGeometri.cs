@@ -21,11 +21,10 @@ namespace DiBK.RuleValidator.Rules.Gml
 
         protected override void Validate(IGmlValidationInputV1 input)
         {
-            if (!input.Surfaces.Any() && !input.Solids.Any())
+            if (!input.Documents.Any())
                 SkipRule();
 
-            input.Surfaces.ForEach(Validate);
-            input.Solids.ForEach(Validate);
+            input.Documents.ForEach(Validate);
         }
 
         private void Validate(GmlDocument document)
@@ -36,20 +35,28 @@ namespace DiBK.RuleValidator.Rules.Gml
             {
                 if (indexed.Geometry == null)
                 {
+                    var (LineNumber, LinePosition) = indexed.Element.GetLineInfo();
+
                     this.AddMessage(
-                        indexed.ErrorMessage ?? "Flaten har ugyldig geometri.",
+                        indexed.ErrorMessage ?? Translate("Message1"),
                         document.FileName,
                         new[] { indexed.Element.GetXPath() },
-                        new[] { GmlHelper.GetFeatureGmlId(indexed.Element) }
+                        new[] { GmlHelper.GetFeatureGmlId(indexed.Element) },
+                        LineNumber,
+                        LinePosition
                     );
                 }
                 else
                 {
+                    var (LineNumber, LinePosition) = indexed.Element.GetLineInfo();
+
                     this.AddMessage(
-                        Translate("Message", GmlHelper.GetNameAndId(indexed.Element)),
+                        Translate("Message2", GmlHelper.GetNameAndId(indexed.Element)),
                         document.FileName,
                         new[] { indexed.Element.GetXPath() },
-                        new[] { GmlHelper.GetFeatureGmlId(indexed.Element) }
+                        new[] { GmlHelper.GetFeatureGmlId(indexed.Element) },
+                        LineNumber,
+                        LinePosition
                     );
                 }
             }

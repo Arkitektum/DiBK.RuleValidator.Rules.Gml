@@ -6,7 +6,6 @@ namespace DiBK.RuleValidator.Rules.Gml
 {
     public interface IGmlValidationInputV1 : IDisposable
     {
-        List<GmlDocument> Surfaces { get; }
-        List<GmlDocument> Solids { get; }
+        List<GmlDocument> Documents { get; }
     }
 }

@@ -7,18 +7,16 @@ namespace DiBK.RuleValidator.Rules.Gml.Tests.Model
     public class GmlValidationInputV1 : IGmlValidationInputV1
     {
         private bool _disposed = false;
-        public List<GmlDocument> Surfaces { get; } = new();
-        public List<GmlDocument> Solids { get; } = new();
+        public List<GmlDocument> Documents { get; } = new();
 
-        private GmlValidationInputV1(List<GmlDocument> surfaces, List<GmlDocument> solids)
+        private GmlValidationInputV1(List<GmlDocument> documents)
         {
-            Surfaces.AddRange(surfaces);
-            Solids.AddRange(solids);
+            Documents.AddRange(documents);
         }
 
-        public static IGmlValidationInputV1 Create(List<GmlDocument> surfaces, List<GmlDocument> solids)
+        public static IGmlValidationInputV1 Create(List<GmlDocument> documents)
         {
-            return new GmlValidationInputV1(surfaces, solids);
+            return new GmlValidationInputV1(documents);
         }
 
         public void Dispose()
@@ -32,10 +30,7 @@ namespace DiBK.RuleValidator.Rules.Gml.Tests.Model
             if (!_disposed)
             {
                 if (disposing)
-                {
-                    Surfaces.ForEach(surface => surface.Dispose());
-                    Solids.ForEach(solid => solid.Dispose());
-                }
+                    Documents.ForEach(document => document.Dispose());
 
                 _disposed = true;
             }

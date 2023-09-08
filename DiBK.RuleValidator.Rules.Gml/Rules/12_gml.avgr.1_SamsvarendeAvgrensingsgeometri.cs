@@ -18,10 +18,10 @@ namespace DiBK.RuleValidator.Rules.Gml
 
         protected override void Validate(IGmlValidationInputV1 input)
         {
-            if (!input.Surfaces.Any())
+            if (!input.Documents.Any())
                 SkipRule();
 
-            var result = input.Surfaces.Select(document => Validate(document, input.Surfaces));
+            var result = input.Documents.Select(document => Validate(document, input.Documents));
 
             if (!result.Contains(true))
                 SkipRule();
@@ -61,11 +61,15 @@ namespace DiBK.RuleValidator.Rules.Gml
 
                     if (!EqualsTopologically(multiSurface.Geometry, boundariesMultiSurface))
                     {
+                        var (LineNumber, LinePosition) = surfaceGeoElement.GetLineInfo();
+
                         this.AddMessage(
                             Translate("Message", GmlHelper.GetNameAndId(featureElement)),
                             document.FileName,
                             new[] { surfaceGeoElement.GetXPath() },
-                            new[] { featureElement.GetAttribute("gml:id") }
+                            new[] { featureElement.GetAttribute("gml:id") },
+                            LineNumber,
+                            LinePosition
                         );
                     }
                 }

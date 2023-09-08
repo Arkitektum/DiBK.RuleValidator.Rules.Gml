@@ -5,5 +5,6 @@
         public const string SelfIntersections = "SelfIntersections_";
         public const string HolesOutsideBoundary = "HolesOutsideBoundary_";
         public const string OverlappingHoles = "OverlappingHoles_";
+        public const string InvalidArcs = "InvalidArcs_";
     }
 }

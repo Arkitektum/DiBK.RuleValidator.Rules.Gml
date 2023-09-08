@@ -70,11 +70,20 @@ namespace DiBK.RuleValidator.Rules.Gml.Translations {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Flaten har ugyldig geometri..
+        /// </summary>
+        internal static string Message1 {
+            get {
+                return ResourceManager.GetString("Message1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0}: Geometrien er ugyldig..
         /// </summary>
-        internal static string Message {
+        internal static string Message2 {
             get {
-                return ResourceManager.GetString("Message", resourceCulture);
+                return ResourceManager.GetString("Message2", resourceCulture);
             }
         }
         

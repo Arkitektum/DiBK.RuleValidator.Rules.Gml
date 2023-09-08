@@ -1,10 +1,11 @@
 ﻿using DiBK.RuleValidator.Extensions;
 using DiBK.RuleValidator.Extensions.Gml;
+using DiBK.RuleValidator.Rules.Gml.Constants;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
-using static DiBK.RuleValidator.Extensions.Gml.Constants.Namespace;
 
 namespace DiBK.RuleValidator.Rules.Gml
 {
@@ -15,67 +16,57 @@ namespace DiBK.RuleValidator.Rules.Gml
         public override void Create()
         {
             Id = "gml.bue.2";
+
+            DependOn<SirkelbuerKanKunInneholdeTrePunkter>().ToExecute();
         }
 
         protected override void Validate(IGmlValidationInputV1 input)
         {
-            if (!input.Surfaces.Any() && !input.Solids.Any())
+            if (!input.Documents.Any())
                 SkipRule();
 
-            input.Surfaces.ForEach(document => Validate(document, 2));
-            input.Solids.ForEach(document => Validate(document, 3));
+            input.Documents.ForEach(Validate);
         }
 
-        private void Validate(GmlDocument document, int dimensions)
+        private void Validate(GmlDocument document)
         {
-            var arcElements = document.GetFeatureElements()
-                .Descendants(GmlNs + "Arc")
-                .ToList();
+            var indexedGeometries = GetIndexedGeometries(document);
 
-            foreach (var element in arcElements)
+            foreach (var indexed in indexedGeometries)
             {
-                var points = new List<double[]>();
-
-                try
-                {
-                    points = GeometryHelper.GetCoordinates(element, dimensions);
-                }
-                catch (Exception exception)
-                {
-                    this.AddMessage(
-                        exception.Message, 
-                        document.FileName, 
-                        new[] { element.GetXPath() }, 
-                        new[] { GmlHelper.GetFeatureGmlId(element) }
-                    );
-
-                    continue;
-                }
-
+                using var points = GeometryHelper.GetPointGeometries(indexed.Geometry);
                 var circle = GeometryHelper.PointsToCircle(points[0], points[1], points[2]);
 
                 if (circle == null)
                     continue;
 
-                using var firstPoint = GeometryHelper.CreatePoint(points[0][0], points[0][1]);
-                using var lastPoint = GeometryHelper.CreatePoint(points[2][0], points[2][1]);
-
-                var chordHalfLength = firstPoint.Distance(lastPoint) / 2;
+                var chordHalfLength = points[0].Distance(points[2]) / 2;
                 var sangitta = circle.Radius - Math.Sqrt(Math.Pow(circle.Radius, 2) - Math.Pow(chordHalfLength, 2));
 
                 if (sangitta >= MIN_SANGITTA)
                     continue;
 
-                using var middlePoint = GeometryHelper.CreatePoint(points[1][0], points[1][1]);
+                var (LineNumber, LinePosition) = indexed.Element.GetLineInfo();
 
                 this.AddMessage(
                     Translate("Message"),
                     document.FileName, 
-                    new[] { element.GetXPath() },
-                    new[] { GmlHelper.GetFeatureGmlId(element) },
-                    GeometryHelper.GetZoomToPoint(middlePoint)
+                    new[] { indexed.Element.GetXPath() },
+                    new[] { GmlHelper.GetFeatureGmlId(indexed.Element) },
+                    LineNumber,
+                    LinePosition,
+                    GeometryHelper.GetZoomToPoint(points[1])
                 );
             }
+        }
+
+        private List<IndexedGeometry> GetIndexedGeometries(GmlDocument document)
+        {
+            var invalidElements = GetData<ConcurrentBag<XElement>>(DataKey.InvalidArcs + document.Id);
+
+            return document.GetGeometriesByType(GmlGeometry.Arc)
+                .Where(indexedGeometry => !invalidElements.Any(element => element.Equals(indexedGeometry.Element)))
+                .ToList();
         }
     }
 }

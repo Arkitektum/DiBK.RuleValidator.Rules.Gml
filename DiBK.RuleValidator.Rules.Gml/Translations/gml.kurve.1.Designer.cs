@@ -70,6 +70,15 @@ namespace DiBK.RuleValidator.Rules.Gml.Translations {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Kurven har ugyldig geometri..
+        /// </summary>
+        internal static string Message {
+            get {
+                return ResourceManager.GetString("Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Kurver skal ha gyldig geometri.
         /// </summary>
         internal static string Name {

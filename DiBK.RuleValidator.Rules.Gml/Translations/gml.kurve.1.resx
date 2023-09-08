@@ -120,6 +120,9 @@
   <data name="Documentation" xml:space="preserve">
     <value>https://dibk.atlassian.net/wiki/spaces/FP/pages/1918763029/gml.kurve.1</value>
   </data>
+  <data name="Message" xml:space="preserve">
+    <value>Kurven har ugyldig geometri.</value>
+  </data>
   <data name="Name" xml:space="preserve">
     <value>Kurver skal ha gyldig geometri</value>
   </data>

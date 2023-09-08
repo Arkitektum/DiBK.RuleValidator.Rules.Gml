@@ -33,18 +33,18 @@ namespace DiBK.RuleValidator.Rules.Gml
 
             foreach (var element in polygonElements)
             {
+                var dimension = GmlHelper.GetDimension(element) ?? 2;
                 var exteriorElement = element.GetElement("*:exterior");
 
                 try
                 {
-                    var ringElement = exteriorElement.Elements().First();
-                    using var ring = GeometryHelper.GeometryFromGML(ringElement);
-                    var exteriorPoints = GeometryHelper.GetPoints(ring);
-                    var (LineNumber, LinePosition) = element.GetLineInfo();
+                    var ringElement = exteriorElement.Elements().First();                   
+                    var exteriorPoints = GeometryHelper.GetCoordinates(ringElement, dimension);
 
                     if (GeometryHelper.PointsAreClockWise(exteriorPoints))
                     {
                         var gmlId = element.GetAttribute("gml:id");
+                        var (LineNumber, LinePosition) = element.GetLineInfo();
 
                         this.AddMessage(
                             Translate("Message1", GmlHelper.GetNameAndId(element)),
@@ -76,16 +76,14 @@ namespace DiBK.RuleValidator.Rules.Gml
                 {
                     try
                     {
-                        var dimension = GmlHelper.GetDimension(ringElement);
-
                         if (dimension == 3)
                             AddSrsDimensionAttribute(ringElement);
 
-                        using var ring = GeometryHelper.GeometryFromGML(ringElement);
-                        var ringPoints = GeometryHelper.GetPoints(ring);
+                        var ringPoints = GeometryHelper.GetCoordinates(ringElement, dimension);
 
                         if (!GeometryHelper.PointsAreClockWise(ringPoints))
                         {
+                            using var ring = GeometryHelper.GeometryFromGML(ringElement);
                             using var polygon = GeometryHelper.CreatePolygonFromRing(ring);
                             using var point = polygon.PointOnSurface();
                             var (LineNumber, LinePosition) = ringElement.GetLineInfo();

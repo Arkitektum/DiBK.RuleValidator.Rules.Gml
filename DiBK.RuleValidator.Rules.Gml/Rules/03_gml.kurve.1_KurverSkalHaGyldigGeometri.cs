@@ -27,11 +27,11 @@ namespace DiBK.RuleValidator.Rules.Gml
 
             foreach (var indexed in indexedCurveGeometries)
             {
-                var errorMessage = indexed.ErrorMessage ?? Translate("Message");
+                var errorMessage = indexed.ErrorMessage ?? $"{GmlHelper.GetNameAndId(indexed.Element)} {Translate("Message")}";
                 var (LineNumber, LinePosition) = indexed.Element.GetLineInfo();
 
                 this.AddMessage(
-                    $"{GmlHelper.GetNameAndId(indexed.Element)}: {errorMessage}",
+                    errorMessage,
                     document.FileName,
                     new[] { indexed.Element.GetXPath() },
                     new[] { GmlHelper.GetFeatureGmlId(indexed.Element) },

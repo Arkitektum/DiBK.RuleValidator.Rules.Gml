@@ -27,17 +27,17 @@ namespace DiBK.RuleValidator.Rules.Gml
         private void Validate(GmlDocument document)
         {
             var curveElements = GetCurveElements(document);
-            
+
             Parallel.ForEach(curveElements, element =>
             {
-                var geometry = document.GetOrCreateGeometry(element);
+                var indexed = document.GetOrCreateGeometry(element);
 
-                if (geometry.ErrorMessage != null)
+                if (indexed.ErrorMessage != null)
                 {
                     var (LineNumber, LinePosition) = element.GetLineInfo();
 
                     this.AddMessage(
-                        geometry.ErrorMessage,
+                        indexed.ErrorMessage,
                         document.FileName,
                         new[] { element.GetXPath() },
                         new[] { GmlHelper.GetFeatureGmlId(element) },
@@ -48,40 +48,17 @@ namespace DiBK.RuleValidator.Rules.Gml
                     return;
                 }
 
-                var dimensions = geometry.Geometry.GetCoordinateDimension();
-                var pointTuples = new List<(double[] PointA, double[] PointB)>();
+                var points = indexed.Geometry.GetPoints();
 
-                try
+                for (var i = 1; i < points.Length; i++)
                 {
-                    var coordinatePairs = GeometryHelper.GetCoordinates(element, dimensions);
+                    if (!points[i].SequenceEqual(points[i - 1]))
+                        continue;
 
-                    for (var i = 1; i < coordinatePairs.Count; i++)
-                        pointTuples.Add((coordinatePairs[i - 1], coordinatePairs[i]));
-                }
-                catch (Exception exception)
-                {
-                    var (LineNumber, LinePosition) = element.GetLineInfo();
-
-                    this.AddMessage(
-                        exception.Message,
-                        document.FileName,
-                        new[] { element.GetXPath() },
-                        new[] { GmlHelper.GetFeatureGmlId(element) },
-                        LineNumber,
-                        LinePosition
-                    );
-
-                    return;
-                }
-
-                var doublePoint = pointTuples
-                    .FirstOrDefault(tuple => tuple.PointA[0] == tuple.PointB[0] && tuple.PointA[1] == tuple.PointB[1] && (dimensions != 3 || tuple.PointA[2] == tuple.PointB[2]));
-
-                if (doublePoint != default)
-                {
-                    var x = doublePoint.PointA[0];
-                    var y = doublePoint.PointA[1];
-                    var z = dimensions == 3 ? doublePoint.PointA[2] : 0;
+                    var dimensions = indexed.Geometry.GetCoordinateDimension();
+                    var x = points[i][0];
+                    var y = points[i][1];
+                    var z = dimensions == 3 ? points[i][2] : 0;
 
                     using var point = GeometryHelper.CreatePoint(x, y, z);
                     FormattableString pointString;
